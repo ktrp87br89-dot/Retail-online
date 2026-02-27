@@ -167,7 +167,7 @@
 
         // ระบบ Live Search
         document.getElementById('searchInput').addEventListener('keyup', (e) => {
-            const searchText = e.target.value.toLowerCase();
+            const searchText = e.target.value.toLowerCase().trim();
             const filtered = allProducts.filter(p => {
                 const title = p.Title ? p.Title.toString().toLowerCase() : '';
                 const desc = p.Description ? p.Description.toString().toLowerCase() : '';
@@ -181,7 +181,7 @@
             document.querySelector('[data-filter="all"]').classList.add('active');
         });
 
-        // ระบบกรองหมวดหมู่แบรนด์
+        // ระบบกรองหมวดหมู่แบรนด์ (อัปเกรดให้ตัดช่องว่างและไม่สนตัวพิมพ์เล็กใหญ่)
         const filterBtns = document.querySelectorAll('.filter-btn');
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -189,11 +189,17 @@
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 
-                const filterValue = btn.getAttribute('data-filter');
+                // ดึงค่าจากปุ่ม แล้วแปลงเป็นตัวเล็กและตัดช่องว่าง
+                const filterValue = btn.getAttribute('data-filter').toLowerCase().trim();
+                
                 if(filterValue === 'all') {
                     renderProducts(allProducts);
                 } else {
-                    const filtered = allProducts.filter(p => p.Brand === filterValue);
+                    const filtered = allProducts.filter(p => {
+                        // ดึงชื่อแบรนด์จาก Sheets แปลงเป็นตัวเล็กและตัดช่องว่างก่อนเทียบ
+                        const brandName = p.Brand ? p.Brand.toString().toLowerCase().trim() : '';
+                        return brandName === filterValue;
+                    });
                     renderProducts(filtered);
                 }
             });
