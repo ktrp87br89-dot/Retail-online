@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Promo Catalog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --surface: #ffffff;
+            --background: #f3f4f6;
+            --text-dark: #111827;
+            --text-gray: #6b7280;
+            --danger: #ef4444;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Prompt', sans-serif; }
+        
+        body { background-color: var(--background); color: var(--text-dark); padding: 40px 20px; line-height: 1.5; }
+        
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* Header & Controls */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 20px; }
+        .header h1 { font-size: 28px; font-weight: 700; color: var(--text-dark); letter-spacing: -0.5px; }
+        
+        .controls { display: flex; gap: 15px; width: 100%; max-width: 600px; }
+        .search-box { flex: 1; padding: 14px 24px; border: 1px solid #e5e7eb; border-radius: 50px; font-size: 16px; transition: all 0.3s ease; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+        .search-box:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
+        
+        .btn-primary { background-color: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2); }
+        .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+
+        /* Filter Tabs */
+        .filters { display: flex; gap: 10px; margin-bottom: 30px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+        .filter-btn { background: var(--surface); border: 1px solid #e5e7eb; padding: 8px 20px; border-radius: 50px; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--text-gray); transition: 0.3s; white-space: nowrap; }
+        .filter-btn.active { background: var(--text-dark); color: white; border-color: var(--text-dark); }
+        
+        /* Grid & Cards */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+        
+        .product-card { background: var(--surface); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(255,255,255,0.5); }
+        .product-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); }
+        
+        .card-img-wrapper { height: 220px; background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;}
+        .img-placeholder { color: #9ca3af; font-size: 14px; font-weight: 600; letter-spacing: 1px; }
+        
+        .card-content { padding: 24px; }
+        .brand-badge { display: inline-block; padding: 4px 12px; background-color: #eef2ff; color: var(--primary); border-radius: 50px; font-size: 12px; font-weight: 700; margin-bottom: 12px; letter-spacing: 0.5px; }
+        
+        .product-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: var(--text-dark); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .product-desc { font-size: 14px; color: var(--text-gray); margin-bottom: 20px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        .price-container { display: flex; align-items: flex-end; justify-content: space-between; padding-top: 16px; border-top: 1px solid #f3f4f6; margin-bottom: 20px;}
+        .normal-price { text-decoration: line-through; color: #9ca3af; font-size: 13px; display: block; margin-bottom: 2px;}
+        .special-price { font-size: 26px; font-weight: 700; color: var(--danger); line-height: 1;}
+        
+        /* Admin Controls */
+        .admin-controls { display: flex; gap: 10px; }
+        .btn-action { flex: 1; padding: 10px; border: 1px solid #e5e7eb; background: white; border-radius: var(--radius-md); font-size: 14px; font-weight: 600; color: var(--text-dark); cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 5px;}
+        .btn-action:hover { background: #f9fafb; border-color: #d1d5db; }
+        .btn-danger:hover { color: var(--danger); border-color: #fecaca; background: #fef2f2; }
+
+        /* Toggle UI */
+        .mode-toggle { position: fixed; bottom: 30px; right: 30px; background: white; padding: 15px 20px; border-radius: 50px; box-shadow: var(--shadow-hover); display: flex; align-items: center; gap: 15px; z-index: 1000; border: 1px solid #e5e7eb;}
+        .toggle-switch { position: relative; width: 44px; height: 24px; background: #cbd5e1; border-radius: 24px; cursor: pointer; transition: 0.3s; }
+        .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);}
+        .toggle-switch.active { background: var(--primary); }
+        .toggle-switch.active::after { left: 22px; }
+
+        /* Utility Class */
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>📦 PROMO CENTER</h1>
+            <div class="controls">
+                <input type="text" id="searchInput" class="search-box" placeholder="ค้นหาสินค้า, โปรโมชั่น, แบรนด์...">
+                <button class="btn-primary admin-element">+ เพิ่มโปรโมชั่น</button>
+            </div>
+        </div>
+
+        <div class="filters" id="filterContainer">
+            <button class="filter-btn active" data-filter="all">ทั้งหมด</button>
+            <button class="filter-btn" data-filter="HAPPY TRENDS">HAPPY TRENDS</button>
+            <button class="filter-btn" data-filter="YURA">YURA</button>
+            <button class="filter-btn" data-filter="BONBACK">BONBACK</button>
+            <button class="filter-btn" data-filter="สุขกายะ">สุขกายะ</button>
+        </div>
+
+        <div class="product-grid" id="productGrid">
+            <div class="product-card" data-brand="YURA">
+                <div class="card-img-wrapper">
+                    <span class="img-placeholder">YURA Image</span>
+                </div>
+                <div class="card-content">
+                    <span class="brand-badge">YURA</span>
+                    <h2 class="product-title">เซต ยูร่า 999 บาท (ชุด 5 ชิ้น)</h2>
+                    <p class="product-desc">แป้งพัฟ 12g, กันแดด 20g, ครีม 30g, สบู่ 100g, ถุงตาข่าย</p>
+                    <div class="price-container">
+                        <div>
+                            <span class="normal-price">ปกติ 1,957.-</span>
+                            <span class="special-price">999.-</span>
+                        </div>
+                    </div>
+                    <div class="admin-controls admin-element">
+                        <button class="btn-action">✏️ แก้ไข</button>
+                        <button class="btn-action">🖼️ อัปรูป</button>
+                        <button class="btn-action btn-danger">🗑️</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card" data-brand="BONBACK">
+                <div class="card-img-wrapper">
+                    <span class="img-placeholder">BONBACK Image</span>
+                </div>
+                <div class="card-content">
+                    <span class="brand-badge">BONBACK</span>
+                    <h2 class="product-title">รังนก 42 มล. (สูตรออริจินอล)</h2>
+                    <p class="product-desc">รังนกขนาด 42 มล. จำนวน 30 ขวด (แพ็ก 6 ขวด x 5)</p>
+                    <div class="price-container">
+                        <div>
+                            <span class="normal-price"></span>
+                            <span class="special-price">1,350.-</span>
+                        </div>
+                    </div>
+                    <div class="admin-controls admin-element">
+                        <button class="btn-action">✏️ แก้ไข</button>
+                        <button class="btn-action">🖼️ อัปรูป</button>
+                        <button class="btn-action btn-danger">🗑️</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card" data-brand="HAPPY TRENDS">
+                <div class="card-img-wrapper">
+                    <span class="img-placeholder">HAPPY TRENDS Image</span>
+                </div>
+                <div class="card-content">
+                    <span class="brand-badge">HAPPY TRENDS</span>
+                    <h2 class="product-title">โปรโมชั่น 120 ซอง</h2>
+                    <p class="product-desc">กาแฟแฮปปี้เทรนด์ จำนวน 6 กล่อง (กล่องละ 20 ซอง)</p>
+                    <div class="price-container">
+                        <div>
+                            <span class="normal-price">ปกติ 5,340.-</span>
+                            <span class="special-price">1,190.-</span>
+                        </div>
+                    </div>
+                    <div class="admin-controls admin-element">
+                        <button class="btn-action">✏️ แก้ไข</button>
+                        <button class="btn-action">🖼️ อัปรูป</button>
+                        <button class="btn-action btn-danger">🗑️</button>
+                    </div>
+                </div>
+            </div>
+            
+             <div class="product-card" data-brand="สุขกายะ">
+                <div class="card-img-wrapper">
+                    <span class="img-placeholder">Sukaya Image</span>
+                </div>
+                <div class="card-content">
+                    <span class="brand-badge">สุขกายะ</span>
+                    <h2 class="product-title">เซต น้ำมันสมุนไพรสุขสกิน</h2>
+                    <p class="product-desc">น้ำมันนวด 30ml x2 ขวด แถมฟรี 12ml x4 ขวด และ 3ml x4 ขวด</p>
+                    <div class="price-container">
+                        <div>
+                            <span class="normal-price">รวมของแถม 3,880.-</span>
+                            <span class="special-price">999.-</span>
+                        </div>
+                    </div>
+                    <div class="admin-controls admin-element">
+                        <button class="btn-action">✏️ แก้ไข</button>
+                        <button class="btn-action">🖼️ อัปรูป</button>
+                        <button class="btn-action btn-danger">🗑️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mode-toggle">
+        <span style="font-weight: 600; font-size: 14px;">โหมดแอดมิน (Admin)</span>
+        <div class="toggle-switch active" id="adminToggle"></div>
+    </div>
+
+    <script>
+        // 1. ระบบจำลองเปิด-ปิดโหมดแอดมิน
+        const adminToggle = document.getElementById('adminToggle');
+        const adminElements = document.querySelectorAll('.admin-element');
+
+        adminToggle.addEventListener('click', () => {
+            adminToggle.classList.toggle('active');
+            adminElements.forEach(el => {
+                el.classList.toggle('hidden');
+            });
+        });
+
+        // 2. ระบบ Live Search (พิมพ์แล้วค้นหาทันที)
+        const searchInput = document.getElementById('searchInput');
+        const productCards = document.querySelectorAll('.product-card');
+
+        searchInput.addEventListener('keyup', (e) => {
+            const searchText = e.target.value.toLowerCase();
+            
+            productCards.forEach(card => {
+                const title = card.querySelector('.product-title').innerText.toLowerCase();
+                const desc = card.querySelector('.product-desc').innerText.toLowerCase();
+                const brand = card.querySelector('.brand-badge').innerText.toLowerCase();
+                
+                if(title.includes(searchText) || desc.includes(searchText) || brand.includes(searchText)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // 3. ระบบกรองหมวดหมู่ (Category Filters)
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // เปลี่ยนสีปุ่มที่กด
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filterValue = btn.getAttribute('data-filter');
+                
+                productCards.forEach(card => {
+                    if(filterValue === 'all' || card.getAttribute('data-brand') === filterValue) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
