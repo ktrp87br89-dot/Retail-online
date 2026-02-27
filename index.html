@@ -14,26 +14,23 @@
             --text-dark: #111827;
             --text-gray: #6b7280;
             --danger: #ef4444;
+            --success: #10b981;
             --radius-lg: 16px;
             --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
             --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Prompt', sans-serif; }
-        
         body { background-color: var(--background); color: var(--text-dark); padding: 40px 20px; line-height: 1.5; }
-        
         .container { max-width: 1200px; margin: 0 auto; }
 
         /* Header & Controls */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 20px; }
         .header h1 { font-size: 28px; font-weight: 700; color: var(--text-dark); letter-spacing: -0.5px; }
-        
         .controls { display: flex; gap: 15px; width: 100%; max-width: 600px; }
-        .search-box { flex: 1; padding: 14px 24px; border: 1px solid #e5e7eb; border-radius: 50px; font-size: 16px; transition: all 0.3s ease; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+        .search-box { flex: 1; padding: 14px 24px; border: 1px solid #e5e7eb; border-radius: 50px; font-size: 16px; transition: all 0.3s ease; }
         .search-box:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
-        
-        .btn-primary { background-color: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2); }
+        .btn-primary { background-color: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2); white-space: nowrap;}
         .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
 
         /* Filter Tabs */
@@ -43,26 +40,21 @@
         
         /* Grid & Cards */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
-        
         .product-card { background: var(--surface); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(255,255,255,0.5); display: flex; flex-direction: column;}
         .product-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); }
-        
-        .card-img-wrapper { height: 220px; background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;}
-        .img-placeholder { color: #9ca3af; font-size: 14px; font-weight: 600; letter-spacing: 1px; }
-        
+        .card-img-wrapper { height: 220px; background: #e5e7eb; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;}
+        .img-placeholder { color: #9ca3af; font-size: 14px; font-weight: 600; }
         .card-content { padding: 24px; display: flex; flex-direction: column; flex-grow: 1;}
-        .brand-badge { display: inline-block; align-self: flex-start; padding: 4px 12px; background-color: #eef2ff; color: var(--primary); border-radius: 50px; font-size: 12px; font-weight: 700; margin-bottom: 12px; letter-spacing: 0.5px; }
-        
+        .brand-badge { display: inline-block; align-self: flex-start; padding: 4px 12px; background-color: #eef2ff; color: var(--primary); border-radius: 50px; font-size: 12px; font-weight: 700; margin-bottom: 12px; }
         .product-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: var(--text-dark); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .product-desc { font-size: 14px; color: var(--text-gray); margin-bottom: 20px; flex-grow: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-        
         .price-container { display: flex; align-items: flex-end; justify-content: space-between; padding-top: 16px; border-top: 1px solid #f3f4f6;}
         .normal-price { text-decoration: line-through; color: #9ca3af; font-size: 13px; display: block; margin-bottom: 2px;}
         .special-price { font-size: 26px; font-weight: 700; color: var(--danger); line-height: 1;}
         
         /* Admin Controls */
         .admin-controls { display: flex; gap: 10px; margin-top: 20px;}
-        .btn-action { flex: 1; padding: 10px; border: 1px solid #e5e7eb; background: white; border-radius: 12px; font-size: 14px; font-weight: 600; color: var(--text-dark); cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 5px;}
+        .btn-action { flex: 1; padding: 10px; border: 1px solid #e5e7eb; background: white; border-radius: 12px; font-size: 14px; font-weight: 600; color: var(--text-dark); cursor: pointer; transition: 0.2s;}
         .btn-action:hover { background: #f9fafb; border-color: #d1d5db; }
         .btn-danger { color: var(--danger); border-color: #fecaca; background: #fef2f2; flex: 0.3; }
         .btn-danger:hover { background: #fee2e2; }
@@ -70,14 +62,28 @@
         /* Toggle UI */
         .mode-toggle { position: fixed; bottom: 30px; right: 30px; background: white; padding: 15px 20px; border-radius: 50px; box-shadow: var(--shadow-hover); display: flex; align-items: center; gap: 15px; z-index: 1000; border: 1px solid #e5e7eb;}
         .toggle-switch { position: relative; width: 44px; height: 24px; background: #cbd5e1; border-radius: 24px; cursor: pointer; transition: 0.3s; }
-        .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);}
+        .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.3s;}
         .toggle-switch.active { background: var(--primary); }
         .toggle-switch.active::after { left: 22px; }
 
-        /* Utility Class */
-        .hidden { display: none !important; }
+        /* Modal Popup (ระบบฟอร์ม) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s; padding: 20px;}
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal-content { background: white; width: 100%; max-width: 500px; border-radius: var(--radius-lg); padding: 30px; box-shadow: var(--shadow-hover); transform: translateY(20px); transition: 0.3s;}
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; color: var(--text-dark); }
         
-        /* Loading Text */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-gray); margin-bottom: 5px; }
+        .form-control { width: 100%; padding: 10px 15px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; outline: none; font-family: 'Prompt';}
+        .form-control:focus { border-color: var(--primary); }
+        
+        .modal-actions { display: flex; gap: 10px; margin-top: 25px; }
+        .btn-cancel { flex: 1; padding: 12px; border: 1px solid #e5e7eb; background: white; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .btn-save { flex: 1; padding: 12px; border: none; background: var(--success); color: white; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s;}
+        .btn-save:hover { background: #059669; }
+
+        .hidden { display: none !important; }
         .loading-text { text-align: center; font-size: 18px; color: var(--text-gray); padding: 40px; grid-column: 1 / -1; }
     </style>
 </head>
@@ -88,7 +94,7 @@
             <h1>📦 PROMO CENTER</h1>
             <div class="controls">
                 <input type="text" id="searchInput" class="search-box" placeholder="ค้นหาสินค้า, โปรโมชั่น, แบรนด์...">
-                <button class="btn-primary hidden" id="btnAddPromo" onclick="alert('ฟังก์ชันเพิ่มสินค้าเตรียมเชื่อมต่อกับฐานข้อมูลครับ')">+ เพิ่มโปรโมชั่น</button>
+                <button class="btn-primary hidden" id="btnAddPromo" onclick="openModal('add')">+ เพิ่มโปรโมชั่น</button>
             </div>
         </div>
 
@@ -109,21 +115,58 @@
     </div>
 
     <div class="mode-toggle">
-        <span id="adminLabel" style="font-weight: 600; font-size: 14px; color: var(--text-dark);">โหมดแอดมิน (Admin)</span>
+        <span id="adminLabel" style="font-weight: 600; font-size: 14px; color: var(--text-dark);">โหมดแอดมิน</span>
         <div class="toggle-switch" id="adminToggle"></div>
     </div>
 
+    <div class="modal-overlay" id="promoModal">
+        <div class="modal-content">
+            <h2 class="modal-title" id="modalTitle">เพิ่มโปรโมชั่นใหม่</h2>
+            
+            <input type="hidden" id="formRowIndex"> <div class="form-group">
+                <label>แบรนด์ (Brand)</label>
+                <input type="text" id="formBrand" class="form-control" placeholder="เช่น YURA, BONBACK">
+            </div>
+            <div class="form-group">
+                <label>ชื่อสินค้า / เซตโปรโมชั่น (Title)</label>
+                <input type="text" id="formTitle" class="form-control" placeholder="เช่น เซต ยูร่า 999 บาท">
+            </div>
+            <div class="form-group">
+                <label>รายละเอียด (Description)</label>
+                <textarea id="formDesc" class="form-control" rows="3" placeholder="รายละเอียดของแถม..."></textarea>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <div class="form-group" style="flex: 1;">
+                    <label>ราคาปกติ (ไม่ต้องใส่ "ปกติ" หรือ ".-")</label>
+                    <input type="text" id="formNormal" class="form-control" placeholder="เช่น 1,957">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>ราคาพิเศษ (ไม่ต้องใส่ ".-")</label>
+                    <input type="text" id="formSpecial" class="form-control" placeholder="เช่น 999">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>ชื่อไฟล์รูป หรือ ลิงก์รูปภาพ (ImageURL)</label>
+                <input type="text" id="formImage" class="form-control" placeholder="เช่น yura.jpg หรือลิงก์ Drive">
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal()">ยกเลิก</button>
+                <button class="btn-save" id="btnSave" onclick="saveData()">💾 บันทึกข้อมูล</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // URL ของ Web App จาก Google Apps Script (ของคุณกร)
+        // URL ของ Apps Script
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzfhzBH0dzt1lxObKp6q0Fu6kb3c55UbZaWAI7AuzM712ndg-ExrvMSLv8xiOYxbkq9/exec'; 
         
         const productGrid = document.getElementById('productGrid');
         let allProducts = [];
-        
-        // 0 = User ทั่วไป, 1 = Admin ธรรมดา, 2 = Super Admin
-        let currentAdminLevel = 0; 
+        let currentAdminLevel = 0; // 0=User, 1=Admin, 2=SuperAdmin
+        let currentAction = 'add'; // เอาไว้เช็คว่ากำลังกดเพิ่ม หรือ กดแก้
 
-        // ฟังก์ชันแปลงลิงก์ Google Drive ให้เป็นลิงก์สำหรับแสดงรูปภาพ
+        // --- ระบบแปลงลิงก์รูปภาพ ---
         function getDirectImageUrl(url) {
             if (!url || url === 'รออัปโหลด' || url.trim() === '') return null;
             if (url.includes('drive.google.com')) {
@@ -133,45 +176,41 @@
             return url; 
         }
 
-        // ฟังก์ชันดึงข้อมูลจาก Google Sheets
+        // --- ระบบดึงข้อมูล (Read) ---
         async function fetchProducts() {
+            productGrid.innerHTML = '<div class="loading-text">กำลังโหลดข้อมูลโปรโมชั่นล่าสุด... ⏳</div>';
             try {
                 const response = await fetch(APPS_SCRIPT_URL);
                 allProducts = await response.json();
                 renderProducts(allProducts);
             } catch (error) {
-                productGrid.innerHTML = '<div class="loading-text" style="color:var(--danger);">❌ เกิดข้อผิดพลาดในการดึงข้อมูล โปรดลองรีเฟรชหน้าเว็บอีกครั้ง</div>';
+                productGrid.innerHTML = '<div class="loading-text" style="color:var(--danger);">❌ เกิดข้อผิดพลาดในการดึงข้อมูล</div>';
             }
         }
 
-        // ฟังก์ชันสร้างการ์ดสินค้า
         function renderProducts(products) {
             productGrid.innerHTML = ''; 
-            
             if(products.length === 0) {
-                productGrid.innerHTML = '<div class="loading-text">ไม่พบรายการสินค้าที่ค้นหา</div>';
+                productGrid.innerHTML = '<div class="loading-text">ไม่พบรายการสินค้า</div>';
                 return;
             }
 
             products.forEach(product => {
                 const directImageUrl = getDirectImageUrl(product.ImageURL);
                 const imageHtml = directImageUrl 
-                    ? `<img src="${directImageUrl}" alt="${product.Title}" style="width:100%; height:100%; object-fit:cover;">`
+                    ? `<img src="${directImageUrl}" style="width:100%; height:100%; object-fit:cover;">`
                     : `<span class="img-placeholder">${product.Brand} Image</span>`;
 
                 const normalPriceText = product.NormalPrice ? `ปกติ ${product.NormalPrice}.-` : '';
 
-                // ระบบควบคุมปุ่ม Admin ในแต่ละการ์ด
-                const adminClass = currentAdminLevel > 0 ? '' : 'hidden'; // โชว์กรอบปุ่มเมื่อเป็นแอดมินระดับ 1 หรือ 2
+                const adminClass = currentAdminLevel > 0 ? '' : 'hidden'; 
                 const deleteBtnHtml = currentAdminLevel === 2 
-                    ? `<button class="btn-action btn-danger" onclick="alert('ระบบลบจะทำงานเมื่อเชื่อมต่อฐานข้อมูลครับ')">🗑️</button>` 
-                    : ''; // โชว์ปุ่มลบเฉพาะ Super Admin (Level 2) เท่านั้น
+                    ? `<button class="btn-action btn-danger" onclick="deleteData(${product._rowIndex}, '${product.Title}')">🗑️</button>` 
+                    : ''; 
 
                 const cardHtml = `
                     <div class="product-card" data-brand="${product.Brand}">
-                        <div class="card-img-wrapper">
-                            ${imageHtml}
-                        </div>
+                        <div class="card-img-wrapper">${imageHtml}</div>
                         <div class="card-content">
                             <span class="brand-badge">${product.Brand}</span>
                             <h2 class="product-title">${product.Title}</h2>
@@ -183,7 +222,7 @@
                                 </div>
                             </div>
                             <div class="admin-controls ${adminClass}">
-                                <button class="btn-action" onclick="alert('ระบบแก้ไขจะทำงานเมื่อเชื่อมต่อฐานข้อมูลครับ')">✏️ แก้ไขข้อมูล</button>
+                                <button class="btn-action" onclick="openModal('edit', ${product._rowIndex})">✏️ แก้ไข</button>
                                 ${deleteBtnHtml}
                             </div>
                         </div>
@@ -196,53 +235,150 @@
         fetchProducts();
 
         // ==========================================
-        // ระบบ Login ควบคุม Admin (Super Admin / Admin ธรรมดา)
+        // ระบบจัดการข้อมูล (Create, Update, Delete) ผ่าน API
+        // ==========================================
+
+        const modal = document.getElementById('promoModal');
+        const btnSave = document.getElementById('btnSave');
+
+        // 1. เปิด Popup Form
+        function openModal(action, rowIndex = null) {
+            currentAction = action;
+            modal.classList.add('active');
+
+            if (action === 'add') {
+                document.getElementById('modalTitle').innerText = '✨ เพิ่มโปรโมชั่นใหม่';
+                // เคลียร์ค่าในช่องพิมพ์ให้ว่างเปล่า
+                document.getElementById('formRowIndex').value = '';
+                document.getElementById('formBrand').value = '';
+                document.getElementById('formTitle').value = '';
+                document.getElementById('formDesc').value = '';
+                document.getElementById('formNormal').value = '';
+                document.getElementById('formSpecial').value = '';
+                document.getElementById('formImage').value = '';
+            } else if (action === 'edit') {
+                document.getElementById('modalTitle').innerText = '✏️ แก้ไขข้อมูลโปรโมชั่น';
+                // ดึงข้อมูลเดิมมาใส่ในช่องพิมพ์
+                const product = allProducts.find(p => p._rowIndex === rowIndex);
+                if(product) {
+                    document.getElementById('formRowIndex').value = product._rowIndex;
+                    document.getElementById('formBrand').value = product.Brand;
+                    document.getElementById('formTitle').value = product.Title;
+                    document.getElementById('formDesc').value = product.Description;
+                    document.getElementById('formNormal').value = product.NormalPrice;
+                    document.getElementById('formSpecial').value = product.SpecialPrice;
+                    document.getElementById('formImage').value = product.ImageURL;
+                }
+            }
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+        }
+
+        // 2. ฟังก์ชันกดปุ่มบันทึก (วิ่งไปหา doPost)
+        async function saveData() {
+            // ดึงค่าจากช่องพิมพ์
+            const payload = {
+                action: currentAction,
+                data: {
+                    _rowIndex: document.getElementById('formRowIndex').value,
+                    Brand: document.getElementById('formBrand').value,
+                    Title: document.getElementById('formTitle').value,
+                    Description: document.getElementById('formDesc').value,
+                    NormalPrice: document.getElementById('formNormal').value,
+                    SpecialPrice: document.getElementById('formSpecial').value,
+                    ImageURL: document.getElementById('formImage').value
+                }
+            };
+
+            if(!payload.data.Brand || !payload.data.Title) {
+                alert('กรุณากรอก แบรนด์ และ ชื่อโปรโมชั่นให้ครบถ้วนครับ');
+                return;
+            }
+
+            // เปลี่ยนหน้าตาปุ่มเป็นตอนโหลด
+            btnSave.innerText = 'กำลังบันทึก... ⏳';
+            btnSave.style.opacity = '0.7';
+            btnSave.style.pointerEvents = 'none';
+
+            try {
+                // ส่งข้อมูลไป Google Sheets
+                await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                
+                closeModal();
+                alert('✅ บันทึกข้อมูลลงฐานข้อมูลเรียบร้อยแล้ว!');
+                fetchProducts(); // โหลดข้อมูลใหม่มาแสดงทันที
+            } catch (error) {
+                alert('❌ เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+            } finally {
+                // คืนสภาพปุ่มกลับมา
+                btnSave.innerText = '💾 บันทึกข้อมูล';
+                btnSave.style.opacity = '1';
+                btnSave.style.pointerEvents = 'auto';
+            }
+        }
+
+        // 3. ฟังก์ชันลบข้อมูล (เฉพาะ Super Admin)
+        async function deleteData(rowIndex, title) {
+            if(confirm(`⚠️ คุณแน่ใจหรือไม่ว่าต้องการลบ\n"${title}" ?\n(ลบแล้วกู้คืนไม่ได้นะครับ)`)) {
+                try {
+                    await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({ action: 'delete', data: { _rowIndex: rowIndex } })
+                    });
+                    alert('🗑️ ลบข้อมูลเรียบร้อยแล้ว!');
+                    fetchProducts();
+                } catch (error) {
+                    alert('❌ เกิดข้อผิดพลาดในการลบข้อมูล');
+                }
+            }
+        }
+
+        // ==========================================
+        // ระบบ Login ควบคุม Admin
         // ==========================================
         const adminToggle = document.getElementById('adminToggle');
         const adminLabel = document.getElementById('adminLabel');
         const btnAddPromo = document.getElementById('btnAddPromo');
 
         adminToggle.addEventListener('click', () => {
-            // ถ้าสถานะปิดอยู่ (กำลังจะเปิด)
             if (currentAdminLevel === 0) {
                 const password = prompt('กรุณากรอกรหัสผ่านเพื่อเข้าสู่โหมด Admin:');
-                
                 if (password === 'admin9sing') {
-                    // Super Admin
                     currentAdminLevel = 2;
                     adminToggle.classList.add('active');
                     adminLabel.innerText = '👑 Super Admin';
                     adminLabel.style.color = '#4f46e5';
                     btnAddPromo.classList.remove('hidden');
-                    renderProducts(allProducts); // รีเฟรชหน้าจอเพื่อโชว์ปุ่ม
-
+                    renderProducts(allProducts); 
                 } else if (password === 'admin0208') {
-                    // Admin ธรรมดา
                     currentAdminLevel = 1;
                     adminToggle.classList.add('active');
                     adminLabel.innerText = '👤 Admin ธรรมดา';
                     adminLabel.style.color = '#059669';
                     btnAddPromo.classList.remove('hidden');
-                    renderProducts(allProducts); // รีเฟรชหน้าจอเพื่อโชว์ปุ่ม
-
+                    renderProducts(allProducts); 
                 } else if (password !== null) {
-                    // รหัสผิด (กด Cancel จะคืนค่า null ระบบจะอยู่เฉยๆ)
-                    alert('❌ รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง');
+                    alert('❌ รหัสผ่านไม่ถูกต้อง');
                 }
-            } 
-            // ถ้าสถานะเปิดอยู่ (กำลังจะปิด)
-            else {
+            } else {
                 currentAdminLevel = 0;
                 adminToggle.classList.remove('active');
-                adminLabel.innerText = 'โหมดแอดมิน (Admin)';
+                adminLabel.innerText = 'โหมดแอดมิน';
                 adminLabel.style.color = 'var(--text-dark)';
                 btnAddPromo.classList.add('hidden');
-                renderProducts(allProducts); // รีเฟรชหน้าจอเพื่อซ่อนปุ่ม
+                renderProducts(allProducts); 
             }
         });
 
         // ==========================================
-        // ระบบ ค้นหา และ กรอง (Search & Filter)
+        // ระบบ ค้นหา และ กรอง
         // ==========================================
         document.getElementById('searchInput').addEventListener('keyup', (e) => {
             const searchText = e.target.value.toLowerCase().trim();
@@ -250,11 +386,9 @@
                 const title = p.Title ? p.Title.toString().toLowerCase() : '';
                 const desc = p.Description ? p.Description.toString().toLowerCase() : '';
                 const brand = p.Brand ? p.Brand.toString().toLowerCase() : '';
-                
                 return title.includes(searchText) || desc.includes(searchText) || brand.includes(searchText);
             });
             renderProducts(filtered);
-            
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             document.querySelector('[data-filter="all"]').classList.add('active');
         });
@@ -265,12 +399,9 @@
                 document.getElementById('searchInput').value = '';
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                
                 const filterValue = btn.getAttribute('data-filter').toLowerCase().trim();
-                
-                if(filterValue === 'all') {
-                    renderProducts(allProducts);
-                } else {
+                if(filterValue === 'all') renderProducts(allProducts);
+                else {
                     const filtered = allProducts.filter(p => {
                         const brandName = p.Brand ? p.Brand.toString().toLowerCase().trim() : '';
                         return brandName === filterValue;
