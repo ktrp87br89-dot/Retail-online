@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Promo Catalog</title>
+    <title>Sales Promo Catalog</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,7 +15,6 @@
             --text-gray: #6b7280;
             --danger: #ef4444;
             --radius-lg: 16px;
-            --radius-md: 12px;
             --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
             --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
@@ -33,9 +32,6 @@
         .controls { display: flex; gap: 15px; width: 100%; max-width: 600px; }
         .search-box { flex: 1; padding: 14px 24px; border: 1px solid #e5e7eb; border-radius: 50px; font-size: 16px; transition: all 0.3s ease; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
         .search-box:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
-        
-        .btn-primary { background-color: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2); }
-        .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
 
         /* Filter Tabs */
         .filters { display: flex; gap: 10px; margin-bottom: 30px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
@@ -57,25 +53,9 @@
         .product-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: var(--text-dark); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .product-desc { font-size: 14px; color: var(--text-gray); margin-bottom: 20px; flex-grow: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         
-        .price-container { display: flex; align-items: flex-end; justify-content: space-between; padding-top: 16px; border-top: 1px solid #f3f4f6; margin-bottom: 20px;}
+        .price-container { display: flex; align-items: flex-end; justify-content: space-between; padding-top: 16px; border-top: 1px solid #f3f4f6;}
         .normal-price { text-decoration: line-through; color: #9ca3af; font-size: 13px; display: block; margin-bottom: 2px;}
         .special-price { font-size: 26px; font-weight: 700; color: var(--danger); line-height: 1;}
-        
-        /* Admin Controls */
-        .admin-controls { display: flex; gap: 10px; margin-top: auto;}
-        .btn-action { flex: 1; padding: 10px; border: 1px solid #e5e7eb; background: white; border-radius: var(--radius-md); font-size: 14px; font-weight: 600; color: var(--text-dark); cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 5px;}
-        .btn-action:hover { background: #f9fafb; border-color: #d1d5db; }
-        .btn-danger:hover { color: var(--danger); border-color: #fecaca; background: #fef2f2; }
-
-        /* Toggle UI */
-        .mode-toggle { position: fixed; bottom: 30px; right: 30px; background: white; padding: 15px 20px; border-radius: 50px; box-shadow: var(--shadow-hover); display: flex; align-items: center; gap: 15px; z-index: 1000; border: 1px solid #e5e7eb;}
-        .toggle-switch { position: relative; width: 44px; height: 24px; background: #cbd5e1; border-radius: 24px; cursor: pointer; transition: 0.3s; }
-        .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);}
-        .toggle-switch.active { background: var(--primary); }
-        .toggle-switch.active::after { left: 22px; }
-
-        /* Utility Class */
-        .hidden { display: none !important; }
         
         /* Loading Text */
         .loading-text { text-align: center; font-size: 18px; color: var(--text-gray); padding: 40px; grid-column: 1 / -1; }
@@ -88,7 +68,6 @@
             <h1>📦 PROMO CENTER</h1>
             <div class="controls">
                 <input type="text" id="searchInput" class="search-box" placeholder="ค้นหาสินค้า, โปรโมชั่น, แบรนด์...">
-                <button class="btn-primary admin-element hidden" onclick="alert('ฟังก์ชันนี้เตรียมเชื่อมต่อกับ Google Sheets ในขั้นต่อไปครับ')">+ เพิ่มโปรโมชั่น</button>
             </div>
         </div>
 
@@ -100,6 +79,7 @@
             <button class="filter-btn" data-filter="สุขกายะ">สุขกายะ</button>
             <button class="filter-btn" data-filter="FLi">FLi</button>
             <button class="filter-btn" data-filter="เบญจ ออยล์">เบญจ ออยล์</button>
+            <button class="filter-btn" data-filter="สุภาพโอสถ">สุภาพโอสถ</button>
         </div>
 
         <div class="product-grid" id="productGrid">
@@ -107,59 +87,58 @@
         </div>
     </div>
 
-    <div class="mode-toggle">
-        <span style="font-weight: 600; font-size: 14px;">โหมดแอดมิน (Admin)</span>
-        <div class="toggle-switch" id="adminToggle"></div>
-    </div>
-
     <script>
-        // ==========================================
         // URL ของ Web App จาก Google Apps Script
-        // ==========================================
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzfhzBH0dzt1lxObKp6q0Fu6kb3c55UbZaWAI7AuzM712ndg-ExrvMSLv8xiOYxbkq9/exec'; 
         
         const productGrid = document.getElementById('productGrid');
-        let allProducts = []; // เก็บข้อมูลสินค้าทั้งหมด
+        let allProducts = [];
+
+        // ฟังก์ชันแปลงลิงก์ Google Drive ให้เป็นลิงก์สำหรับแสดงรูปภาพ
+        function getDirectImageUrl(url) {
+            if (!url || url === 'รออัปโหลด' || url.trim() === '') return null;
+            
+            // ตรวจสอบว่าเป็นลิงก์ Google Drive หรือไม่
+            if (url.includes('drive.google.com')) {
+                // ค้นหา ID ของไฟล์จากลิงก์
+                const match = url.match(/\/d\/(.+?)\//) || url.match(/id=(.+?)(&|$)/);
+                if (match && match[1]) {
+                    // แปลงเป็นลิงก์สำหรับเปิดดูรูปโดยตรง
+                    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+                }
+            }
+            return url; // ถ้าระบุลิงก์อื่นที่ไม่ใช่ Drive ก็ให้ใช้ลิงก์นั้นเลย
+        }
 
         // ฟังก์ชันดึงข้อมูลจาก Google Sheets
         async function fetchProducts() {
             try {
-                // ตรวจสอบว่าใส่ URL หรือยัง
-                if(APPS_SCRIPT_URL === 'วาง_URL_ที่ก๊อปปี้มา_ตรงนี้') {
-                    productGrid.innerHTML = '<div class="loading-text" style="color:var(--danger);">⚠️ กรุณาใส่ URL ของ Apps Script ในโค้ดบรรทัดที่ 181 ก่อนครับ</div>';
-                    return;
-                }
-
                 const response = await fetch(APPS_SCRIPT_URL);
                 allProducts = await response.json();
                 renderProducts(allProducts);
             } catch (error) {
-                productGrid.innerHTML = '<div class="loading-text" style="color:var(--danger);">❌ เกิดข้อผิดพลาดในการดึงข้อมูล โปรดตรวจสอบ URL หรือสิทธิ์การเข้าถึง Sheets</div>';
+                productGrid.innerHTML = '<div class="loading-text" style="color:var(--danger);">❌ เกิดข้อผิดพลาดในการดึงข้อมูล โปรดลองรีเฟรชหน้าเว็บอีกครั้ง</div>';
                 console.error('Error fetching data:', error);
             }
         }
 
-        // ฟังก์ชันสร้างการ์ดสินค้าแสดงบนจอ
+        // ฟังก์ชันสร้างการ์ดสินค้า
         function renderProducts(products) {
-            productGrid.innerHTML = ''; // ล้างข้อความกำลังโหลด
+            productGrid.innerHTML = ''; 
             
             if(products.length === 0) {
                 productGrid.innerHTML = '<div class="loading-text">ไม่พบรายการสินค้าที่ค้นหา</div>';
                 return;
             }
 
-            // เช็คสถานะโหมดแอดมินปัจจุบัน เพื่อซ่อน/แสดงปุ่มในการ์ดใหม่
-            const isAdmin = document.getElementById('adminToggle').classList.contains('active');
-            const adminClass = isAdmin ? '' : 'hidden';
-
             products.forEach(product => {
-                // จัดการเรื่องรูปภาพ
-                const hasImage = product.ImageURL && product.ImageURL !== 'รออัปโหลด' && product.ImageURL !== '';
-                const imageHtml = hasImage 
-                    ? `<img src="${product.ImageURL}" alt="${product.Title}" style="width:100%; height:100%; object-fit:cover;">`
+                // ใช้ฟังก์ชันแปลงลิงก์รูปภาพ
+                const directImageUrl = getDirectImageUrl(product.ImageURL);
+                
+                const imageHtml = directImageUrl 
+                    ? `<img src="${directImageUrl}" alt="${product.Title}" style="width:100%; height:100%; object-fit:cover;">`
                     : `<span class="img-placeholder">${product.Brand} Image</span>`;
 
-                // จัดการเรื่องราคาปกติ (ถ้าไม่มีให้ว่างไว้)
                 const normalPriceText = product.NormalPrice ? `ปกติ ${product.NormalPrice}.-` : '';
 
                 const cardHtml = `
@@ -177,10 +156,6 @@
                                     <span class="special-price">${product.SpecialPrice}.-</span>
                                 </div>
                             </div>
-                            <div class="admin-controls admin-element ${adminClass}">
-                                <button class="btn-action" onclick="alert('ระบบแก้ไขจะทำงานเมื่อทำระบบ Backend ขาเข้าเสร็จครับ')">✏️ แก้ไข</button>
-                                <button class="btn-action btn-danger" onclick="alert('ระบบลบจะทำงานเมื่อทำระบบ Backend ขาเข้าเสร็จครับ')">🗑️</button>
-                            </div>
                         </div>
                     </div>
                 `;
@@ -188,27 +163,12 @@
             });
         }
 
-        // เริ่มต้นดึงข้อมูลทันทีที่โหลดเว็บ
         fetchProducts();
 
-        // ==========================================
-        // ระบบ User Interface (UI)
-        // ==========================================
-
-        // 1. ระบบเปิด-ปิด โหมดแอดมิน
-        const adminToggle = document.getElementById('adminToggle');
-        adminToggle.addEventListener('click', () => {
-            adminToggle.classList.toggle('active');
-            document.querySelectorAll('.admin-element').forEach(el => {
-                el.classList.toggle('hidden');
-            });
-        });
-
-        // 2. ระบบ Live Search
+        // ระบบ Live Search
         document.getElementById('searchInput').addEventListener('keyup', (e) => {
             const searchText = e.target.value.toLowerCase();
             const filtered = allProducts.filter(p => {
-                // ป้องกัน error กรณีบางช่องใน Sheets ว่างเปล่า
                 const title = p.Title ? p.Title.toString().toLowerCase() : '';
                 const desc = p.Description ? p.Description.toString().toLowerCase() : '';
                 const brand = p.Brand ? p.Brand.toString().toLowerCase() : '';
@@ -217,19 +177,15 @@
             });
             renderProducts(filtered);
             
-            // รีเซ็ตปุ่ม Filter กลับไปที่ "ทั้งหมด"
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             document.querySelector('[data-filter="all"]').classList.add('active');
         });
 
-        // 3. ระบบกรองหมวดหมู่แบรนด์
+        // ระบบกรองหมวดหมู่แบรนด์
         const filterBtns = document.querySelectorAll('.filter-btn');
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                // เคลียร์ช่องค้นหา
                 document.getElementById('searchInput').value = '';
-                
-                // สลับสีปุ่ม
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 
