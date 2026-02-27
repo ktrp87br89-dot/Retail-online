@@ -32,6 +32,9 @@
         .controls { display: flex; gap: 15px; width: 100%; max-width: 600px; }
         .search-box { flex: 1; padding: 14px 24px; border: 1px solid #e5e7eb; border-radius: 50px; font-size: 16px; transition: all 0.3s ease; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
         .search-box:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
+        
+        .btn-primary { background-color: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2); }
+        .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
 
         /* Filter Tabs */
         .filters { display: flex; gap: 10px; margin-bottom: 30px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
@@ -57,6 +60,23 @@
         .normal-price { text-decoration: line-through; color: #9ca3af; font-size: 13px; display: block; margin-bottom: 2px;}
         .special-price { font-size: 26px; font-weight: 700; color: var(--danger); line-height: 1;}
         
+        /* Admin Controls */
+        .admin-controls { display: flex; gap: 10px; margin-top: 20px;}
+        .btn-action { flex: 1; padding: 10px; border: 1px solid #e5e7eb; background: white; border-radius: 12px; font-size: 14px; font-weight: 600; color: var(--text-dark); cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 5px;}
+        .btn-action:hover { background: #f9fafb; border-color: #d1d5db; }
+        .btn-danger { color: var(--danger); border-color: #fecaca; background: #fef2f2; flex: 0.3; }
+        .btn-danger:hover { background: #fee2e2; }
+
+        /* Toggle UI */
+        .mode-toggle { position: fixed; bottom: 30px; right: 30px; background: white; padding: 15px 20px; border-radius: 50px; box-shadow: var(--shadow-hover); display: flex; align-items: center; gap: 15px; z-index: 1000; border: 1px solid #e5e7eb;}
+        .toggle-switch { position: relative; width: 44px; height: 24px; background: #cbd5e1; border-radius: 24px; cursor: pointer; transition: 0.3s; }
+        .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);}
+        .toggle-switch.active { background: var(--primary); }
+        .toggle-switch.active::after { left: 22px; }
+
+        /* Utility Class */
+        .hidden { display: none !important; }
+        
         /* Loading Text */
         .loading-text { text-align: center; font-size: 18px; color: var(--text-gray); padding: 40px; grid-column: 1 / -1; }
     </style>
@@ -68,6 +88,7 @@
             <h1>📦 PROMO CENTER</h1>
             <div class="controls">
                 <input type="text" id="searchInput" class="search-box" placeholder="ค้นหาสินค้า, โปรโมชั่น, แบรนด์...">
+                <button class="btn-primary hidden" id="btnAddPromo" onclick="alert('ฟังก์ชันเพิ่มสินค้าเตรียมเชื่อมต่อกับฐานข้อมูลครับ')">+ เพิ่มโปรโมชั่น</button>
             </div>
         </div>
 
@@ -87,27 +108,29 @@
         </div>
     </div>
 
+    <div class="mode-toggle">
+        <span id="adminLabel" style="font-weight: 600; font-size: 14px; color: var(--text-dark);">โหมดแอดมิน (Admin)</span>
+        <div class="toggle-switch" id="adminToggle"></div>
+    </div>
+
     <script>
-        // URL ของ Web App จาก Google Apps Script
+        // URL ของ Web App จาก Google Apps Script (ของคุณกร)
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzfhzBH0dzt1lxObKp6q0Fu6kb3c55UbZaWAI7AuzM712ndg-ExrvMSLv8xiOYxbkq9/exec'; 
         
         const productGrid = document.getElementById('productGrid');
         let allProducts = [];
+        
+        // 0 = User ทั่วไป, 1 = Admin ธรรมดา, 2 = Super Admin
+        let currentAdminLevel = 0; 
 
         // ฟังก์ชันแปลงลิงก์ Google Drive ให้เป็นลิงก์สำหรับแสดงรูปภาพ
         function getDirectImageUrl(url) {
             if (!url || url === 'รออัปโหลด' || url.trim() === '') return null;
-            
-            // ตรวจสอบว่าเป็นลิงก์ Google Drive หรือไม่
             if (url.includes('drive.google.com')) {
-                // ค้นหา ID ของไฟล์จากลิงก์
                 const match = url.match(/\/d\/(.+?)\//) || url.match(/id=(.+?)(&|$)/);
-                if (match && match[1]) {
-                    // แปลงเป็นลิงก์สำหรับเปิดดูรูปโดยตรง
-                    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
-                }
+                if (match && match[1]) return `https://drive.google.com/uc?export=view&id=${match[1]}`;
             }
-            return url; // ถ้าระบุลิงก์อื่นที่ไม่ใช่ Drive ก็ให้ใช้ลิงก์นั้นเลย
+            return url; 
         }
 
         // ฟังก์ชันดึงข้อมูลจาก Google Sheets
@@ -118,7 +141,6 @@
                 renderProducts(allProducts);
             } catch (error) {
                 productGrid.innerHTML = '<div class="loading-text" style="color:var(--danger);">❌ เกิดข้อผิดพลาดในการดึงข้อมูล โปรดลองรีเฟรชหน้าเว็บอีกครั้ง</div>';
-                console.error('Error fetching data:', error);
             }
         }
 
@@ -132,14 +154,18 @@
             }
 
             products.forEach(product => {
-                // ใช้ฟังก์ชันแปลงลิงก์รูปภาพ
                 const directImageUrl = getDirectImageUrl(product.ImageURL);
-                
                 const imageHtml = directImageUrl 
                     ? `<img src="${directImageUrl}" alt="${product.Title}" style="width:100%; height:100%; object-fit:cover;">`
                     : `<span class="img-placeholder">${product.Brand} Image</span>`;
 
                 const normalPriceText = product.NormalPrice ? `ปกติ ${product.NormalPrice}.-` : '';
+
+                // ระบบควบคุมปุ่ม Admin ในแต่ละการ์ด
+                const adminClass = currentAdminLevel > 0 ? '' : 'hidden'; // โชว์กรอบปุ่มเมื่อเป็นแอดมินระดับ 1 หรือ 2
+                const deleteBtnHtml = currentAdminLevel === 2 
+                    ? `<button class="btn-action btn-danger" onclick="alert('ระบบลบจะทำงานเมื่อเชื่อมต่อฐานข้อมูลครับ')">🗑️</button>` 
+                    : ''; // โชว์ปุ่มลบเฉพาะ Super Admin (Level 2) เท่านั้น
 
                 const cardHtml = `
                     <div class="product-card" data-brand="${product.Brand}">
@@ -156,6 +182,10 @@
                                     <span class="special-price">${product.SpecialPrice}.-</span>
                                 </div>
                             </div>
+                            <div class="admin-controls ${adminClass}">
+                                <button class="btn-action" onclick="alert('ระบบแก้ไขจะทำงานเมื่อเชื่อมต่อฐานข้อมูลครับ')">✏️ แก้ไขข้อมูล</button>
+                                ${deleteBtnHtml}
+                            </div>
                         </div>
                     </div>
                 `;
@@ -165,7 +195,55 @@
 
         fetchProducts();
 
-        // ระบบ Live Search
+        // ==========================================
+        // ระบบ Login ควบคุม Admin (Super Admin / Admin ธรรมดา)
+        // ==========================================
+        const adminToggle = document.getElementById('adminToggle');
+        const adminLabel = document.getElementById('adminLabel');
+        const btnAddPromo = document.getElementById('btnAddPromo');
+
+        adminToggle.addEventListener('click', () => {
+            // ถ้าสถานะปิดอยู่ (กำลังจะเปิด)
+            if (currentAdminLevel === 0) {
+                const password = prompt('กรุณากรอกรหัสผ่านเพื่อเข้าสู่โหมด Admin:');
+                
+                if (password === 'admin9sing') {
+                    // Super Admin
+                    currentAdminLevel = 2;
+                    adminToggle.classList.add('active');
+                    adminLabel.innerText = '👑 Super Admin';
+                    adminLabel.style.color = '#4f46e5';
+                    btnAddPromo.classList.remove('hidden');
+                    renderProducts(allProducts); // รีเฟรชหน้าจอเพื่อโชว์ปุ่ม
+
+                } else if (password === 'admin0208') {
+                    // Admin ธรรมดา
+                    currentAdminLevel = 1;
+                    adminToggle.classList.add('active');
+                    adminLabel.innerText = '👤 Admin ธรรมดา';
+                    adminLabel.style.color = '#059669';
+                    btnAddPromo.classList.remove('hidden');
+                    renderProducts(allProducts); // รีเฟรชหน้าจอเพื่อโชว์ปุ่ม
+
+                } else if (password !== null) {
+                    // รหัสผิด (กด Cancel จะคืนค่า null ระบบจะอยู่เฉยๆ)
+                    alert('❌ รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง');
+                }
+            } 
+            // ถ้าสถานะเปิดอยู่ (กำลังจะปิด)
+            else {
+                currentAdminLevel = 0;
+                adminToggle.classList.remove('active');
+                adminLabel.innerText = 'โหมดแอดมิน (Admin)';
+                adminLabel.style.color = 'var(--text-dark)';
+                btnAddPromo.classList.add('hidden');
+                renderProducts(allProducts); // รีเฟรชหน้าจอเพื่อซ่อนปุ่ม
+            }
+        });
+
+        // ==========================================
+        // ระบบ ค้นหา และ กรอง (Search & Filter)
+        // ==========================================
         document.getElementById('searchInput').addEventListener('keyup', (e) => {
             const searchText = e.target.value.toLowerCase().trim();
             const filtered = allProducts.filter(p => {
@@ -181,7 +259,6 @@
             document.querySelector('[data-filter="all"]').classList.add('active');
         });
 
-        // ระบบกรองหมวดหมู่แบรนด์ (อัปเกรดให้ตัดช่องว่างและไม่สนตัวพิมพ์เล็กใหญ่)
         const filterBtns = document.querySelectorAll('.filter-btn');
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -189,14 +266,12 @@
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 
-                // ดึงค่าจากปุ่ม แล้วแปลงเป็นตัวเล็กและตัดช่องว่าง
                 const filterValue = btn.getAttribute('data-filter').toLowerCase().trim();
                 
                 if(filterValue === 'all') {
                     renderProducts(allProducts);
                 } else {
                     const filtered = allProducts.filter(p => {
-                        // ดึงชื่อแบรนด์จาก Sheets แปลงเป็นตัวเล็กและตัดช่องว่างก่อนเทียบ
                         const brandName = p.Brand ? p.Brand.toString().toLowerCase().trim() : '';
                         return brandName === filterValue;
                     });
