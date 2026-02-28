@@ -24,26 +24,22 @@
         body { background-color: var(--background); color: var(--text-dark); padding: 40px 20px; line-height: 1.5; }
         .container { max-width: 1200px; margin: 0 auto; }
 
-        /* Header & Controls */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 20px; }
         .header h1 { font-size: 28px; font-weight: 700; color: var(--text-dark); letter-spacing: -0.5px; }
         .controls { display: flex; gap: 15px; width: 100%; max-width: 600px; }
         .search-box { flex: 1; padding: 14px 24px; border: 1px solid #e5e7eb; border-radius: 50px; font-size: 16px; transition: all 0.3s ease; }
         .search-box:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
-        .btn-primary { background-color: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2); white-space: nowrap;}
+        .btn-primary { background-color: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; white-space: nowrap;}
         .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
 
-        /* Filter Tabs */
         .filters { display: flex; gap: 10px; margin-bottom: 30px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
         .filter-btn { background: var(--surface); border: 1px solid #e5e7eb; padding: 8px 20px; border-radius: 50px; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--text-gray); transition: 0.3s; white-space: nowrap; }
         .filter-btn.active { background: var(--text-dark); color: white; border-color: var(--text-dark); }
         
-        /* Grid & Cards */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
         .product-card { background: var(--surface); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(255,255,255,0.5); display: flex; flex-direction: column;}
         .product-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); }
         
-        /* Image Wrapper & Hover Effect */
         .card-img-wrapper { height: 220px; background: #e5e7eb; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; cursor: pointer;}
         .card-img-wrapper::after { content: '🔍 ขยายดูรูปและรายละเอียด'; position: absolute; bottom: -50px; left: 0; width: 100%; background: rgba(15, 23, 42, 0.85); color: white; text-align: center; padding: 12px 0; font-size: 14px; font-weight: 600; transition: 0.3s ease-in-out; }
         .card-img-wrapper:hover::after { bottom: 0; }
@@ -52,43 +48,48 @@
         .card-content { padding: 24px; display: flex; flex-direction: column; flex-grow: 1;}
         .brand-badge { display: inline-block; align-self: flex-start; padding: 4px 12px; background-color: #eef2ff; color: var(--primary); border-radius: 50px; font-size: 12px; font-weight: 700; margin-bottom: 12px; }
         .product-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: var(--text-dark); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .product-desc { font-size: 14px; color: var(--text-gray); margin-bottom: 20px; flex-grow: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .product-desc { font-size: 14px; color: var(--text-gray); margin-bottom: 10px; flex-grow: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        /* ป้ายบอกสรรพคุณเล็กๆ หน้าการ์ด */
+        .benefit-tag { font-size: 13px; color: #059669; background: #d1fae5; padding: 4px 8px; border-radius: 6px; display: inline-block; margin-bottom: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;}
+
         .price-container { display: flex; align-items: flex-end; justify-content: space-between; padding-top: 16px; border-top: 1px solid #f3f4f6;}
         .normal-price { text-decoration: line-through; color: #9ca3af; font-size: 13px; display: block; margin-bottom: 2px;}
         .special-price { font-size: 26px; font-weight: 700; color: var(--danger); line-height: 1;}
         
-        /* Admin Controls */
         .admin-controls { display: flex; gap: 10px; margin-top: 20px;}
         .btn-action { flex: 1; padding: 10px; border: 1px solid #e5e7eb; background: white; border-radius: 12px; font-size: 14px; font-weight: 600; color: var(--text-dark); cursor: pointer; transition: 0.2s;}
         .btn-action:hover { background: #f9fafb; border-color: #d1d5db; }
         .btn-danger { color: var(--danger); border-color: #fecaca; background: #fef2f2; flex: 0.3; }
         .btn-danger:hover { background: #fee2e2; }
 
-        /* Toggle UI */
         .mode-toggle { position: fixed; bottom: 30px; right: 30px; background: white; padding: 15px 20px; border-radius: 50px; box-shadow: var(--shadow-hover); display: flex; align-items: center; gap: 15px; z-index: 1000; border: 1px solid #e5e7eb;}
         .toggle-switch { position: relative; width: 44px; height: 24px; background: #cbd5e1; border-radius: 24px; cursor: pointer; transition: 0.3s; }
         .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: white; border-radius: 50%; transition: 0.3s;}
         .toggle-switch.active { background: var(--primary); }
         .toggle-switch.active::after { left: 22px; }
 
-        /* Modal Overlay กลาง */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s; padding: 20px; backdrop-filter: blur(5px);}
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         .modal-content { background: white; width: 100%; max-width: 500px; border-radius: var(--radius-lg); padding: 30px; box-shadow: var(--shadow-hover); transform: translateY(20px); transition: 0.3s; max-height: 90vh; overflow-y: auto;}
         .modal-overlay.active .modal-content { transform: translateY(0); }
         .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; color: var(--text-dark); }
         
-        /* Modal สำหรับดูรูปภาพขยาย (View Modal) */
         .view-modal-content { max-width: 600px; text-align: center; position: relative; padding: 40px 30px 30px 30px;}
         .view-modal-close { position: absolute; top: 15px; right: 15px; background: #f3f4f6; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; color: var(--text-gray);}
         .view-modal-close:hover { background: #e5e7eb; color: var(--danger); }
         .view-image { width: 100%; max-height: 400px; object-fit: contain; border-radius: 12px; margin-bottom: 20px; background: #f9fafb; display: none;}
         .view-no-image { width: 100%; height: 300px; background: #f3f4f6; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #9ca3af; margin-bottom: 20px; font-weight: 600;}
         .view-title { font-size: 24px; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; line-height: 1.3;}
-        .view-desc { font-size: 16px; color: var(--text-gray); margin-bottom: 25px; text-align: left; line-height: 1.6; background: #f9fafb; padding: 15px; border-radius: 12px;}
+        .view-desc { font-size: 16px; color: var(--text-gray); margin-bottom: 15px; text-align: left; line-height: 1.6; background: #f9fafb; padding: 15px; border-radius: 12px;}
+        
+        /* กล่องไฮไลท์สรรพคุณใน Modal */
+        .view-benefits-box { background: #e0f2fe; padding: 15px; border-radius: 12px; text-align: left; margin-bottom: 25px; border: 1px solid #bae6fd;}
+        .view-benefits-title { font-size: 14px; font-weight: 700; color: #0284c7; margin-bottom: 5px; display: flex; align-items: center; gap: 5px;}
+        .view-benefits-text { font-size: 15px; color: #0f172a; line-height: 1.5;}
+
         .view-price-box { background: #fef2f2; padding: 20px; border-radius: 12px; border: 1px dashed #fecaca; display: flex; justify-content: space-between; align-items: center;}
 
-        /* Form Group สำหรับเพิ่ม/แก้ไข */
         .form-group { margin-bottom: 15px; text-align: left;}
         .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-gray); margin-bottom: 5px; }
         .form-control { width: 100%; padding: 10px 15px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; outline: none; font-family: 'Prompt';}
@@ -109,7 +110,7 @@
         <div class="header">
             <h1>📦 PROMO CENTER</h1>
             <div class="controls">
-                <input type="text" id="searchInput" class="search-box" placeholder="ค้นหาสินค้า, โปรโมชั่น, แบรนด์...">
+                <input type="text" id="searchInput" class="search-box" placeholder="ค้นหา: ชื่อ, แบรนด์, สรรพคุณ (พิมพ์หลายคำได้)...">
                 <button class="btn-primary hidden" id="btnAddPromo" onclick="openFormModal('add')">+ เพิ่มโปรโมชั่น</button>
             </div>
         </div>
@@ -144,6 +145,12 @@
             
             <span class="brand-badge" id="viewBrand" style="margin: 0 auto 15px auto; display: inline-block;"></span>
             <h2 class="view-title" id="viewTitle"></h2>
+            
+            <div id="viewBenefitsBox" class="view-benefits-box">
+                <div class="view-benefits-title">✨ สรรพคุณ / จุดเด่น</div>
+                <div id="viewBenefits" class="view-benefits-text"></div>
+            </div>
+
             <div class="view-desc" id="viewDesc"></div>
             
             <div class="view-price-box">
@@ -169,9 +176,15 @@
                 <label>ชื่อสินค้า / เซตโปรโมชั่น (Title)</label>
                 <input type="text" id="formTitle" class="form-control" placeholder="เช่น เซต ยูร่า 999 บาท">
             </div>
+            
             <div class="form-group">
-                <label>รายละเอียด (Description)</label>
-                <textarea id="formDesc" class="form-control" rows="3" placeholder="รายละเอียดของแถม..."></textarea>
+                <label>สรรพคุณ / ข้อมูลสินค้า (Benefits)</label>
+                <textarea id="formBenefits" class="form-control" rows="2" placeholder="เช่น บำรุงข้อเข่า สายตา..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>รายละเอียดของแถม (Description)</label>
+                <textarea id="formDesc" class="form-control" rows="2" placeholder="รายการของแถมในเซต..."></textarea>
             </div>
             <div style="display: flex; gap: 10px;">
                 <div class="form-group" style="flex: 1;">
@@ -201,7 +214,7 @@
         
         const productGrid = document.getElementById('productGrid');
         let allProducts = [];
-        let currentAdminLevel = 0; // 0=User, 1=Admin, 2=SuperAdmin
+        let currentAdminLevel = 0; 
         let currentAction = 'add'; 
 
         function getDirectImageUrl(url) {
@@ -213,7 +226,6 @@
             return url; 
         }
 
-        // --- ดึงข้อมูลจาก Google Sheets ---
         async function fetchProducts() {
             productGrid.innerHTML = '<div class="loading-text">กำลังโหลดข้อมูลโปรโมชั่นล่าสุด... ⏳</div>';
             try {
@@ -228,7 +240,7 @@
         function renderProducts(products) {
             productGrid.innerHTML = ''; 
             if(products.length === 0) {
-                productGrid.innerHTML = '<div class="loading-text">ไม่พบรายการสินค้า</div>';
+                productGrid.innerHTML = '<div class="loading-text">ไม่พบรายการสินค้าที่ค้นหา</div>';
                 return;
             }
 
@@ -239,6 +251,11 @@
                     : `<span class="img-placeholder">${product.Brand} Image</span>`;
 
                 const normalPriceText = product.NormalPrice ? `ปกติ ${product.NormalPrice}.-` : '';
+                
+                // ถังแสดงสรรพคุณหน้าการ์ด (ถ้ามีข้อมูล)
+                const benefitTagHtml = product.Benefits 
+                    ? `<div class="benefit-tag">✨ ${product.Benefits}</div>` 
+                    : '';
 
                 const adminClass = currentAdminLevel > 0 ? '' : 'hidden'; 
                 const deleteBtnHtml = currentAdminLevel === 2 
@@ -253,6 +270,7 @@
                         <div class="card-content">
                             <span class="brand-badge">${product.Brand}</span>
                             <h2 class="product-title">${product.Title}</h2>
+                            ${benefitTagHtml}
                             <p class="product-desc">${product.Description}</p>
                             <div class="price-container">
                                 <div>
@@ -274,7 +292,7 @@
         fetchProducts();
 
         // ==========================================
-        // ระบบขยายดูภาพและรายละเอียด (View Modal)
+        // ระบบ View Modal
         // ==========================================
         const viewModal = document.getElementById('viewModal');
         
@@ -298,26 +316,29 @@
 
             document.getElementById('viewBrand').innerText = product.Brand;
             document.getElementById('viewTitle').innerText = product.Title;
-            // ใช้ replace เพื่อให้เว้นบรรทัดตามที่พิมพ์ใน Sheets
-            document.getElementById('viewDesc').innerHTML = product.Description ? product.Description.replace(/\n/g, '<br>') : '-';
+            
+            // แสดง/ซ่อน กล่องสรรพคุณ
+            const benefitsBox = document.getElementById('viewBenefitsBox');
+            if(product.Benefits && product.Benefits.trim() !== '') {
+                document.getElementById('viewBenefits').innerHTML = product.Benefits.replace(/\n/g, '<br>');
+                benefitsBox.style.display = 'block';
+            } else {
+                benefitsBox.style.display = 'none';
+            }
+
+            document.getElementById('viewDesc').innerHTML = product.Description ? `<strong>รายละเอียดเซต:</strong><br>${product.Description.replace(/\n/g, '<br>')}` : '';
             document.getElementById('viewNormalPrice').innerText = product.NormalPrice ? `ปกติ ${product.NormalPrice}.-` : '';
             document.getElementById('viewSpecialPrice').innerText = `${product.SpecialPrice}.-`;
 
             viewModal.classList.add('active');
         }
 
-        function closeViewModal() {
-            viewModal.classList.remove('active');
-        }
-
-        // ปิด Modal เมื่อคลิกพื้นที่ว่างข้างนอก
-        viewModal.addEventListener('click', (e) => {
-            if(e.target === viewModal) closeViewModal();
-        });
+        function closeViewModal() { viewModal.classList.remove('active'); }
+        viewModal.addEventListener('click', (e) => { if(e.target === viewModal) closeViewModal(); });
 
 
         // ==========================================
-        // ระบบเพิ่ม/แก้ไขข้อมูล (Form Modal)
+        // ระบบ Form Modal
         // ==========================================
         const formModal = document.getElementById('formModal');
         const btnSave = document.getElementById('btnSave');
@@ -331,6 +352,7 @@
                 document.getElementById('formRowIndex').value = '';
                 document.getElementById('formBrand').value = '';
                 document.getElementById('formTitle').value = '';
+                document.getElementById('formBenefits').value = '';
                 document.getElementById('formDesc').value = '';
                 document.getElementById('formNormal').value = '';
                 document.getElementById('formSpecial').value = '';
@@ -342,6 +364,7 @@
                     document.getElementById('formRowIndex').value = product._rowIndex;
                     document.getElementById('formBrand').value = product.Brand;
                     document.getElementById('formTitle').value = product.Title;
+                    document.getElementById('formBenefits').value = product.Benefits || '';
                     document.getElementById('formDesc').value = product.Description;
                     document.getElementById('formNormal').value = product.NormalPrice;
                     document.getElementById('formSpecial').value = product.SpecialPrice;
@@ -350,9 +373,7 @@
             }
         }
 
-        function closeFormModal() {
-            formModal.classList.remove('active');
-        }
+        function closeFormModal() { formModal.classList.remove('active'); }
 
         async function saveData() {
             const payload = {
@@ -361,6 +382,7 @@
                     _rowIndex: document.getElementById('formRowIndex').value,
                     Brand: document.getElementById('formBrand').value,
                     Title: document.getElementById('formTitle').value,
+                    Benefits: document.getElementById('formBenefits').value,
                     Description: document.getElementById('formDesc').value,
                     NormalPrice: document.getElementById('formNormal').value,
                     SpecialPrice: document.getElementById('formSpecial').value,
@@ -369,12 +391,11 @@
             };
 
             if(!payload.data.Brand || !payload.data.Title) {
-                alert('กรุณากรอก แบรนด์ และ ชื่อโปรโมชั่นให้ครบถ้วนครับ');
+                alert('กรุณากรอก แบรนด์ และ ชื่อโปรโมชั่นครับ');
                 return;
             }
 
             btnSave.innerText = 'กำลังบันทึก... ⏳';
-            btnSave.style.opacity = '0.7';
             btnSave.style.pointerEvents = 'none';
 
             try {
@@ -384,30 +405,25 @@
                     body: JSON.stringify(payload)
                 });
                 closeFormModal();
-                alert('✅ บันทึกข้อมูลลงฐานข้อมูลเรียบร้อยแล้ว!');
+                alert('✅ บันทึกข้อมูลเรียบร้อยแล้ว!');
                 fetchProducts(); 
             } catch (error) {
-                alert('❌ เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+                alert('❌ เกิดข้อผิดพลาด');
             } finally {
                 btnSave.innerText = '💾 บันทึกข้อมูล';
-                btnSave.style.opacity = '1';
                 btnSave.style.pointerEvents = 'auto';
             }
         }
 
         async function deleteData(rowIndex, title) {
-            if(confirm(`⚠️ คุณแน่ใจหรือไม่ว่าต้องการลบ\n"${title}" ?\n(ลบแล้วกู้คืนไม่ได้นะครับ)`)) {
+            if(confirm(`⚠️ ยืนยันการลบ "${title}" ?`)) {
                 try {
                     await fetch(APPS_SCRIPT_URL, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                         body: JSON.stringify({ action: 'delete', data: { _rowIndex: rowIndex } })
                     });
-                    alert('🗑️ ลบข้อมูลเรียบร้อยแล้ว!');
                     fetchProducts();
-                } catch (error) {
-                    alert('❌ เกิดข้อผิดพลาดในการลบข้อมูล');
-                }
+                } catch (error) { alert('❌ ลบข้อมูลไม่สำเร็จ'); }
             }
         }
 
@@ -449,16 +465,31 @@
         });
 
         // ==========================================
-        // ระบบ ค้นหา และ กรอง
+        // ระบบ Smart Search (ค้นหาหลายคำพร้อมกันได้)
         // ==========================================
         document.getElementById('searchInput').addEventListener('keyup', (e) => {
             const searchText = e.target.value.toLowerCase().trim();
+            if(!searchText) {
+                renderProducts(allProducts);
+                return;
+            }
+
+            // แยกคำค้นหาด้วยช่องว่าง เช่น "งาดำ เข่า" -> ["งาดำ", "เข่า"]
+            const searchTerms = searchText.split(/\s+/);
+
             const filtered = allProducts.filter(p => {
-                const title = p.Title ? p.Title.toString().toLowerCase() : '';
-                const desc = p.Description ? p.Description.toString().toLowerCase() : '';
-                const brand = p.Brand ? p.Brand.toString().toLowerCase() : '';
-                return title.includes(searchText) || desc.includes(searchText) || brand.includes(searchText);
+                // เอารายละเอียดทุกอย่างมากองรวมกัน
+                const combinedText = `
+                    ${p.Brand || ''} 
+                    ${p.Title || ''} 
+                    ${p.Description || ''} 
+                    ${p.Benefits || ''}
+                `.toLowerCase();
+                
+                // เช็คว่าต้องเจอ "ทุกคำ" ที่พิมพ์มา
+                return searchTerms.every(term => combinedText.includes(term));
             });
+            
             renderProducts(filtered);
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             document.querySelector('[data-filter="all"]').classList.add('active');
