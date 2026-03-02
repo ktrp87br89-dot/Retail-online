@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Promo Catalog - Knowledge Hub</title>
+    <title>Sales Promo Catalog - Ultimate Knowledge</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -59,7 +59,6 @@
         .product-title { font-size: 17px; font-weight: 700; margin-bottom: 10px; color: var(--text-dark); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4;}
         .benefit-tag { font-size: 13px; color: #059669; background: #d1fae5; padding: 4px 8px; border-radius: 6px; display: inline-block; margin-bottom: 10px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;}
         
-        /* เพิ่ม CSS สำหรับแสดงรายละเอียดบนการ์ด */
         .product-desc { font-size: 13px; color: var(--text-gray); margin-bottom: 15px; flex-grow: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5; }
 
         .price-container { display: flex; align-items: flex-end; justify-content: space-between; padding-top: 15px; border-top: 1px solid #f1f5f9; margin-bottom: 15px;}
@@ -74,13 +73,6 @@
         .admin-controls { display: flex; gap: 8px; margin-top: 8px;}
         .btn-action { flex: 1; padding: 8px; border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--text-dark); cursor: pointer; }
         .btn-danger { color: var(--danger); border-color: #fecaca; background: #fef2f2; flex: 0.3; }
-
-        /* Skeleton Load */
-        .skeleton-card { background: white; border-radius: var(--radius-lg); border: 1px solid #f1f5f9; overflow: hidden; height: 400px;}
-        .skeleton-img { height: 200px; width: 100%; }
-        .skeleton-text { height: 20px; margin: 20px; border-radius: 4px; }
-        .skeleton-anim { background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
-        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
         /* Floating Cart Button */
         .floating-cart-btn { position: fixed; bottom: 30px; left: 30px; background: var(--warning); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4); border: none; cursor: pointer; z-index: 1000; transition: 0.3s;}
@@ -99,10 +91,14 @@
         .view-image { width: 100%; max-height: 300px; object-fit: contain; border-radius: 12px; margin-bottom: 20px; background: #f8fafc;}
         .view-title { font-size: 22px; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; line-height: 1.3;}
         .view-benefits-box { background: #f0fdf4; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #bbf7d0;}
+        .view-desc-box { background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0; font-size: 14px; color: var(--text-gray); line-height: 1.6;}
         
-        /* เพิ่ม CSS สำหรับกล่องรายละเอียดใน View Modal */
-        .view-desc-box { background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e2e8f0; font-size: 14px; color: var(--text-gray); line-height: 1.6;}
-        
+        /* สไตล์สำหรับกล่องจุดขาย (Selling Points) */
+        .view-selling-points-box { background: #fffbeb; padding: 15px 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #fde047;}
+        .sp-title { font-size: 14px; font-weight: 700; color: #854d0e; margin-bottom: 8px; display: flex; align-items: center; gap: 5px;}
+        .sp-list { margin: 0; padding-left: 20px; font-size: 14px; color: #713f12; line-height: 1.6; }
+        .sp-list li { margin-bottom: 5px; }
+
         .view-price-box { background: #fef2f2; padding: 20px; border-radius: 12px; border: 1px solid #fecaca; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;}
         
         /* Auto-Infographic Generator Mode */
@@ -180,8 +176,7 @@
 
     <div class="container">
         <div class="product-grid" id="productGrid">
-            <div class="skeleton-card"><div class="skeleton-img skeleton-anim"></div><div class="skeleton-text skeleton-anim"></div></div>
-            <div class="skeleton-card"><div class="skeleton-img skeleton-anim"></div><div class="skeleton-text skeleton-anim"></div></div>
+            <div style="text-align: center; grid-column: 1/-1; padding: 40px; color: #64748b;">กำลังโหลดข้อมูล... ⏳</div>
         </div>
     </div>
 
@@ -201,8 +196,13 @@
                 <h2 class="view-title" id="viewTitle"></h2>
                 
                 <div id="viewBenefitsBox" class="view-benefits-box">
-                    <div style="font-size:14px; font-weight:700; color:#166534;">✨ สรรพคุณ</div>
+                    <div style="font-size:14px; font-weight:700; color:#166534;">✨ แคปชันสั้นๆ</div>
                     <div id="viewBenefits" style="font-size:14px; color:#064e3b;"></div>
+                </div>
+
+                <div id="viewSellingPointsBox" class="view-selling-points-box">
+                    <div class="sp-title">💡 สรุปจุดขาย (Selling Points)</div>
+                    <ul id="viewSellingPoints" class="sp-list"></ul>
                 </div>
 
                 <div id="viewDescBox" class="view-desc-box">
@@ -256,17 +256,20 @@
             <input type="hidden" id="formRowIndex">
             <div class="form-group"><label>แบรนด์</label><input type="text" id="formBrand" class="form-control"></div>
             <div class="form-group"><label>ชื่อสินค้า</label><input type="text" id="formTitle" class="form-control"></div>
-            <div class="form-group"><label>สรรพคุณ</label><textarea id="formBenefits" class="form-control" rows="2"></textarea></div>
-            <div class="form-group"><label>รายละเอียด</label><textarea id="formDesc" class="form-control" rows="2"></textarea></div>
+            
+            <div class="form-group">
+                <label>สรุปจุดขาย (ใส่เครื่องหมาย - นำหน้าข้อความ)</label>
+                <textarea id="formSellingPoints" class="form-control" rows="3" placeholder="- ช่วยเรื่องกระดูก&#10;- ลดอาการอักเสบ"></textarea>
+            </div>
+
+            <div class="form-group"><label>แคปชันสั้นหน้าการ์ด</label><textarea id="formBenefits" class="form-control" rows="1"></textarea></div>
+            <div class="form-group"><label>รายละเอียดของแถม</label><textarea id="formDesc" class="form-control" rows="2"></textarea></div>
             <div style="display:flex; gap:10px;">
-                <div class="form-group" style="flex:1;"><label>ราคาปกติ</label><input type="number" id="formNormal" class="form-control"></div>
-                <div class="form-group" style="flex:1;"><label>ราคาพิเศษ</label><input type="number" id="formSpecial" class="form-control"></div>
+                <div class="form-group" style="flex:1;"><label>ราคาปกติ (ตัวเลข)</label><input type="number" id="formNormal" class="form-control"></div>
+                <div class="form-group" style="flex:1;"><label>ราคาพิเศษ (ตัวเลข)</label><input type="number" id="formSpecial" class="form-control"></div>
             </div>
             <div class="form-group"><label>ลิงก์รูปภาพ</label><input type="text" id="formImage" class="form-control"></div>
-            <div class="form-group">
-                <label>ลิงก์คู่มือสินค้า (PDF_Link)</label>
-                <input type="text" id="formPDF" class="form-control" placeholder="วางลิงก์ Google Drive หรือเว็บที่นี่">
-            </div>
+            <div class="form-group"><label>ลิงก์คู่มือสินค้า (PDF_Link)</label><input type="text" id="formPDF" class="form-control"></div>
 
             <div class="modal-actions">
                 <button class="btn-cancel" onclick="closeFormModal()">ยกเลิก</button>
@@ -328,7 +331,7 @@
             if (searchText) {
                 const searchTerms = searchText.split(/\s+/);
                 filtered = filtered.filter(p => {
-                    const combined = `${p.Brand||''} ${p.Title||''} ${p.Benefits||''} ${p.Description||''}`.toLowerCase();
+                    const combined = `${p.Brand||''} ${p.Title||''} ${p.Benefits||''} ${p.Description||''} ${p.Selling_Points||''}`.toLowerCase();
                     return searchTerms.every(term => combined.includes(term));
                 });
             }
@@ -354,10 +357,7 @@
             products.forEach(product => {
                 const img = getDirectImageUrl(product.ImageURL) ? `<img src="${getDirectImageUrl(product.ImageURL)}" style="width:100%;height:100%;object-fit:cover;">` : `<span class="img-placeholder">ไม่มีรูป</span>`;
                 const benefit = product.Benefits ? `<div class="benefit-tag">✨ ${product.Benefits}</div>` : '';
-                
-                // ดึง Description มาแสดงบนการ์ดสินค้าด้วย
                 const desc = product.Description ? `<p class="product-desc">${product.Description}</p>` : '';
-                
                 const adminClass = currentAdminLevel > 0 ? '' : 'hidden'; 
                 const delBtn = currentAdminLevel === 2 ? `<button class="btn-action btn-danger" onclick="deleteData(${product._rowIndex})">🗑️</button>` : ''; 
 
@@ -463,30 +463,35 @@
             document.getElementById('viewNormalPrice').innerText = product.NormalPrice ? `ปกติ ${product.NormalPrice}.-` : '';
             document.getElementById('viewSpecialPrice').innerText = `${product.SpecialPrice}.-`;
             
-            // แสดง/ซ่อน กล่องสรรพคุณ
             const benefitsBox = document.getElementById('viewBenefitsBox');
             if(product.Benefits) {
-                document.getElementById('viewBenefits').innerHTML = product.Benefits.replace(/\n/g, '<br>');
+                document.getElementById('viewBenefits').innerText = product.Benefits;
                 benefitsBox.style.display = 'block';
             } else benefitsBox.style.display = 'none';
 
-            // แสดง/ซ่อน กล่องรายละเอียดของแถม (ที่เพิ่งแก้ให้แสดง)
+            // จัดการข้อมูลจุดขาย (Selling Points) แปลงข้อความที่ใส่ - ให้เป็น Bullet Point
+            const spBox = document.getElementById('viewSellingPointsBox');
+            const spList = document.getElementById('viewSellingPoints');
+            if(product.Selling_Points && product.Selling_Points.trim() !== '') {
+                // ตัดคำด้วยเครื่องหมาย - แล้วนำมาแสดงเป็น <li>
+                const points = product.Selling_Points.split('-').filter(p => p.trim() !== '');
+                spList.innerHTML = points.map(p => `<li style="margin-bottom:6px;">${p.trim()}</li>`).join('');
+                spBox.style.display = 'block';
+            } else {
+                spBox.style.display = 'none';
+            }
+
             const descBox = document.getElementById('viewDescBox');
             if(product.Description && product.Description.trim() !== '') {
                 document.getElementById('viewDesc').innerHTML = product.Description.replace(/\n/g, '<br>');
                 descBox.style.display = 'block';
-            } else {
-                descBox.style.display = 'none';
-            }
+            } else descBox.style.display = 'none';
 
-            // จัดการปุ่ม PDF 
             const btnPDF = document.getElementById('btnViewPDF');
             if (product.PDF_Link && product.PDF_Link.trim() !== '') {
                 btnPDF.classList.remove('hidden');
                 btnPDF.onclick = () => window.open(product.PDF_Link, '_blank');
-            } else {
-                btnPDF.classList.add('hidden');
-            }
+            } else btnPDF.classList.add('hidden');
 
             document.getElementById('viewModal').classList.add('active');
         }
@@ -494,8 +499,17 @@
         function copyToLine() {
             let p = currentViewProduct;
             let text = `🔥 โปรพิเศษจาก ${p.Brand}\n📦 ${p.Title}\n`;
-            if(p.Benefits) text += `✨ สรรพคุณ: ${p.Benefits}\n`;
-            if(p.Description) text += `🎁 รายละเอียดเซต:\n${p.Description}\n`;
+            
+            // ก๊อปปี้จุดขายไปด้วย
+            if(p.Selling_Points) {
+                text += `\n💡 จุดเด่นสินค้า:\n`;
+                const points = p.Selling_Points.split('-').filter(point => point.trim() !== '');
+                points.forEach(point => {
+                    text += `✅ ${point.trim()}\n`;
+                });
+            }
+
+            if(p.Description) text += `\n🎁 รายละเอียดเซต:\n${p.Description}\n`;
             text += `\n💰 ราคาเพียง: ${p.SpecialPrice} บาท (ปกติ ${p.NormalPrice||'-'})\n\nสนใจพิมพ์ "รับ" ได้เลยครับ`;
             navigator.clipboard.writeText(text).then(() => {
                 showToast('คัดลอกข้อความสำเร็จ!');
@@ -529,37 +543,19 @@
             { t: "1. ค้นหาแบบอัจฉริยะ 🔍", d: "พิมพ์ชื่อแบรนด์ เว้นวรรค ตามด้วยสรรพคุณ เช่น 'งาดำ ข้อเข่า' ระบบจะหาให้ทันที" },
             { t: "2. หมวดหมู่และเรียงราคา 🏷️", d: "ด้านบนมีปุ่มหมวดหมู่ และกดเรียงราคาสินค้าจากต่ำไปสูง เพื่อหาสินค้าตามงบลูกค้าได้" },
             { t: "3. ระบบจัดเซตเสนอราคา 🛒", d: "กดปุ่ม 'เพิ่มลงรายการจัดเซต' แล้วกดปุ่มตะกร้าสีเหลืองมุมซ้ายล่าง เพื่อก๊อปปี้ยอดรวมส่งลูกค้า" },
-            { t: "4. สร้างภาพและคู่มือ 📸📖", d: "กดที่รูปสินค้า จะมีปุ่ม 'สร้างภาพโปรโมท' ให้แคปจอส่งลูกค้า และมีปุ่มเปิดไฟล์ 'คู่มือเจาะลึก(PDF)' ให้อ่านเพิ่มด้วย!" }
+            { t: "4. จุดขายและคู่มือ 📖", d: "เมื่อแตะดูรายละเอียดสินค้า จะมีสรุปจุดขายไว้ก๊อปปี้ส่งลูกค้า และมีปุ่มเปิดไฟล์คู่มือ PDF ด้วย!" }
         ];
 
-        function startTour() {
-            tourStep = 0;
-            document.getElementById('tourOverlay').style.display = 'flex';
-            updateTour();
-        }
-
-        function updateTour() {
-            document.getElementById('tourTitle').innerText = tourData[tourStep].t;
-            document.getElementById('tourDesc').innerText = tourData[tourStep].d;
-            document.getElementById('btnTourNext').innerText = tourStep === tourData.length - 1 ? "เข้าใจแล้ว เริ่มลุยเลย! 🎉" : "ถัดไป ➡️";
-        }
-
-        function nextTour() {
-            if(tourStep < tourData.length - 1) {
-                tourStep++;
-                updateTour();
-            } else {
-                document.getElementById('tourOverlay').style.display = 'none';
-                showToast('ขอให้สนุกกับการทำยอดนะครับ!');
-            }
-        }
+        function startTour() { tourStep = 0; document.getElementById('tourOverlay').style.display = 'flex'; updateTour(); }
+        function updateTour() { document.getElementById('tourTitle').innerText = tourData[tourStep].t; document.getElementById('tourDesc').innerText = tourData[tourStep].d; document.getElementById('btnTourNext').innerText = tourStep === tourData.length - 1 ? "เข้าใจแล้ว เริ่มลุยเลย! 🎉" : "ถัดไป ➡️"; }
+        function nextTour() { if(tourStep < tourData.length - 1) { tourStep++; updateTour(); } else { document.getElementById('tourOverlay').style.display = 'none'; showToast('ขอให้สนุกกับการทำยอดนะครับ!'); } }
 
         function openFormModal(action, rowIndex = null) {
             currentAction = action;
             document.getElementById('formModal').classList.add('active');
             if (action === 'add') {
                 document.getElementById('formModalTitle').innerText = '✨ เพิ่มโปรโมชั่น';
-                ['formRowIndex','formBrand','formTitle','formBenefits','formDesc','formNormal','formSpecial','formImage','formPDF'].forEach(id => document.getElementById(id).value = '');
+                ['formRowIndex','formBrand','formTitle','formBenefits','formSellingPoints','formDesc','formNormal','formSpecial','formImage','formPDF'].forEach(id => document.getElementById(id).value = '');
             } else {
                 document.getElementById('formModalTitle').innerText = '✏️ แก้ไขโปรโมชั่น';
                 const p = allProducts.find(x => x._rowIndex === rowIndex);
@@ -568,6 +564,7 @@
                     document.getElementById('formBrand').value = p.Brand;
                     document.getElementById('formTitle').value = p.Title;
                     document.getElementById('formBenefits').value = p.Benefits || '';
+                    document.getElementById('formSellingPoints').value = p.Selling_Points || '';
                     document.getElementById('formDesc').value = p.Description;
                     document.getElementById('formNormal').value = p.NormalPrice;
                     document.getElementById('formSpecial').value = p.SpecialPrice;
@@ -586,6 +583,7 @@
                     Brand: document.getElementById('formBrand').value,
                     Title: document.getElementById('formTitle').value,
                     Benefits: document.getElementById('formBenefits').value,
+                    Selling_Points: document.getElementById('formSellingPoints').value,
                     Description: document.getElementById('formDesc').value,
                     NormalPrice: document.getElementById('formNormal').value,
                     SpecialPrice: document.getElementById('formSpecial').value,
