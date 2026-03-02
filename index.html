@@ -57,7 +57,11 @@
         .card-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1;}
         .brand-badge { display: inline-block; align-self: flex-start; padding: 4px 10px; background-color: #e0e7ff; color: var(--primary); border-radius: 6px; font-size: 12px; font-weight: 700; margin-bottom: 12px; }
         .product-title { font-size: 17px; font-weight: 700; margin-bottom: 10px; color: var(--text-dark); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4;}
-        .benefit-tag { font-size: 13px; color: #059669; background: #d1fae5; padding: 4px 8px; border-radius: 6px; display: inline-block; margin-bottom: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;}
+        .benefit-tag { font-size: 13px; color: #059669; background: #d1fae5; padding: 4px 8px; border-radius: 6px; display: inline-block; margin-bottom: 10px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;}
+        
+        /* เพิ่ม CSS สำหรับแสดงรายละเอียดบนการ์ด */
+        .product-desc { font-size: 13px; color: var(--text-gray); margin-bottom: 15px; flex-grow: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5; }
+
         .price-container { display: flex; align-items: flex-end; justify-content: space-between; padding-top: 15px; border-top: 1px solid #f1f5f9; margin-bottom: 15px;}
         .normal-price { text-decoration: line-through; color: #94a3b8; font-size: 13px; display: block; margin-bottom: 2px;}
         .special-price { font-size: 24px; font-weight: 700; color: var(--danger); line-height: 1;}
@@ -94,7 +98,11 @@
         /* View Modal Specifics */
         .view-image { width: 100%; max-height: 300px; object-fit: contain; border-radius: 12px; margin-bottom: 20px; background: #f8fafc;}
         .view-title { font-size: 22px; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; line-height: 1.3;}
-        .view-benefits-box { background: #f0fdf4; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #bbf7d0;}
+        .view-benefits-box { background: #f0fdf4; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #bbf7d0;}
+        
+        /* เพิ่ม CSS สำหรับกล่องรายละเอียดใน View Modal */
+        .view-desc-box { background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e2e8f0; font-size: 14px; color: var(--text-gray); line-height: 1.6;}
+        
         .view-price-box { background: #fef2f2; padding: 20px; border-radius: 12px; border: 1px solid #fecaca; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;}
         
         /* Auto-Infographic Generator Mode */
@@ -191,10 +199,17 @@
                 <img id="viewImage" class="view-image" src="" alt="Product">
                 <span class="brand-badge" id="viewBrand"></span>
                 <h2 class="view-title" id="viewTitle"></h2>
+                
                 <div id="viewBenefitsBox" class="view-benefits-box">
                     <div style="font-size:14px; font-weight:700; color:#166534;">✨ สรรพคุณ</div>
                     <div id="viewBenefits" style="font-size:14px; color:#064e3b;"></div>
                 </div>
+
+                <div id="viewDescBox" class="view-desc-box">
+                    <div style="font-size:13px; font-weight:700; color:var(--text-dark); margin-bottom:5px;">🎁 รายละเอียด / ของแถม</div>
+                    <div id="viewDesc"></div>
+                </div>
+
                 <div class="view-price-box">
                     <div>
                         <span style="font-size: 13px; color: var(--danger); font-weight: 600;">🔥 ราคาโปรโมชั่น</span>
@@ -202,10 +217,9 @@
                     </div>
                     <div id="viewSpecialPrice" style="font-size: 32px; font-weight: 700; color: var(--danger);"></div>
                 </div>
+                
                 <button class="btn-copy-line" onclick="copyToLine()">💬 คัดลอกข้อความเตรียมส่ง LINE</button>
-                
                 <button id="btnViewPDF" class="btn-pdf hidden">📖 เปิดคู่มือเจาะลึกสินค้า (PDF)</button>
-                
                 <button class="btn-promo-gen" onclick="generatePromoImage()">🎨 สร้างภาพโปรโมท (สำหรับแคปจอ)</button>
             </div>
 
@@ -249,10 +263,9 @@
                 <div class="form-group" style="flex:1;"><label>ราคาพิเศษ</label><input type="number" id="formSpecial" class="form-control"></div>
             </div>
             <div class="form-group"><label>ลิงก์รูปภาพ</label><input type="text" id="formImage" class="form-control"></div>
-            
             <div class="form-group">
                 <label>ลิงก์คู่มือสินค้า (PDF_Link)</label>
-                <input type="text" id="formPDF" class="form-control" placeholder="วางลิงก์ Google Drive หรือลิงก์เว็บที่นี่">
+                <input type="text" id="formPDF" class="form-control" placeholder="วางลิงก์ Google Drive หรือเว็บที่นี่">
             </div>
 
             <div class="modal-actions">
@@ -271,7 +284,6 @@
     </div>
 
     <script>
-        // คง URL เดิม ไม่ให้ระบบพัง
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzfhzBH0dzt1lxObKp6q0Fu6kb3c55UbZaWAI7AuzM712ndg-ExrvMSLv8xiOYxbkq9/exec'; 
         
         let allProducts = [];
@@ -316,7 +328,7 @@
             if (searchText) {
                 const searchTerms = searchText.split(/\s+/);
                 filtered = filtered.filter(p => {
-                    const combined = `${p.Brand||''} ${p.Title||''} ${p.Benefits||''}`.toLowerCase();
+                    const combined = `${p.Brand||''} ${p.Title||''} ${p.Benefits||''} ${p.Description||''}`.toLowerCase();
                     return searchTerms.every(term => combined.includes(term));
                 });
             }
@@ -342,6 +354,10 @@
             products.forEach(product => {
                 const img = getDirectImageUrl(product.ImageURL) ? `<img src="${getDirectImageUrl(product.ImageURL)}" style="width:100%;height:100%;object-fit:cover;">` : `<span class="img-placeholder">ไม่มีรูป</span>`;
                 const benefit = product.Benefits ? `<div class="benefit-tag">✨ ${product.Benefits}</div>` : '';
+                
+                // ดึง Description มาแสดงบนการ์ดสินค้าด้วย
+                const desc = product.Description ? `<p class="product-desc">${product.Description}</p>` : '';
+                
                 const adminClass = currentAdminLevel > 0 ? '' : 'hidden'; 
                 const delBtn = currentAdminLevel === 2 ? `<button class="btn-action btn-danger" onclick="deleteData(${product._rowIndex})">🗑️</button>` : ''; 
 
@@ -352,6 +368,7 @@
                             <span class="brand-badge">${product.Brand}</span>
                             <h2 class="product-title">${product.Title}</h2>
                             ${benefit}
+                            ${desc}
                             <div class="price-container">
                                 <span class="special-price">${product.SpecialPrice}.-</span>
                             </div>
@@ -446,17 +463,26 @@
             document.getElementById('viewNormalPrice').innerText = product.NormalPrice ? `ปกติ ${product.NormalPrice}.-` : '';
             document.getElementById('viewSpecialPrice').innerText = `${product.SpecialPrice}.-`;
             
-            const benefits = document.getElementById('viewBenefitsBox');
+            // แสดง/ซ่อน กล่องสรรพคุณ
+            const benefitsBox = document.getElementById('viewBenefitsBox');
             if(product.Benefits) {
-                document.getElementById('viewBenefits').innerText = product.Benefits;
-                benefits.style.display = 'block';
-            } else benefits.style.display = 'none';
+                document.getElementById('viewBenefits').innerHTML = product.Benefits.replace(/\n/g, '<br>');
+                benefitsBox.style.display = 'block';
+            } else benefitsBox.style.display = 'none';
 
-            // จัดการปุ่ม PDF (ซ่อน/แสดง อัตโนมัติ)
+            // แสดง/ซ่อน กล่องรายละเอียดของแถม (ที่เพิ่งแก้ให้แสดง)
+            const descBox = document.getElementById('viewDescBox');
+            if(product.Description && product.Description.trim() !== '') {
+                document.getElementById('viewDesc').innerHTML = product.Description.replace(/\n/g, '<br>');
+                descBox.style.display = 'block';
+            } else {
+                descBox.style.display = 'none';
+            }
+
+            // จัดการปุ่ม PDF 
             const btnPDF = document.getElementById('btnViewPDF');
             if (product.PDF_Link && product.PDF_Link.trim() !== '') {
                 btnPDF.classList.remove('hidden');
-                // ตั้งค่าให้คลิกแล้วเปิดแท็บใหม่
                 btnPDF.onclick = () => window.open(product.PDF_Link, '_blank');
             } else {
                 btnPDF.classList.add('hidden');
@@ -469,6 +495,7 @@
             let p = currentViewProduct;
             let text = `🔥 โปรพิเศษจาก ${p.Brand}\n📦 ${p.Title}\n`;
             if(p.Benefits) text += `✨ สรรพคุณ: ${p.Benefits}\n`;
+            if(p.Description) text += `🎁 รายละเอียดเซต:\n${p.Description}\n`;
             text += `\n💰 ราคาเพียง: ${p.SpecialPrice} บาท (ปกติ ${p.NormalPrice||'-'})\n\nสนใจพิมพ์ "รับ" ได้เลยครับ`;
             navigator.clipboard.writeText(text).then(() => {
                 showToast('คัดลอกข้อความสำเร็จ!');
