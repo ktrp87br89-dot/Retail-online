@@ -93,7 +93,6 @@
         .view-benefits-box { background: #f0fdf4; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #bbf7d0;}
         .view-desc-box { background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0; font-size: 14px; color: var(--text-gray); line-height: 1.6;}
         
-        /* สไตล์สำหรับกล่องจุดขาย (Selling Points) */
         .view-selling-points-box { background: #fffbeb; padding: 15px 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #fde047;}
         .sp-title { font-size: 14px; font-weight: 700; color: #854d0e; margin-bottom: 8px; display: flex; align-items: center; gap: 5px;}
         .sp-list { margin: 0; padding-left: 20px; font-size: 14px; color: #713f12; line-height: 1.6; }
@@ -163,11 +162,11 @@
 
             <div class="filters" id="filterContainer">
                 <button class="filter-btn active" data-filter="all">หมวดหมู่ทั้งหมด</button>
-                <button class="filter-btn" data-filter="HAPPY TRENDS">HAPPY TRENDS</button>
-                <button class="filter-btn" data-filter="YURA">YURA</button>
-                <button class="filter-btn" data-filter="BONBACK">BONBACK</button>
+                <button class="filter-btn" data-filter="happy trends">HAPPY TRENDS</button>
+                <button class="filter-btn" data-filter="yura">YURA</button>
+                <button class="filter-btn" data-filter="bonback">BONBACK</button>
                 <button class="filter-btn" data-filter="สุขกายะ">สุขกายะ</button>
-                <button class="filter-btn" data-filter="FLi">FLi</button>
+                <button class="filter-btn" data-filter="fli">FLi</button>
                 <button class="filter-btn" data-filter="เบญจ ออยล์">เบญจ ออยล์</button>
                 <button class="filter-btn" data-filter="สุภาพโอสถ">สุภาพโอสถ</button>
             </div>
@@ -256,12 +255,10 @@
             <input type="hidden" id="formRowIndex">
             <div class="form-group"><label>แบรนด์</label><input type="text" id="formBrand" class="form-control"></div>
             <div class="form-group"><label>ชื่อสินค้า</label><input type="text" id="formTitle" class="form-control"></div>
-            
             <div class="form-group">
                 <label>สรุปจุดขาย (ใส่เครื่องหมาย - นำหน้าข้อความ)</label>
                 <textarea id="formSellingPoints" class="form-control" rows="3" placeholder="- ช่วยเรื่องกระดูก&#10;- ลดอาการอักเสบ"></textarea>
             </div>
-
             <div class="form-group"><label>แคปชันสั้นหน้าการ์ด</label><textarea id="formBenefits" class="form-control" rows="1"></textarea></div>
             <div class="form-group"><label>รายละเอียดของแถม</label><textarea id="formDesc" class="form-control" rows="2"></textarea></div>
             <div style="display:flex; gap:10px;">
@@ -317,7 +314,7 @@
                 allProducts = await response.json();
                 applyFiltersAndRender(); 
             } catch (error) {
-                document.getElementById('productGrid').innerHTML = '<div style="text-align:center; grid-column:1/-1;">❌ เกิดข้อผิดพลาด กรุณารีเฟรช</div>';
+                document.getElementById('productGrid').innerHTML = '<div style="text-align:center; grid-column:1/-1;">❌ เกิดข้อผิดพลาด กรุณารีเฟรชหน้าเว็บ</div>';
             }
         }
 
@@ -336,8 +333,9 @@
                 });
             }
 
+            // จุดที่แก้ไข: กรองหมวดหมู่ให้ฉลาดขึ้น (ค้นหาคำบางส่วนได้ ไม่ต้องเป๊ะ 100%)
             if (filterValue !== 'all') {
-                filtered = filtered.filter(p => (p.Brand||'').toLowerCase().trim() === filterValue);
+                filtered = filtered.filter(p => (p.Brand||'').toLowerCase().includes(filterValue));
             }
 
             if (sortType === 'price_asc') filtered.sort((a, b) => (Number(a.SpecialPrice)||0) - (Number(b.SpecialPrice)||0));
@@ -358,6 +356,10 @@
                 const img = getDirectImageUrl(product.ImageURL) ? `<img src="${getDirectImageUrl(product.ImageURL)}" style="width:100%;height:100%;object-fit:cover;">` : `<span class="img-placeholder">ไม่มีรูป</span>`;
                 const benefit = product.Benefits ? `<div class="benefit-tag">✨ ${product.Benefits}</div>` : '';
                 const desc = product.Description ? `<p class="product-desc">${product.Description}</p>` : '';
+                
+                // จุดที่แก้ไข: นำโครงสร้างราคาปกติกลับมาใส่ในการ์ดสินค้าให้เรียบร้อย
+                const normalPriceHtml = product.NormalPrice ? `<span class="normal-price">ปกติ ${product.NormalPrice}.-</span>` : '<span class="normal-price">&nbsp;</span>';
+                
                 const adminClass = currentAdminLevel > 0 ? '' : 'hidden'; 
                 const delBtn = currentAdminLevel === 2 ? `<button class="btn-action btn-danger" onclick="deleteData(${product._rowIndex})">🗑️</button>` : ''; 
 
@@ -369,9 +371,14 @@
                             <h2 class="product-title">${product.Title}</h2>
                             ${benefit}
                             ${desc}
+                            
                             <div class="price-container">
-                                <span class="special-price">${product.SpecialPrice}.-</span>
+                                <div>
+                                    ${normalPriceHtml}
+                                    <span class="special-price">${product.SpecialPrice}.-</span>
+                                </div>
                             </div>
+                            
                             <div class="admin-controls ${adminClass}">
                                 <button class="btn-action" onclick="openFormModal('edit', ${product._rowIndex})">✏️ แก้ไข</button>
                                 ${delBtn}
@@ -465,15 +472,13 @@
             
             const benefitsBox = document.getElementById('viewBenefitsBox');
             if(product.Benefits) {
-                document.getElementById('viewBenefits').innerText = product.Benefits;
+                document.getElementById('viewBenefits').innerHTML = product.Benefits.replace(/\n/g, '<br>');
                 benefitsBox.style.display = 'block';
             } else benefitsBox.style.display = 'none';
 
-            // จัดการข้อมูลจุดขาย (Selling Points) แปลงข้อความที่ใส่ - ให้เป็น Bullet Point
             const spBox = document.getElementById('viewSellingPointsBox');
             const spList = document.getElementById('viewSellingPoints');
             if(product.Selling_Points && product.Selling_Points.trim() !== '') {
-                // ตัดคำด้วยเครื่องหมาย - แล้วนำมาแสดงเป็น <li>
                 const points = product.Selling_Points.split('-').filter(p => p.trim() !== '');
                 spList.innerHTML = points.map(p => `<li style="margin-bottom:6px;">${p.trim()}</li>`).join('');
                 spBox.style.display = 'block';
@@ -500,7 +505,6 @@
             let p = currentViewProduct;
             let text = `🔥 โปรพิเศษจาก ${p.Brand}\n📦 ${p.Title}\n`;
             
-            // ก๊อปปี้จุดขายไปด้วย
             if(p.Selling_Points) {
                 text += `\n💡 จุดเด่นสินค้า:\n`;
                 const points = p.Selling_Points.split('-').filter(point => point.trim() !== '');
