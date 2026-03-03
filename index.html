@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Promo Catalog - Ultimate Knowledge</title>
+    <title>Sales Promo Catalog - Enterprise Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -79,7 +79,7 @@
         .floating-cart-btn:hover { transform: scale(1.1); }
         .cart-badge { position: absolute; top: -5px; right: -5px; background: var(--danger); color: white; font-size: 12px; font-weight: 700; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white;}
 
-        /* Modals */
+        /* Modals Overlay */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); display: flex; align-items: center; justify-content: center; z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s; padding: 20px; backdrop-filter: blur(4px);}
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         .modal-content { background: white; width: 100%; max-width: 550px; border-radius: var(--radius-lg); padding: 30px; box-shadow: var(--shadow-hover); transform: translateY(20px); transition: 0.3s; max-height: 90vh; overflow-y: auto; position: relative;}
@@ -92,12 +92,10 @@
         .view-title { font-size: 22px; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; line-height: 1.3;}
         .view-benefits-box { background: #f0fdf4; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #bbf7d0;}
         .view-desc-box { background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0; font-size: 14px; color: var(--text-gray); line-height: 1.6;}
-        
         .view-selling-points-box { background: #fffbeb; padding: 15px 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #fde047;}
         .sp-title { font-size: 14px; font-weight: 700; color: #854d0e; margin-bottom: 8px; display: flex; align-items: center; gap: 5px;}
         .sp-list { margin: 0; padding-left: 20px; font-size: 14px; color: #713f12; line-height: 1.6; }
         .sp-list li { margin-bottom: 5px; }
-
         .view-price-box { background: #fef2f2; padding: 20px; border-radius: 12px; border: 1px solid #fecaca; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;}
         
         /* Auto-Infographic Generator Mode */
@@ -190,7 +188,7 @@
         <div class="modal-content">
             <button class="modal-close" onclick="closeViewModal()">✖</button>
             <div id="viewNormalContent">
-                <img id="viewImage" class="view-image" src="" alt="Product">
+                <img id="viewImage" class="view-image" src="" alt="Product" loading="lazy">
                 <span class="brand-badge" id="viewBrand"></span>
                 <h2 class="view-title" id="viewTitle"></h2>
                 
@@ -262,8 +260,8 @@
             <div class="form-group"><label>แคปชันสั้นหน้าการ์ด</label><textarea id="formBenefits" class="form-control" rows="1"></textarea></div>
             <div class="form-group"><label>รายละเอียดของแถม</label><textarea id="formDesc" class="form-control" rows="2"></textarea></div>
             <div style="display:flex; gap:10px;">
-                <div class="form-group" style="flex:1;"><label>ราคาปกติ (ตัวเลข)</label><input type="number" id="formNormal" class="form-control"></div>
-                <div class="form-group" style="flex:1;"><label>ราคาพิเศษ (ตัวเลข)</label><input type="number" id="formSpecial" class="form-control"></div>
+                <div class="form-group" style="flex:1;"><label>ราคาปกติ (ใส่ลูกน้ำได้)</label><input type="text" id="formNormal" class="form-control"></div>
+                <div class="form-group" style="flex:1;"><label>ราคาพิเศษ (ใส่ลูกน้ำได้)</label><input type="text" id="formSpecial" class="form-control"></div>
             </div>
             <div class="form-group"><label>ลิงก์รูปภาพ</label><input type="text" id="formImage" class="form-control"></div>
             <div class="form-group"><label>ลิงก์คู่มือสินค้า (PDF_Link)</label><input type="text" id="formPDF" class="form-control"></div>
@@ -333,13 +331,19 @@
                 });
             }
 
-            // จุดที่แก้ไข: กรองหมวดหมู่ให้ฉลาดขึ้น (ค้นหาคำบางส่วนได้ ไม่ต้องเป๊ะ 100%)
+            // กรองหมวดหมู่แบบฉลาด
             if (filterValue !== 'all') {
                 filtered = filtered.filter(p => (p.Brand||'').toLowerCase().includes(filterValue));
             }
 
-            if (sortType === 'price_asc') filtered.sort((a, b) => (Number(a.SpecialPrice)||0) - (Number(b.SpecialPrice)||0));
-            else if (sortType === 'price_desc') filtered.sort((a, b) => (Number(b.SpecialPrice)||0) - (Number(a.SpecialPrice)||0));
+            // เรียงราคา (ป้องกัน Error ถ้าช่องราคาใส่ลูกน้ำมา ให้ตัดลูกน้ำทิ้งก่อนคำนวณ)
+            if (sortType === 'price_asc' || sortType === 'price_desc') {
+                filtered.sort((a, b) => {
+                    const priceA = Number(String(a.SpecialPrice||'0').replace(/,/g, '')) || 0;
+                    const priceB = Number(String(b.SpecialPrice||'0').replace(/,/g, '')) || 0;
+                    return sortType === 'price_asc' ? priceA - priceB : priceB - priceA;
+                });
+            }
 
             renderProducts(filtered);
         }
@@ -348,34 +352,33 @@
             const grid = document.getElementById('productGrid');
             grid.innerHTML = ''; 
             if(products.length === 0) {
-                grid.innerHTML = '<div style="text-align:center; grid-column:1/-1;">🔍 ไม่พบรายการสินค้า</div>';
+                grid.innerHTML = '<div style="text-align:center; grid-column:1/-1; color: var(--text-gray); padding: 40px;">🔍 ไม่พบรายการสินค้าที่คุณค้นหา</div>';
                 return;
             }
 
             products.forEach(product => {
-                const img = getDirectImageUrl(product.ImageURL) ? `<img src="${getDirectImageUrl(product.ImageURL)}" style="width:100%;height:100%;object-fit:cover;">` : `<span class="img-placeholder">ไม่มีรูป</span>`;
+                const img = getDirectImageUrl(product.ImageURL) ? `<img src="${getDirectImageUrl(product.ImageURL)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">` : `<span class="img-placeholder">ไม่มีรูป</span>`;
                 const benefit = product.Benefits ? `<div class="benefit-tag">✨ ${product.Benefits}</div>` : '';
                 const desc = product.Description ? `<p class="product-desc">${product.Description}</p>` : '';
                 
-                // จุดที่แก้ไข: นำโครงสร้างราคาปกติกลับมาใส่ในการ์ดสินค้าให้เรียบร้อย
                 const normalPriceHtml = product.NormalPrice ? `<span class="normal-price">ปกติ ${product.NormalPrice}.-</span>` : '<span class="normal-price">&nbsp;</span>';
                 
                 const adminClass = currentAdminLevel > 0 ? '' : 'hidden'; 
-                const delBtn = currentAdminLevel === 2 ? `<button class="btn-action btn-danger" onclick="deleteData(${product._rowIndex})">🗑️</button>` : ''; 
+                const delBtn = currentAdminLevel === 2 ? `<button class="btn-action btn-danger" onclick="deleteData(${product._rowIndex}, '${product.Title||''}')">🗑️</button>` : ''; 
 
                 grid.innerHTML += `
                     <div class="product-card">
                         <div class="card-img-wrapper" onclick="openViewModal(${product._rowIndex})">${img}</div>
                         <div class="card-content">
-                            <span class="brand-badge">${product.Brand}</span>
-                            <h2 class="product-title">${product.Title}</h2>
+                            <span class="brand-badge">${product.Brand || 'ไม่มีชื่อแบรนด์'}</span>
+                            <h2 class="product-title">${product.Title || 'ไม่มีชื่อสินค้า'}</h2>
                             ${benefit}
                             ${desc}
                             
                             <div class="price-container">
                                 <div>
                                     ${normalPriceHtml}
-                                    <span class="special-price">${product.SpecialPrice}.-</span>
+                                    <span class="special-price">${product.SpecialPrice || '0'}.-</span>
                                 </div>
                             </div>
                             
@@ -423,7 +426,8 @@
                 container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-gray);">ยังไม่มีสินค้าในรายการจัดเซต</div>';
             } else {
                 cart.forEach((item, index) => {
-                    total += Number(item.SpecialPrice) || 0;
+                    const priceVal = Number(String(item.SpecialPrice||'0').replace(/,/g, '')) || 0;
+                    total += priceVal;
                     container.innerHTML += `
                         <div class="cart-item">
                             <div>
@@ -444,8 +448,9 @@
             let text = `📝 *สรุปใบเสนอราคาพิเศษ*\n\n`;
             let total = 0;
             cart.forEach((item, i) => {
+                const priceVal = Number(String(item.SpecialPrice||'0').replace(/,/g, '')) || 0;
                 text += `${i+1}. ${item.Title} = ${item.SpecialPrice} บาท\n`;
-                total += Number(item.SpecialPrice) || 0;
+                total += priceVal;
             });
             text += `\n💰 *ยอดรวมสุทธิ: ${total.toLocaleString()} บาท*\nจัดส่งฟรี! สนใจพิมพ์ "รับ" ยืนยันได้เลยครับ`;
 
@@ -465,21 +470,21 @@
             document.getElementById('viewPromoGenContent').classList.add('hidden');
 
             document.getElementById('viewImage').src = getDirectImageUrl(product.ImageURL) || '';
-            document.getElementById('viewBrand').innerText = product.Brand;
-            document.getElementById('viewTitle').innerText = product.Title;
+            document.getElementById('viewBrand').innerText = product.Brand || '-';
+            document.getElementById('viewTitle').innerText = product.Title || '-';
             document.getElementById('viewNormalPrice').innerText = product.NormalPrice ? `ปกติ ${product.NormalPrice}.-` : '';
-            document.getElementById('viewSpecialPrice').innerText = `${product.SpecialPrice}.-`;
+            document.getElementById('viewSpecialPrice').innerText = `${product.SpecialPrice || '0'}.-`;
             
             const benefitsBox = document.getElementById('viewBenefitsBox');
             if(product.Benefits) {
-                document.getElementById('viewBenefits').innerHTML = product.Benefits.replace(/\n/g, '<br>');
+                document.getElementById('viewBenefits').innerHTML = String(product.Benefits).replace(/\n/g, '<br>');
                 benefitsBox.style.display = 'block';
             } else benefitsBox.style.display = 'none';
 
             const spBox = document.getElementById('viewSellingPointsBox');
             const spList = document.getElementById('viewSellingPoints');
-            if(product.Selling_Points && product.Selling_Points.trim() !== '') {
-                const points = product.Selling_Points.split('-').filter(p => p.trim() !== '');
+            if(product.Selling_Points && String(product.Selling_Points).trim() !== '') {
+                const points = String(product.Selling_Points).split('-').filter(p => p.trim() !== '');
                 spList.innerHTML = points.map(p => `<li style="margin-bottom:6px;">${p.trim()}</li>`).join('');
                 spBox.style.display = 'block';
             } else {
@@ -487,13 +492,13 @@
             }
 
             const descBox = document.getElementById('viewDescBox');
-            if(product.Description && product.Description.trim() !== '') {
-                document.getElementById('viewDesc').innerHTML = product.Description.replace(/\n/g, '<br>');
+            if(product.Description && String(product.Description).trim() !== '') {
+                document.getElementById('viewDesc').innerHTML = String(product.Description).replace(/\n/g, '<br>');
                 descBox.style.display = 'block';
             } else descBox.style.display = 'none';
 
             const btnPDF = document.getElementById('btnViewPDF');
-            if (product.PDF_Link && product.PDF_Link.trim() !== '') {
+            if (product.PDF_Link && String(product.PDF_Link).trim() !== '') {
                 btnPDF.classList.remove('hidden');
                 btnPDF.onclick = () => window.open(product.PDF_Link, '_blank');
             } else btnPDF.classList.add('hidden');
@@ -507,10 +512,8 @@
             
             if(p.Selling_Points) {
                 text += `\n💡 จุดเด่นสินค้า:\n`;
-                const points = p.Selling_Points.split('-').filter(point => point.trim() !== '');
-                points.forEach(point => {
-                    text += `✅ ${point.trim()}\n`;
-                });
+                const points = String(p.Selling_Points).split('-').filter(point => point.trim() !== '');
+                points.forEach(point => { text += `✅ ${point.trim()}\n`; });
             }
 
             if(p.Description) text += `\n🎁 รายละเอียดเซต:\n${p.Description}\n`;
@@ -526,10 +529,10 @@
             document.getElementById('viewPromoGenContent').classList.remove('hidden');
             
             let p = currentViewProduct;
-            document.getElementById('genBrand').innerText = p.Brand;
+            document.getElementById('genBrand').innerText = p.Brand || '';
             document.getElementById('genImage').src = getDirectImageUrl(p.ImageURL) || '';
-            document.getElementById('genTitle').innerText = p.Title;
-            document.getElementById('genPrice').innerText = `${p.SpecialPrice}.-`;
+            document.getElementById('genTitle').innerText = p.Title || '';
+            document.getElementById('genPrice').innerText = `${p.SpecialPrice || '0'}.-`;
             
             const b = document.getElementById('genBenefits');
             if(p.Benefits) { b.innerText = `✨ ${p.Benefits}`; b.style.display = 'inline-block'; }
@@ -565,14 +568,14 @@
                 const p = allProducts.find(x => x._rowIndex === rowIndex);
                 if(p) {
                     document.getElementById('formRowIndex').value = p._rowIndex;
-                    document.getElementById('formBrand').value = p.Brand;
-                    document.getElementById('formTitle').value = p.Title;
+                    document.getElementById('formBrand').value = p.Brand || '';
+                    document.getElementById('formTitle').value = p.Title || '';
                     document.getElementById('formBenefits').value = p.Benefits || '';
                     document.getElementById('formSellingPoints').value = p.Selling_Points || '';
-                    document.getElementById('formDesc').value = p.Description;
-                    document.getElementById('formNormal').value = p.NormalPrice;
-                    document.getElementById('formSpecial').value = p.SpecialPrice;
-                    document.getElementById('formImage').value = p.ImageURL;
+                    document.getElementById('formDesc').value = p.Description || '';
+                    document.getElementById('formNormal').value = p.NormalPrice || '';
+                    document.getElementById('formSpecial').value = p.SpecialPrice || '';
+                    document.getElementById('formImage').value = p.ImageURL || '';
                     document.getElementById('formPDF').value = p.PDF_Link || '';
                 }
             }
@@ -595,22 +598,34 @@
                     PDF_Link: document.getElementById('formPDF').value
                 }
             };
-            document.getElementById('btnSave').innerText = '⏳';
+            document.getElementById('btnSave').innerText = '⏳ กำลังบันทึก...';
             try {
                 await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
                 closeFormModal();
                 showToast('บันทึกสำเร็จ!');
                 fetchProducts(); 
-            } catch (e) { showToast('Error', 'error'); }
+            } catch (e) { showToast('เกิดข้อผิดพลาดในการบันทึก', 'error'); }
             document.getElementById('btnSave').innerText = '💾 บันทึก';
         }
 
-        async function deleteData(rowIndex) {
-            if(confirm(`⚠️ ลบข้อมูลนี้หรือไม่?`)) {
-                await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'delete', data: { _rowIndex: rowIndex } }) });
-                showToast('ลบสำเร็จ'); fetchProducts();
+        async function deleteData(rowIndex, title) {
+            if(confirm(`⚠️ ลบข้อมูล "${title}" หรือไม่?`)) {
+                try {
+                    await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'delete', data: { _rowIndex: rowIndex } }) });
+                    showToast('ลบสำเร็จ'); 
+                    fetchProducts();
+                } catch(e) {
+                    showToast('ลบไม่สำเร็จ', 'error');
+                }
             }
         }
+
+        // UX: ปิด Modal เมื่อคลิกที่พื้นที่ว่างสีดำ
+        window.addEventListener('click', (e) => {
+            if (e.target === document.getElementById('viewModal')) closeViewModal();
+            if (e.target === document.getElementById('cartModal')) closeCartModal();
+            if (e.target === document.getElementById('formModal')) closeFormModal();
+        });
 
         document.getElementById('adminToggle').addEventListener('click', () => {
             if (currentAdminLevel === 0) {
