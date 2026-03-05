@@ -120,7 +120,7 @@
         .btn-pdf { width: 100%; background: var(--info); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.2s; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;}
         
         .order-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; margin-bottom: 15px; text-align: left; }
-        .order-header { display: flex; justify-content: space-between; border-bottom: 1px solid #cbd5e1; padding-bottom: 10px; margin-bottom: 10px; font-size: 13px; color: var(--text-gray); }
+        .order-header { display: flex; justify-content: space-between; border-bottom: 1px solid #cbd5e1; padding-bottom: 10px; margin-bottom: 10px; font-size: 14px; color: var(--text-gray); }
         .order-customer { font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 5px; }
         .order-rep { display: inline-block; background: #e0e7ff; color: var(--primary); padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-bottom: 10px; }
         .order-items { font-size: 14px; color: var(--text-dark); line-height: 1.6; background: white; padding: 10px; border-radius: 8px; border: 1px dashed #cbd5e1; white-space: pre-wrap;}
@@ -163,7 +163,7 @@
             </div>
 
             <div class="filters" id="filterContainer">
-                <button class="filter-btn active" data-filter="all">ทั้งหมด</button>
+                <button class="filter-btn active" data-filter="all">หมวดหมู่ทั้งหมด</button>
                 <button class="filter-btn" data-filter="happy trends">HAPPY TRENDS</button>
                 <button class="filter-btn" data-filter="yura">YURA</button>
                 <button class="filter-btn" data-filter="bonback">BONBACK</button>
@@ -534,7 +534,7 @@
         }
 
         // ==========================================
-        // 🌟 แก้ไข: แสดงวันที่ออเดอร์ตรงๆ ไม่พึ่งการแปลง Date อีกรอบ
+        // 🌟 แก้ไข: แสดงวันที่ออเดอร์ตรงๆ (ป้องกันบั๊กปี 3112 ถาวร)
         // ==========================================
         async function openOrderDashboard() {
             const modal = document.getElementById('orderDashboardModal');
@@ -553,8 +553,21 @@
 
                 container.innerHTML = '';
                 orders.forEach(order => {
-                    // ดึงค่าวันที่มาจาก Google Sheets ตรงๆ เลย
-                    const date = order['Date'] || order['วัน/เวลา'] || '-';
+                    // 💡 แสดงข้อมูลวันที่ตรงๆ ตามที่รับมาจาก Apps Script เพื่อความแม่นยำ 100%
+                    let dateStr = order['Date'] || order['วัน/เวลา'] || '-';
+                    
+                    // ป้องกันเผื่อเป็นออเดอร์เก่าที่ค้างอยู่ใน Sheet ให้ฟอร์แมตให้สวยด้วย
+                    if (dateStr !== '-' && String(dateStr).includes('T')) {
+                        const d = new Date(dateStr);
+                        const day = String(d.getDate()).padStart(2, '0');
+                        const month = String(d.getMonth() + 1).padStart(2, '0');
+                        const year = d.getFullYear() > 2500 ? d.getFullYear() : d.getFullYear() + 543;
+                        const hours = String(d.getHours()).padStart(2, '0');
+                        const minutes = String(d.getMinutes()).padStart(2, '0');
+                        const seconds = String(d.getSeconds()).padStart(2, '0');
+                        dateStr = `${day}/${month}/${year}  ${hours}:${minutes}:${seconds}`;
+                    }
+
                     const cusName = order['CustomerName'] || order['ชื่อลูกค้า'] || '-';
                     const phone = order['Phone'] || order['เบอร์โทร'] || '-';
                     const rep = order['SalesRep'] || order['รหัสเซลส์ (Ref)'] || 'ไม่มีผู้แนะนำ';
@@ -562,11 +575,10 @@
                     const total = order['TotalPrice'] || order['ยอดรวม'] || '0';
                     const status = order['Status'] || order['สถานะ'] || '-';
 
-                    // 💡 จุดที่แก้บั๊ก: แสดงค่า ${date} ตรงๆ ไม่มีการใช้ new Date(date) อีกแล้ว
                     container.innerHTML += `
                         <div class="order-card">
                             <div class="order-header">
-                                <span>🕒 ${date}</span>
+                                <span>🕒 ${dateStr}</span>
                                 <span style="color:var(--warning); font-weight:bold;">${status}</span>
                             </div>
                             <div class="order-customer">👤 คุณ ${cusName} (โทร: ${phone})</div>
