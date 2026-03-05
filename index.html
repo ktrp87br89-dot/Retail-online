@@ -133,11 +133,13 @@
 
         .tour-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 4000; display: none; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 20px;}
         .tour-box { background: white; padding: 30px; border-radius: 16px; max-width: 400px;}
-        .mode-toggle { position: fixed; bottom: 30px; right: 30px; background: white; padding: 12px 20px; border-radius: 50px; box-shadow: var(--shadow-hover); display: flex; align-items: center; gap: 12px; z-index: 1000; border: 1px solid #e2e8f0;}
-        .toggle-switch { position: relative; width: 40px; height: 22px; background: #cbd5e1; border-radius: 24px; cursor: pointer; }
+        
+        .mode-toggle { position: fixed; bottom: 30px; right: 30px; background: white; padding: 12px 20px; border-radius: 50px; box-shadow: var(--shadow-hover); display: flex; align-items: center; gap: 12px; z-index: 1000; border: 1px solid #e2e8f0; cursor: pointer;}
+        .toggle-switch { position: relative; width: 40px; height: 22px; background: #cbd5e1; border-radius: 24px; transition: 0.3s; pointer-events: none;}
         .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: white; border-radius: 50%; transition: 0.3s;}
-        .toggle-switch.active { background: var(--primary); }
-        .toggle-switch.active::after { left: 20px; }
+        .mode-toggle.active .toggle-switch { background: var(--primary); }
+        .mode-toggle.active .toggle-switch::after { left: 20px; }
+        
         .toast-container { position: fixed; top: 20px; right: 20px; background: #1e293b; color: white; padding: 14px 24px; border-radius: 12px; font-size: 14px; font-weight: 600; box-shadow: 0 10px 15px rgba(0,0,0,0.2); opacity: 0; transform: translateX(50px); transition: 0.4s; z-index: 5000;}
         .toast-container.show { opacity: 1; transform: translateX(0); }
         .hidden { display: none !important; }
@@ -184,12 +186,23 @@
     <button class="floating-cart-btn" onclick="openCartModal()">🛒<span class="cart-badge" id="cartBadge">0</span></button>
     <div class="mode-toggle" id="adminToggleContainer">
         <span id="adminLabel" style="font-weight: 600; font-size: 13px;">โหมดแอดมิน</span>
-        <div class="toggle-switch" id="adminToggle"></div>
+        <div class="toggle-switch"></div>
     </div>
     <div id="toastMessage" class="toast-container"></div>
 
     <div id="fullscreenOverlay" class="fullscreen-overlay" onclick="this.style.display='none'">
         <img id="fullscreenImg" src="">
+    </div>
+
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-content" style="max-width: 350px; text-align: center; padding: 40px 30px;">
+            <button class="modal-close" onclick="closeLoginModal()">✖</button>
+            <h2 class="modal-title" style="margin-bottom: 25px;">🔒 เข้าสู่ระบบแอดมิน</h2>
+            <div class="form-group">
+                <input type="password" id="adminPasswordInput" class="form-control" placeholder="กรอกรหัสผ่านที่นี่..." style="text-align: center; font-size: 18px; letter-spacing: 2px;">
+            </div>
+            <button class="btn-primary" style="width: 100%; margin-top: 15px; padding: 14px;" onclick="checkLogin()">ยืนยัน</button>
+        </div>
     </div>
 
     <div class="modal-overlay" id="viewModal">
@@ -264,14 +277,8 @@
             <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #bbf7d0;">
                 <div style="font-size: 14px; color: #166534;">พนักงานดูแลลูกค้า (รหัสอ้างอิง): <strong id="displaySalesRep" style="font-size: 16px;"></strong></div>
             </div>
-            <div class="form-group">
-                <label>ชื่อ-นามสกุล (สำหรับจัดส่ง)</label>
-                <input type="text" id="customerName" class="form-control" placeholder="ระบุชื่อของคุณ">
-            </div>
-            <div class="form-group">
-                <label>เบอร์โทรศัพท์ติดต่อ</label>
-                <input type="text" id="customerPhone" class="form-control" placeholder="เช่น 0812345678" maxlength="10">
-            </div>
+            <div class="form-group"><label>ชื่อ-นามสกุล (สำหรับจัดส่ง)</label><input type="text" id="customerName" class="form-control" placeholder="ระบุชื่อของคุณ"></div>
+            <div class="form-group"><label>เบอร์โทรศัพท์ติดต่อ</label><input type="text" id="customerPhone" class="form-control" placeholder="เช่น 0812345678" maxlength="10"></div>
             <div class="modal-actions">
                 <button class="btn-cancel" onclick="closeCheckoutModal()">ย้อนกลับ</button>
                 <button class="btn-save" id="btnSubmitOrder" onclick="submitOrder()">🚀 ยืนยันส่งคำสั่งซื้อ</button>
@@ -510,10 +517,7 @@
         async function submitOrder() {
             const name = document.getElementById('customerName').value.trim();
             const phone = document.getElementById('customerPhone').value.trim();
-            
-            // เพิ่มการตรวจสอบเบอร์โทรให้มีอย่างน้อย 9-10 หลัก
             if(!name || !phone) return showToast('กรุณากรอกชื่อและเบอร์โทรให้ครบถ้วน', 'error');
-            if(phone.length < 9) return showToast('กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง', 'error');
 
             let orderDetails = '';
             let total = 0;
@@ -542,9 +546,6 @@
             finally { btn.innerText = '🚀 ยืนยันส่งคำสั่งซื้อ'; btn.style.pointerEvents = 'auto'; }
         }
 
-        // ==========================================
-        // 🌟 แก้บั๊กเบอร์โทร: เติม 0 ให้ถ้า Google Sheets แอบตัดทิ้ง
-        // ==========================================
         async function openOrderDashboard() {
             const modal = document.getElementById('orderDashboardModal');
             const container = document.getElementById('orderListContainer');
@@ -563,21 +564,8 @@
                 container.innerHTML = '';
                 orders.forEach(order => {
                     let dateStr = order['Date'] || order['วัน/เวลา'] || '-';
-                    // เช็กเผื่อเป็นออเดอร์ที่ค้างอยู่ก่อนแก้บั๊กวันที่
-                    if (dateStr !== '-' && String(dateStr).includes('T')) {
-                        const d = new Date(dateStr);
-                        const day = String(d.getDate()).padStart(2, '0');
-                        const month = String(d.getMonth() + 1).padStart(2, '0');
-                        const year = d.getFullYear() > 2500 ? d.getFullYear() : d.getFullYear() + 543;
-                        const hours = String(d.getHours()).padStart(2, '0');
-                        const minutes = String(d.getMinutes()).padStart(2, '0');
-                        const seconds = String(d.getSeconds()).padStart(2, '0');
-                        dateStr = `${day}/${month}/${year}  ${hours}:${minutes}:${seconds}`;
-                    }
-
                     const cusName = order['CustomerName'] || order['ชื่อลูกค้า'] || '-';
                     
-                    // 💡 แก้บั๊กเบอร์โทร 9 หลัก: เติม 0 เข้าไปข้างหน้าให้เลย
                     let phone = String(order['Phone'] || order['เบอร์โทร'] || '-').trim();
                     if (phone.length === 9 && !phone.startsWith('0') && phone !== '-') {
                         phone = '0' + phone;
@@ -607,7 +595,6 @@
         }
         function closeOrderDashboard() { document.getElementById('orderDashboardModal').classList.remove('active'); }
 
-        // ระบบดูรายละเอียดสินค้า
         let currentViewProduct = null;
         function openFullscreen(src) { if(!src) return; document.getElementById('fullscreenImg').src = src; document.getElementById('fullscreenOverlay').style.display = 'flex'; }
         function addCurrentViewToCart() { if(currentViewProduct) { addToCart(currentViewProduct._rowIndex); closeViewModal(); } }
@@ -778,33 +765,73 @@
             }
         }
 
+        // ==========================================
+        // 🌟 ระบบหน้าต่าง Login (พิมพ์แล้วโชว์เป็น ***)
+        // ==========================================
+        function openLoginModal() {
+            document.getElementById('adminPasswordInput').value = '';
+            document.getElementById('loginModal').classList.add('active');
+            setTimeout(() => document.getElementById('adminPasswordInput').focus(), 100);
+        }
+        
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('active');
+        }
+
+        function checkLogin() {
+            const pass = document.getElementById('adminPasswordInput').value;
+            
+            if (pass === 'admin9sing') { 
+                currentAdminLevel = 2; showToast('Super Admin Mode'); 
+            } 
+            else if (pass === 'admin0208') { 
+                currentAdminLevel = 1; showToast('Admin Mode'); 
+            }
+            else {
+                showToast('รหัสผ่านไม่ถูกต้อง', 'error');
+                document.getElementById('adminToggleContainer').classList.remove('active');
+                closeLoginModal();
+                return; // ออกจากฟังก์ชัน ถ้ารหัสผิด
+            }
+            
+            // ถ้ารหัสถูก ให้เปิดสวิตช์และแสดงปุ่มแอดมิน
+            closeLoginModal();
+            document.getElementById('adminToggleContainer').classList.add('active');
+            document.getElementById('btnAddPromo').classList.remove('hidden');
+            document.getElementById('btnViewOrders').classList.remove('hidden');
+            applyFiltersAndRender();
+        }
+
+        // 🌟 กด Enter เพื่อล็อกอินได้เลย
+        document.getElementById('adminPasswordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkLogin();
+            }
+        });
+
+        // 🌟 ปรับปรุงปุ่ม Toggle ให้เรียกใช้หน้าต่าง Login แทน prompt()
+        document.getElementById('adminToggleContainer').addEventListener('click', () => {
+            if (currentAdminLevel === 0) {
+                openLoginModal(); // เรียกหน้าต่าง Login แบบ Custom
+            } else {
+                // ออกจากระบบ
+                currentAdminLevel = 0;
+                document.getElementById('adminToggleContainer').classList.remove('active');
+                document.getElementById('btnAddPromo').classList.add('hidden');
+                document.getElementById('btnViewOrders').classList.add('hidden');
+                applyFiltersAndRender();
+                showToast('ออกจากระบบ Admin เรียบร้อย');
+            }
+        });
+
+        // UX: คลิกข้างนอกเพื่อปิด Modal
         window.addEventListener('click', (e) => {
             if (e.target === document.getElementById('viewModal')) closeViewModal();
             if (e.target === document.getElementById('cartModal')) closeCartModal();
             if (e.target === document.getElementById('formModal')) closeFormModal();
             if (e.target === document.getElementById('checkoutModal')) closeCheckoutModal();
             if (e.target === document.getElementById('orderDashboardModal')) closeOrderDashboard();
-        });
-
-        document.getElementById('adminToggle').addEventListener('click', () => {
-            if (currentAdminLevel === 0) {
-                const pass = prompt('รหัสผ่าน Admin:');
-                if (pass === 'admin9sing') { currentAdminLevel = 2; showToast('Super Admin Mode'); } 
-                else if (pass === 'admin0208') { currentAdminLevel = 1; showToast('Admin Mode'); }
-                
-                if(currentAdminLevel > 0) {
-                    document.getElementById('adminToggle').classList.add('active');
-                    document.getElementById('btnAddPromo').classList.remove('hidden');
-                    document.getElementById('btnViewOrders').classList.remove('hidden');
-                    applyFiltersAndRender();
-                }
-            } else {
-                currentAdminLevel = 0;
-                document.getElementById('adminToggle').classList.remove('active');
-                document.getElementById('btnAddPromo').classList.add('hidden');
-                document.getElementById('btnViewOrders').classList.add('hidden');
-                applyFiltersAndRender();
-            }
+            if (e.target === document.getElementById('loginModal')) closeLoginModal();
         });
 
         document.getElementById('searchInput').addEventListener('keyup', applyFiltersAndRender);
