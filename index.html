@@ -6,160 +6,768 @@
     <title>Sales Promo Catalog - Enterprise Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS โครงสร้างเดิมทั้งหมด 100% */
         :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --surface: #ffffff;
-            --background: #f8fafc;
-            --text-dark: #0f172a;
-            --text-gray: #64748b;
-            --danger: #ef4444;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --info: #0284c7;
-            --radius-lg: 16px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --shadow-sticky: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            --primary: #f5b830;
+            --primary-dim: rgba(245,184,48,0.15);
+            --primary-hover: #e0a820;
+            --surface: #18181d;
+            --surface-2: #1f1f26;
+            --surface-3: #27272f;
+            --background: #0e0e12;
+            --text-dark: #f0f0f4;
+            --text-mid: #a0a0b0;
+            --text-gray: #66667a;
+            --danger: #ff5c6a;
+            --danger-dim: rgba(255,92,106,0.12);
+            --success: #34d399;
+            --success-dim: rgba(52,211,153,0.12);
+            --warning: #f5b830;
+            --info: #38bdf8;
+            --info-dim: rgba(56,189,248,0.12);
+            --line-green: #06c755;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --radius-xl: 24px;
+            --border: rgba(255,255,255,0.07);
+            --border-active: rgba(245,184,48,0.4);
+            --glow: 0 0 20px rgba(245,184,48,0.18);
+            --shadow-card: 0 4px 24px rgba(0,0,0,0.35);
+            --shadow-modal: 0 24px 60px rgba(0,0,0,0.6);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Prompt', sans-serif; }
-        body { background-color: var(--background); color: var(--text-dark); line-height: 1.5; padding-bottom: 100px;}
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px;}
 
-        .sticky-wrapper { position: sticky; top: 0; z-index: 1000; background: rgba(248, 250, 252, 0.95); backdrop-filter: blur(10px); padding: 20px 0 15px 0; border-bottom: 1px solid #e2e8f0; margin-bottom: 30px; box-shadow: var(--shadow-sticky);}
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
-        .header h1 { font-size: 26px; font-weight: 700; color: var(--text-dark); letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px;}
-        .btn-help { background: #e0e7ff; color: var(--primary); border: none; padding: 6px 12px; border-radius: 50px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.2s;}
-        .btn-help:hover { background: #c7d2fe; }
+        body {
+            background-color: var(--background);
+            color: var(--text-dark);
+            line-height: 1.5;
+            padding-bottom: 120px;
+            background-image:
+                radial-gradient(ellipse 80% 40% at 50% -10%, rgba(245,184,48,0.06) 0%, transparent 70%);
+        }
 
-        .controls { display: flex; gap: 10px; width: 100%; max-width: 700px; flex-wrap: wrap;}
-        .search-box { flex: 1; min-width: 250px; padding: 12px 20px; border: 1px solid #cbd5e1; border-radius: 50px; font-size: 15px; transition: all 0.3s ease; }
-        .search-box:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
-        .sort-select { padding: 12px 20px; border: 1px solid #cbd5e1; border-radius: 50px; font-size: 14px; outline: none; cursor: pointer; color: var(--text-dark); background: white;}
-        .btn-primary { background-color: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.2s; white-space: nowrap;}
-        
-        .filters { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--background); }
+        ::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 3px; }
+
+        .container { max-width: 1260px; margin: 0 auto; padding: 0 24px; }
+
+        /* ─── STICKY HEADER ─── */
+        .sticky-wrapper {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(14,14,18,0.88);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            padding: 16px 0 14px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 36px;
+        }
+
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 16px; flex-wrap: wrap; gap: 12px;
+        }
+
+        .header h1 {
+            font-size: 22px; font-weight: 700;
+            color: var(--text-dark); letter-spacing: -0.3px;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .header h1 .logo-icon {
+            width: 36px; height: 36px; background: var(--primary);
+            border-radius: 10px; display: flex; align-items: center;
+            justify-content: center; font-size: 18px; flex-shrink: 0;
+        }
+
+        .header h1 .logo-text { color: var(--primary); }
+
+        .btn-help {
+            background: var(--primary-dim);
+            color: var(--primary); border: 1px solid rgba(245,184,48,0.2);
+            padding: 5px 12px; border-radius: 20px;
+            font-size: 12px; font-weight: 600; cursor: pointer;
+            transition: all 0.2s; white-space: nowrap; margin-left: 4px;
+        }
+        .btn-help:hover { background: rgba(245,184,48,0.25); border-color: var(--primary); }
+
+        /* ─── CONTROLS ─── */
+        .controls {
+            display: flex; gap: 8px; width: 100%;
+            max-width: 780px; flex-wrap: wrap; align-items: center;
+        }
+
+        .search-box {
+            flex: 1; min-width: 220px;
+            padding: 10px 18px 10px 42px;
+            border: 1px solid var(--border); border-radius: 50px;
+            font-size: 14px; transition: all 0.3s;
+            background: var(--surface); color: var(--text-dark);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2366667a' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: 14px center;
+        }
+        .search-box::placeholder { color: var(--text-gray); }
+        .search-box:focus {
+            outline: none; border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(245,184,48,0.12);
+            background-color: var(--surface-2);
+        }
+
+        .sort-select {
+            padding: 10px 16px; border: 1px solid var(--border);
+            border-radius: 50px; font-size: 13px; outline: none;
+            cursor: pointer; color: var(--text-mid);
+            background: var(--surface);
+            transition: all 0.2s;
+        }
+        .sort-select:focus { border-color: var(--primary); }
+
+        .btn-primary {
+            background: var(--primary); color: #0e0e12;
+            padding: 10px 20px; border: none; border-radius: 50px;
+            font-size: 13px; font-weight: 700; cursor: pointer;
+            transition: all 0.2s; white-space: nowrap; letter-spacing: 0.2px;
+        }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: var(--glow); }
+
+        /* ─── FILTER TABS ─── */
+        .filters {
+            display: flex; gap: 8px; overflow-x: auto;
+            padding-bottom: 4px; scrollbar-width: none;
+        }
         .filters::-webkit-scrollbar { display: none; }
-        .filter-btn { background: var(--surface); border: 1px solid #cbd5e1; padding: 8px 20px; border-radius: 50px; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--text-gray); transition: 0.2s; white-space: nowrap; }
-        .filter-btn.active { background: var(--text-dark); color: white; border-color: var(--text-dark); }
-        
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
-        .product-card { background: var(--surface); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); transition: 0.3s; border: 1px solid #f1f5f9; display: flex; flex-direction: column;}
-        .product-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
-        .card-img-wrapper { height: 200px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; cursor: pointer;}
-        .card-img-wrapper::after { content: '🔍 แตะเพื่อดูรายละเอียด / สร้างภาพ'; position: absolute; bottom: -50px; left: 0; width: 100%; background: rgba(15, 23, 42, 0.85); color: white; text-align: center; padding: 10px 0; font-size: 13px; font-weight: 600; transition: 0.3s ease-in-out; }
-        .card-img-wrapper:hover::after { bottom: 0; }
-        .img-placeholder { color: #94a3b8; font-size: 14px; font-weight: 600; }
-        
-        .card-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1;}
-        .brand-badge { display: inline-block; align-self: flex-start; padding: 4px 10px; background-color: #e0e7ff; color: var(--primary); border-radius: 6px; font-size: 12px; font-weight: 700; margin-bottom: 12px; }
-        .product-title { font-size: 17px; font-weight: 700; margin-bottom: 10px; color: var(--text-dark); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4;}
-        .benefit-tag { font-size: 13px; color: #059669; background: #d1fae5; padding: 4px 8px; border-radius: 6px; display: inline-block; margin-bottom: 10px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;}
-        .product-desc { font-size: 13px; color: var(--text-gray); margin-bottom: 15px; flex-grow: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5; }
 
-        .price-container { display: flex; align-items: flex-end; justify-content: space-between; padding-top: 15px; border-top: 1px solid #f1f5f9; margin-bottom: 15px;}
-        .normal-price { text-decoration: line-through; color: #94a3b8; font-size: 13px; display: block; margin-bottom: 2px;}
-        .special-price { font-size: 24px; font-weight: 700; color: var(--danger); line-height: 1;}
+        .filter-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 6px 16px; border-radius: 50px;
+            cursor: pointer; font-size: 13px; font-weight: 600;
+            color: var(--text-gray); transition: all 0.2s;
+            white-space: nowrap; flex-shrink: 0;
+        }
+        .filter-btn:hover { border-color: rgba(245,184,48,0.3); color: var(--text-mid); }
+        .filter-btn.active {
+            background: var(--primary); color: #0e0e12;
+            border-color: var(--primary); font-weight: 700;
+        }
+
+        /* ─── PRODUCT GRID ─── */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 20px;
+        }
+
+        /* ─── PRODUCT CARD ─── */
+        .product-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--border);
+            display: flex; flex-direction: column;
+            position: relative;
+        }
+        .product-card::before {
+            content: '';
+            position: absolute; inset: 0;
+            border-radius: var(--radius-lg);
+            border: 1px solid transparent;
+            background: linear-gradient(135deg, rgba(245,184,48,0.12), transparent 60%) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(0,0,0,0.5); }
+        .product-card:hover::before { opacity: 1; }
+
+        .card-img-wrapper {
+            height: 196px;
+            background: var(--surface-2);
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden; cursor: pointer;
+        }
+        .card-img-wrapper::after {
+            content: '🔍 ดูรายละเอียด';
+            position: absolute; bottom: -44px; left: 0; width: 100%;
+            background: rgba(245,184,48,0.9); color: #0e0e12;
+            text-align: center; padding: 10px 0;
+            font-size: 13px; font-weight: 700; transition: 0.3s ease;
+        }
+        .card-img-wrapper:hover::after { bottom: 0; }
+
+        .img-placeholder { color: var(--text-gray); font-size: 13px; font-weight: 600; }
+
+        .card-content {
+            padding: 18px; display: flex;
+            flex-direction: column; flex-grow: 1; gap: 0;
+        }
+
+        .brand-badge {
+            display: inline-block; align-self: flex-start;
+            padding: 3px 10px;
+            background: var(--primary-dim);
+            color: var(--primary);
+            border: 1px solid rgba(245,184,48,0.2);
+            border-radius: 6px; font-size: 11px; font-weight: 700;
+            margin-bottom: 10px; letter-spacing: 0.5px; text-transform: uppercase;
+        }
+
+        .product-title {
+            font-size: 15px; font-weight: 700; margin-bottom: 8px;
+            color: var(--text-dark);
+            display: -webkit-box; -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; overflow: hidden; line-height: 1.45;
+        }
+
+        .benefit-tag {
+            font-size: 12px; color: var(--success);
+            background: var(--success-dim);
+            border: 1px solid rgba(52,211,153,0.2);
+            padding: 4px 10px; border-radius: 6px;
+            display: inline-block; margin-bottom: 10px;
+            font-weight: 600; white-space: nowrap;
+            overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+        }
+
+        .product-desc {
+            font-size: 12px; color: var(--text-gray);
+            margin-bottom: 14px; flex-grow: 1;
+            display: -webkit-box; -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5;
+        }
+
+        .price-container {
+            display: flex; align-items: flex-end;
+            justify-content: space-between;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
+            margin-bottom: 14px;
+        }
+
+        .normal-price {
+            text-decoration: line-through; color: var(--text-gray);
+            font-size: 12px; display: block; margin-bottom: 2px;
+        }
+
+        .special-price {
+            font-size: 26px; font-weight: 700;
+            color: var(--danger); line-height: 1;
+        }
 
         .user-controls { display: flex; gap: 8px; }
-        .btn-cart-add { flex: 1; padding: 10px; border: none; background: #fef08a; border-radius: 8px; font-size: 14px; font-weight: 700; color: #854d0e; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 5px;}
-        .btn-cart-add:hover { background: #fde047; }
-        
-        .admin-controls { display: flex; gap: 8px; margin-top: 8px;}
-        .btn-action { flex: 1; padding: 8px; border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--text-dark); cursor: pointer; }
-        .btn-danger { color: var(--danger); border-color: #fecaca; background: #fef2f2; flex: 0.3; }
 
-        .floating-cart-btn { position: fixed; bottom: 30px; left: 30px; background: var(--warning); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4); border: none; cursor: pointer; z-index: 1000; transition: 0.3s;}
-        .floating-cart-btn:hover { transform: scale(1.1); }
-        .cart-badge { position: absolute; top: -5px; right: -5px; background: var(--danger); color: white; font-size: 12px; font-weight: 700; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white;}
+        .btn-cart-add {
+            flex: 1; padding: 10px 14px;
+            border: none;
+            background: var(--primary-dim);
+            border: 1px solid rgba(245,184,48,0.2);
+            border-radius: var(--radius-sm);
+            font-size: 13px; font-weight: 700;
+            color: var(--primary); cursor: pointer;
+            transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .btn-cart-add:hover {
+            background: var(--primary); color: #0e0e12;
+            border-color: var(--primary); transform: translateY(-1px);
+        }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); display: flex; align-items: center; justify-content: center; z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s; padding: 20px; backdrop-filter: blur(4px);}
+        .admin-controls { display: flex; gap: 8px; margin-top: 8px; }
+
+        .btn-action {
+            flex: 1; padding: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            border-radius: var(--radius-sm);
+            font-size: 12px; font-weight: 600;
+            color: var(--text-mid); cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-action:hover { border-color: var(--primary); color: var(--primary); }
+
+        .btn-danger {
+            color: var(--danger) !important;
+            border-color: rgba(255,92,106,0.2) !important;
+            background: var(--danger-dim) !important;
+            flex: 0.3;
+        }
+        .btn-danger:hover { background: rgba(255,92,106,0.25) !important; }
+
+        /* ─── FLOATING CART ─── */
+        .floating-cart-btn {
+            position: fixed; bottom: 32px; left: 28px;
+            background: var(--primary); color: #0e0e12;
+            width: 58px; height: 58px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; border: none; cursor: pointer;
+            z-index: 1000; transition: all 0.3s;
+            box-shadow: 0 8px 24px rgba(245,184,48,0.35), var(--glow);
+        }
+        .floating-cart-btn:hover { transform: scale(1.1); box-shadow: 0 12px 32px rgba(245,184,48,0.5); }
+
+        .cart-badge {
+            position: absolute; top: -4px; right: -4px;
+            background: var(--danger); color: white;
+            font-size: 11px; font-weight: 700;
+            width: 22px; height: 22px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 2px solid var(--background);
+        }
+
+        /* ─── ADMIN TOGGLE ─── */
+        .mode-toggle {
+            position: fixed; bottom: 32px; right: 28px;
+            background: var(--surface); padding: 10px 18px;
+            border-radius: 50px;
+            box-shadow: var(--shadow-card);
+            display: flex; align-items: center; gap: 10px;
+            z-index: 1000;
+            border: 1px solid var(--border);
+            cursor: pointer; transition: all 0.2s;
+        }
+        .mode-toggle:hover { border-color: rgba(245,184,48,0.3); }
+
+        .toggle-switch {
+            position: relative; width: 38px; height: 20px;
+            background: var(--surface-3); border-radius: 24px;
+            transition: 0.3s; pointer-events: none;
+            border: 1px solid var(--border);
+        }
+        .toggle-switch::after {
+            content: ''; position: absolute;
+            top: 2px; left: 2px; width: 14px; height: 14px;
+            background: var(--text-gray); border-radius: 50%; transition: 0.3s;
+        }
+        .mode-toggle.active .toggle-switch { background: var(--primary-dim); border-color: var(--primary); }
+        .mode-toggle.active .toggle-switch::after { left: 20px; background: var(--primary); }
+
+        /* ─── TOAST ─── */
+        .toast-container {
+            position: fixed; top: 20px; right: 20px;
+            background: var(--surface-2); color: var(--text-dark);
+            padding: 12px 20px; border-radius: var(--radius-md);
+            font-size: 14px; font-weight: 600;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            opacity: 0; transform: translateX(60px) translateY(-8px);
+            transition: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 5000; border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+        .toast-container.show { opacity: 1; transform: translateX(0) translateY(0); }
+
+        /* ─── MODALS ─── */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(5,5,8,0.82);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 2000; opacity: 0; pointer-events: none;
+            transition: opacity 0.3s; padding: 20px;
+            backdrop-filter: blur(8px);
+        }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
-        .modal-content { background: white; width: 100%; max-width: 550px; border-radius: var(--radius-lg); padding: 30px; box-shadow: var(--shadow-hover); transform: translateY(20px); transition: 0.3s; max-height: 90vh; overflow-y: auto; position: relative;}
-        
-        .view-modal-content { max-width: 700px; text-align: left; padding: 30px;}
-        .modal-overlay.active .modal-content { transform: translateY(0); }
-        
-        .modal-close { position: absolute; top: 15px; right: 15px; background: #f1f5f9; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 16px; cursor: pointer; transition: 0.2s; color: var(--text-gray); z-index: 10;}
-        .modal-close:hover { background: #e2e8f0; color: var(--danger); }
 
-        .view-image { width: 100%; max-height: 450px; object-fit: contain; border-radius: 12px; margin-bottom: 10px; background: #f1f5f9; cursor: zoom-in; transition: 0.3s;}
-        .view-image:hover { opacity: 0.95; }
-        .gallery-container { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
-        .gallery-thumb { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; cursor: pointer; border: 2px solid transparent; opacity: 0.6; transition: 0.2s; background: #f1f5f9;}
+        .modal-content {
+            background: var(--surface);
+            width: 100%; max-width: 560px;
+            border-radius: var(--radius-xl);
+            padding: 28px; box-shadow: var(--shadow-modal);
+            transform: translateY(24px) scale(0.97);
+            transition: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-height: 90vh; overflow-y: auto;
+            position: relative;
+            border: 1px solid var(--border);
+        }
+        .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
+
+        .view-modal-content { max-width: 700px; text-align: left; }
+
+        .modal-close {
+            position: absolute; top: 14px; right: 14px;
+            background: var(--surface-3); border: 1px solid var(--border);
+            width: 34px; height: 34px; border-radius: 50%;
+            font-size: 14px; cursor: pointer; transition: all 0.2s;
+            color: var(--text-gray); z-index: 10;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .modal-close:hover { background: var(--danger-dim); color: var(--danger); border-color: rgba(255,92,106,0.3); }
+
+        .modal-title {
+            font-size: 20px; font-weight: 700;
+            color: var(--text-dark); margin-bottom: 22px;
+            padding-right: 40px;
+        }
+
+        /* ─── VIEW MODAL ─── */
+        .view-image {
+            width: 100%; max-height: 420px;
+            object-fit: contain; border-radius: var(--radius-md);
+            margin-bottom: 10px;
+            background: var(--surface-2);
+            cursor: zoom-in; transition: opacity 0.3s;
+        }
+        .view-image:hover { opacity: 0.9; }
+
+        .gallery-container {
+            display: flex; gap: 8px; margin-bottom: 20px;
+            overflow-x: auto; padding-bottom: 4px;
+        }
+
+        .gallery-thumb {
+            width: 58px; height: 58px; border-radius: 8px;
+            object-fit: cover; cursor: pointer;
+            border: 2px solid transparent; opacity: 0.5;
+            transition: all 0.2s; background: var(--surface-3);
+        }
         .gallery-thumb.active { border-color: var(--primary); opacity: 1; }
-        .fullscreen-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); z-index: 9999; display: none; align-items: center; justify-content: center; cursor: zoom-out;}
+
+        .fullscreen-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.96); z-index: 9999;
+            display: none; align-items: center; justify-content: center;
+            cursor: zoom-out;
+        }
         .fullscreen-overlay img { max-width: 95%; max-height: 95%; object-fit: contain; }
 
-        .view-title { font-size: 22px; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; line-height: 1.3;}
-        .view-benefits-box { background: #f0fdf4; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #bbf7d0;}
-        .view-desc-box { background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0; font-size: 14px; color: var(--text-gray); line-height: 1.6;}
-        .view-selling-points-box { background: #fffbeb; padding: 15px 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #fde047;}
-        .sp-title { font-size: 14px; font-weight: 700; color: #854d0e; margin-bottom: 8px; display: flex; align-items: center; gap: 5px;}
-        .sp-list { margin: 0; padding-left: 20px; font-size: 14px; color: #713f12; line-height: 1.6; }
-        .sp-list li { margin-bottom: 5px; }
-        .view-price-box { background: #fef2f2; padding: 20px; border-radius: 12px; border: 1px solid #fecaca; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;}
-        
-        .promo-gen-container { width: 100%; aspect-ratio: 1/1; background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%); border-radius: 0; padding: 25px; display: flex; flex-direction: column; text-align: center; border: 2px solid #e2e8f0; position: relative;}
-        .promo-gen-brand { font-size: 18px; font-weight: 700; color: var(--primary); letter-spacing: 2px; margin-bottom: 10px; text-transform: uppercase;}
-        .promo-gen-img { width: 100%; height: 40%; object-fit: contain; margin-bottom: 15px; mix-blend-mode: multiply;}
-        .promo-gen-title { font-size: 24px; font-weight: 700; color: #0f172a; line-height: 1.2; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;}
-        .promo-gen-benefits { font-size: 16px; color: #059669; font-weight: 600; background: #d1fae5; padding: 8px 15px; border-radius: 50px; display: inline-block; margin: 0 auto 15px auto;}
-        .promo-gen-price { font-size: 42px; font-weight: 700; color: var(--danger); margin-top: auto;}
+        .view-title {
+            font-size: 20px; font-weight: 700;
+            color: var(--text-dark); margin-bottom: 14px; line-height: 1.3;
+        }
 
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #e2e8f0;}
-        .cart-item-title { font-weight: 600; font-size: 15px; color: var(--text-dark);}
-        .cart-item-price { color: var(--danger); font-weight: 700;}
-        .btn-cart-remove { background: #fee2e2; color: var(--danger); border: none; width: 30px; height: 30px; border-radius: 6px; cursor: pointer; font-weight: bold;}
-        .cart-total { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; font-size: 20px; font-weight: 700; color: var(--text-dark);}
+        .view-benefits-box {
+            background: var(--success-dim);
+            padding: 14px; border-radius: var(--radius-md);
+            margin-bottom: 12px;
+            border: 1px solid rgba(52,211,153,0.2);
+        }
 
-        .btn-copy-line { width: 100%; background: #00B900; color: white; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;}
-        .btn-promo-gen { width: 100%; background: #6366f1; color: white; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.2s; margin-top: 10px;}
-        .btn-pdf { width: 100%; background: var(--info); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.2s; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;}
-        
-        .order-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; margin-bottom: 15px; text-align: left; }
-        .order-header { display: flex; justify-content: space-between; border-bottom: 1px solid #cbd5e1; padding-bottom: 10px; margin-bottom: 10px; font-size: 14px; color: var(--text-gray); }
-        .order-customer { font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 5px; }
-        .order-rep { display: inline-block; background: #e0e7ff; color: var(--primary); padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-bottom: 10px; }
-        .order-items { font-size: 14px; color: var(--text-dark); line-height: 1.6; background: white; padding: 10px; border-radius: 8px; border: 1px dashed #cbd5e1; white-space: pre-wrap;}
-        .order-total { margin-top: 10px; text-align: right; font-size: 18px; font-weight: 700; color: var(--danger); }
+        .view-desc-box {
+            background: var(--surface-2); padding: 14px;
+            border-radius: var(--radius-md); margin-bottom: 12px;
+            border: 1px solid var(--border);
+            font-size: 14px; color: var(--text-mid); line-height: 1.65;
+        }
 
-        .form-group { margin-bottom: 15px; text-align: left;}
-        .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-gray); margin-bottom: 5px; }
-        .form-control { width: 100%; padding: 10px 15px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; font-family: 'Prompt';}
-        .form-control:focus { border-color: var(--primary); }
+        .view-selling-points-box {
+            background: rgba(245,184,48,0.06); padding: 14px 18px;
+            border-radius: var(--radius-md); margin-bottom: 18px;
+            border: 1px solid rgba(245,184,48,0.2);
+        }
 
-        .tour-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 4000; display: none; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 20px;}
-        .tour-box { background: white; padding: 30px; border-radius: 16px; max-width: 400px;}
-        
-        .mode-toggle { position: fixed; bottom: 30px; right: 30px; background: white; padding: 12px 20px; border-radius: 50px; box-shadow: var(--shadow-hover); display: flex; align-items: center; gap: 12px; z-index: 1000; border: 1px solid #e2e8f0; cursor: pointer;}
-        .toggle-switch { position: relative; width: 40px; height: 22px; background: #cbd5e1; border-radius: 24px; transition: 0.3s; pointer-events: none;}
-        .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: white; border-radius: 50%; transition: 0.3s;}
-        .mode-toggle.active .toggle-switch { background: var(--primary); }
-        .mode-toggle.active .toggle-switch::after { left: 20px; }
-        
-        .toast-container { position: fixed; top: 20px; right: 20px; background: #1e293b; color: white; padding: 14px 24px; border-radius: 12px; font-size: 14px; font-weight: 600; box-shadow: 0 10px 15px rgba(0,0,0,0.2); opacity: 0; transform: translateX(50px); transition: 0.4s; z-index: 5000;}
-        .toast-container.show { opacity: 1; transform: translateX(0); }
+        .sp-title {
+            font-size: 13px; font-weight: 700;
+            color: var(--primary); margin-bottom: 8px;
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        .sp-list {
+            margin: 0; padding-left: 20px;
+            font-size: 14px; color: var(--text-mid); line-height: 1.7;
+        }
+        .sp-list li { margin-bottom: 4px; }
+
+        .view-price-box {
+            background: var(--danger-dim);
+            padding: 18px; border-radius: var(--radius-md);
+            border: 1px solid rgba(255,92,106,0.2);
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 14px;
+        }
+
+        /* ─── PROMO GEN ─── */
+        .promo-gen-container {
+            width: 100%; aspect-ratio: 1/1;
+            background: linear-gradient(135deg, #1a1a1f 0%, #0e0e12 100%);
+            border-radius: var(--radius-md); padding: 24px;
+            display: flex; flex-direction: column;
+            text-align: center;
+            border: 1px solid var(--border); position: relative;
+            overflow: hidden;
+        }
+        .promo-gen-container::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(245,184,48,0.08) 0%, transparent 60%);
+        }
+
+        .promo-gen-brand {
+            font-size: 16px; font-weight: 700; color: var(--primary);
+            letter-spacing: 3px; margin-bottom: 10px; text-transform: uppercase;
+        }
+
+        .promo-gen-img {
+            width: 100%; height: 40%; object-fit: contain;
+            margin-bottom: 14px; mix-blend-mode: luminosity;
+        }
+
+        .promo-gen-benefits {
+            font-size: 14px; color: var(--success);
+            font-weight: 600;
+            background: var(--success-dim);
+            border: 1px solid rgba(52,211,153,0.2);
+            padding: 7px 14px; border-radius: 50px;
+            display: inline-block; margin: 0 auto 14px auto;
+        }
+
+        .promo-gen-title {
+            font-size: 22px; font-weight: 700; color: var(--text-dark);
+            line-height: 1.25; margin-bottom: 10px;
+            display: -webkit-box; -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; overflow: hidden;
+        }
+
+        .promo-gen-price {
+            font-size: 40px; font-weight: 700; color: var(--danger); margin-top: auto;
+        }
+
+        /* ─── CART MODAL ─── */
+        .cart-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 13px 0; border-bottom: 1px solid var(--border);
+        }
+
+        .cart-item-title { font-weight: 600; font-size: 14px; color: var(--text-dark); }
+        .cart-item-price { color: var(--danger); font-weight: 700; font-size: 13px; }
+
+        .btn-cart-remove {
+            background: var(--danger-dim); color: var(--danger);
+            border: 1px solid rgba(255,92,106,0.2);
+            width: 30px; height: 30px; border-radius: 6px;
+            cursor: pointer; font-weight: bold; transition: all 0.2s;
+        }
+        .btn-cart-remove:hover { background: rgba(255,92,106,0.25); }
+
+        .cart-total {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 0; font-size: 18px; font-weight: 700;
+            color: var(--text-dark); border-top: 1px solid var(--border);
+            margin-top: 4px;
+        }
+
+        /* ─── ACTION BUTTONS ─── */
+        .btn-copy-line {
+            width: 100%;
+            background: var(--line-green); color: white;
+            border: none; padding: 13px;
+            border-radius: var(--radius-md);
+            font-size: 14px; font-weight: 700; cursor: pointer;
+            transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-copy-line:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+        .btn-promo-gen {
+            width: 100%;
+            background: var(--primary-dim);
+            color: var(--primary);
+            border: 1px solid rgba(245,184,48,0.25);
+            padding: 13px; border-radius: var(--radius-md);
+            font-size: 14px; font-weight: 700; cursor: pointer;
+            transition: all 0.2s; margin-top: 10px;
+        }
+        .btn-promo-gen:hover { background: var(--primary); color: #0e0e12; border-color: var(--primary); }
+
+        .btn-pdf {
+            width: 100%;
+            background: var(--info-dim); color: var(--info);
+            border: 1px solid rgba(56,189,248,0.2);
+            padding: 13px; border-radius: var(--radius-md);
+            font-size: 14px; font-weight: 700; cursor: pointer;
+            transition: all 0.2s; margin-top: 10px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-pdf:hover { background: rgba(56,189,248,0.2); }
+
+        /* ─── ORDER DASHBOARD ─── */
+        .order-card {
+            background: var(--surface-2); border: 1px solid var(--border);
+            border-radius: var(--radius-md); padding: 16px; margin-bottom: 14px;
+            text-align: left;
+        }
+
+        .order-header {
+            display: flex; justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px; margin-bottom: 10px;
+            font-size: 13px; color: var(--text-gray);
+        }
+
+        .order-customer {
+            font-size: 15px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px;
+        }
+
+        .order-rep {
+            display: inline-block; background: var(--primary-dim);
+            color: var(--primary); padding: 3px 8px;
+            border-radius: 4px; font-size: 12px; font-weight: 600; margin-bottom: 10px;
+            border: 1px solid rgba(245,184,48,0.2);
+        }
+
+        .order-items {
+            font-size: 13px; color: var(--text-mid); line-height: 1.65;
+            background: var(--surface-3); padding: 10px;
+            border-radius: var(--radius-sm);
+            border: 1px dashed var(--border); white-space: pre-wrap;
+        }
+
+        .order-total {
+            margin-top: 10px; text-align: right;
+            font-size: 17px; font-weight: 700; color: var(--danger);
+        }
+
+        /* ─── FORM ─── */
+        .form-group { margin-bottom: 14px; text-align: left; }
+
+        .form-group label {
+            display: block; font-size: 12px; font-weight: 600;
+            color: var(--text-gray); margin-bottom: 5px; text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%; padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 14px; outline: none;
+            font-family: 'Prompt';
+            background: var(--surface-2);
+            color: var(--text-dark);
+            transition: all 0.2s;
+        }
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(245,184,48,0.1);
+        }
+        .form-control::placeholder { color: var(--text-gray); }
+
+        textarea.form-control { resize: vertical; min-height: 60px; }
+
+        .modal-actions {
+            display: flex; gap: 10px; margin-top: 20px;
+        }
+
+        .btn-cancel {
+            flex: 1; padding: 11px;
+            border: 1px solid var(--border);
+            background: var(--surface-2); border-radius: var(--radius-md);
+            font-size: 14px; font-weight: 600; cursor: pointer;
+            color: var(--text-mid); transition: all 0.2s;
+        }
+        .btn-cancel:hover { border-color: rgba(255,92,106,0.3); color: var(--danger); }
+
+        .btn-save {
+            flex: 2; padding: 11px;
+            background: var(--primary); border: none;
+            border-radius: var(--radius-md);
+            font-size: 14px; font-weight: 700;
+            color: #0e0e12; cursor: pointer; transition: all 0.2s;
+        }
+        .btn-save:hover { background: var(--primary-hover); box-shadow: var(--glow); }
+
+        /* ─── LOGIN MODAL ─── */
+        .login-icon {
+            width: 56px; height: 56px;
+            background: var(--primary-dim);
+            border: 1px solid rgba(245,184,48,0.2);
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-size: 26px;
+            margin: 0 auto 20px;
+        }
+
+        /* ─── TOUR ─── */
+        .tour-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5,5,8,0.88); z-index: 4000;
+            display: none; align-items: center; justify-content: center;
+            flex-direction: column; text-align: center; padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .tour-box {
+            background: var(--surface); padding: 32px;
+            border-radius: var(--radius-xl); max-width: 400px;
+            border: 1px solid var(--border); width: 100%;
+        }
+
+        .tour-title {
+            font-size: 20px; font-weight: 700;
+            color: var(--primary); margin-bottom: 12px;
+        }
+
+        .tour-desc {
+            font-size: 15px; color: var(--text-mid);
+            line-height: 1.65; margin-bottom: 24px;
+        }
+
+        /* ─── CHECKOUT MODAL ─── */
+        .checkout-info-box {
+            background: var(--success-dim);
+            padding: 14px; border-radius: var(--radius-md);
+            margin-bottom: 20px; border: 1px solid rgba(52,211,153,0.2);
+            font-size: 14px; color: var(--success);
+        }
+
+        /* ─── MISC ─── */
         .hidden { display: none !important; }
+
+        /* ─── LOADING STATE ─── */
+        .loading-state {
+            text-align: center; grid-column: 1/-1;
+            padding: 60px 20px; color: var(--text-gray);
+        }
+
+        .loading-state .spinner {
+            width: 36px; height: 36px; border-radius: 50%;
+            border: 3px solid var(--surface-3);
+            border-top-color: var(--primary);
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 640px) {
+            .header h1 { font-size: 18px; }
+            .product-grid { grid-template-columns: 1fr; }
+            .modal-content { padding: 22px; }
+            .floating-cart-btn { width: 52px; height: 52px; font-size: 20px; bottom: 24px; left: 20px; }
+            .mode-toggle { bottom: 24px; right: 20px; padding: 8px 14px; }
+        }
+
+        /* ─── SCROLLBAR for modal ─── */
+        .modal-content::-webkit-scrollbar { width: 4px; }
+        .modal-content::-webkit-scrollbar-track { background: transparent; }
+        .modal-content::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 2px; }
     </style>
 </head>
 <body>
 
+    <!-- ╔═══════════════════════════════╗ -->
+    <!-- ║         STICKY HEADER        ║ -->
+    <!-- ╚═══════════════════════════════╝ -->
     <div class="sticky-wrapper">
         <div class="container">
             <div class="header">
-                <h1>📦 PROMO CENTER <button class="btn-help" id="btnHelp" onclick="startTour()">❓ แนะนำการใช้งาน</button></h1>
+                <h1>
+                    <span class="logo-icon">📦</span>
+                    <span>PROMO <span class="logo-text">CENTER</span></span>
+                    <button class="btn-help" id="btnHelp" onclick="startTour()">❓ แนะนำการใช้งาน</button>
+                </h1>
                 <div class="controls">
                     <input type="text" id="searchInput" class="search-box" placeholder="ค้นหา: ชื่อ, แบรนด์, สรรพคุณ...">
                     <select id="sortSelect" class="sort-select">
                         <option value="default">เรียงตาม: ค่าเริ่มต้น</option>
-                        <option value="price_asc">ราคา: ต่ำ ➡️ สูง</option>
-                        <option value="price_desc">ราคา: สูง ➡️ ต่ำ</option>
+                        <option value="price_asc">ราคา: ต่ำ → สูง</option>
+                        <option value="price_desc">ราคา: สูง → ต่ำ</option>
                     </select>
-                    
-                    <button class="btn-primary hidden" id="btnViewOrders" onclick="openOrderDashboard()" style="background: var(--info); border: 1px solid #0284c7;">📋 เช็กออเดอร์</button>
+                    <button class="btn-primary hidden" id="btnViewOrders" onclick="openOrderDashboard()" style="background: var(--info-dim); color: var(--info); border: 1px solid rgba(56,189,248,0.25);">📋 เช็กออเดอร์</button>
                     <button class="btn-primary hidden" id="btnAddPromo" onclick="openFormModal('add')">+ เพิ่มสินค้า</button>
                 </div>
             </div>
@@ -177,73 +785,96 @@
         </div>
     </div>
 
+    <!-- ╔═══════════════════════════════╗ -->
+    <!-- ║         PRODUCT GRID         ║ -->
+    <!-- ╚═══════════════════════════════╝ -->
     <div class="container">
         <div class="product-grid" id="productGrid">
-            <div style="text-align: center; grid-column: 1/-1; padding: 40px; color: #64748b;">กำลังโหลดข้อมูล... ⏳</div>
+            <div class="loading-state">
+                <div class="spinner"></div>
+                กำลังโหลดข้อมูล...
+            </div>
         </div>
     </div>
 
+    <!-- Floating Buttons -->
     <button class="floating-cart-btn" onclick="openCartModal()">🛒<span class="cart-badge" id="cartBadge">0</span></button>
+
     <div class="mode-toggle" id="adminToggleContainer">
-        <span id="adminLabel" style="font-weight: 600; font-size: 13px;">โหมดแอดมิน</span>
+        <span id="adminLabel" style="font-weight: 600; font-size: 13px; color: var(--text-mid);">โหมดแอดมิน</span>
         <div class="toggle-switch"></div>
     </div>
+
     <div id="toastMessage" class="toast-container"></div>
 
+    <!-- Fullscreen Image -->
     <div id="fullscreenOverlay" class="fullscreen-overlay" onclick="this.style.display='none'">
         <img id="fullscreenImg" src="">
     </div>
 
+    <!-- ╔═══════════════════════════════╗ -->
+    <!-- ║         LOGIN MODAL          ║ -->
+    <!-- ╚═══════════════════════════════╝ -->
     <div class="modal-overlay" id="loginModal">
-        <div class="modal-content" style="max-width: 350px; text-align: center; padding: 40px 30px;">
-            <button class="modal-close" onclick="closeLoginModal()">✖</button>
-            <h2 class="modal-title" style="margin-bottom: 25px;">🔒 เข้าสู่ระบบแอดมิน</h2>
+        <div class="modal-content" style="max-width: 360px; text-align: center;">
+            <button class="modal-close" onclick="closeLoginModal()">✕</button>
+            <div class="login-icon">🔒</div>
+            <h2 class="modal-title" style="text-align:center; padding-right:0; margin-bottom:18px; font-size: 18px;">เข้าสู่ระบบแอดมิน</h2>
             <div class="form-group">
-                <input type="password" id="adminPasswordInput" class="form-control" placeholder="กรอกรหัสผ่านที่นี่..." style="text-align: center; font-size: 18px; letter-spacing: 2px;">
+                <input type="password" id="adminPasswordInput" class="form-control"
+                    placeholder="กรอกรหัสผ่าน..."
+                    style="text-align: center; font-size: 20px; letter-spacing: 4px; padding: 14px;">
             </div>
-            <button class="btn-primary" style="width: 100%; margin-top: 15px; padding: 14px;" onclick="checkLogin()">ยืนยัน</button>
+            <button class="btn-save" style="width: 100%; margin-top: 8px; padding: 14px;" onclick="checkLogin()">ยืนยัน</button>
         </div>
     </div>
 
+    <!-- ╔═══════════════════════════════╗ -->
+    <!-- ║         VIEW MODAL           ║ -->
+    <!-- ╚═══════════════════════════════╝ -->
     <div class="modal-overlay" id="viewModal">
         <div class="modal-content view-modal-content">
-            <button class="modal-close" onclick="closeViewModal()">✖</button>
+            <button class="modal-close" onclick="closeViewModal()">✕</button>
+
             <div id="viewNormalContent">
-                <img id="viewImage" class="view-image" src="" alt="Product" loading="lazy" onclick="openFullscreen(this.src)" title="แตะเพื่อขยายเต็มจอ">
+                <img id="viewImage" class="view-image" src="" alt="Product" loading="lazy"
+                    onclick="openFullscreen(this.src)" title="แตะเพื่อขยายเต็มจอ">
                 <div id="viewGallery" class="gallery-container"></div>
                 <span class="brand-badge" id="viewBrand"></span>
                 <h2 class="view-title" id="viewTitle"></h2>
-                
+
                 <div id="viewBenefitsBox" class="view-benefits-box">
-                    <div style="font-size:14px; font-weight:700; color:#166534;">✨ แคปชันสั้นๆ</div>
-                    <div id="viewBenefits" style="font-size:14px; color:#064e3b;"></div>
+                    <div style="font-size:13px; font-weight:700; color: var(--success); margin-bottom:5px;">✨ แคปชันสั้นๆ</div>
+                    <div id="viewBenefits" style="font-size:14px; color: var(--text-mid);"></div>
                 </div>
+
                 <div id="viewSellingPointsBox" class="view-selling-points-box">
                     <div class="sp-title">💡 สรุปจุดขาย (Selling Points)</div>
                     <ul id="viewSellingPoints" class="sp-list"></ul>
                 </div>
+
                 <div id="viewDescBox" class="view-desc-box">
-                    <div style="font-size:13px; font-weight:700; color:var(--text-dark); margin-bottom:5px;">🎁 รายละเอียด / ของแถม</div>
+                    <div style="font-size:13px; font-weight:700; color: var(--text-mid); margin-bottom:5px;">🎁 รายละเอียด / ของแถม</div>
                     <div id="viewDesc"></div>
                 </div>
 
                 <div class="view-price-box">
                     <div>
-                        <span style="font-size: 13px; color: var(--danger); font-weight: 600;">🔥 ราคาโปรโมชั่น</span>
-                        <span id="viewNormalPrice" style="text-decoration: line-through; color: #9ca3af; font-size: 13px; display: block;"></span>
+                        <span style="font-size: 12px; color: var(--danger); font-weight: 700; letter-spacing: 0.5px;">🔥 ราคาโปรโมชั่น</span>
+                        <span id="viewNormalPrice" style="text-decoration: line-through; color: var(--text-gray); font-size: 13px; display: block; margin-top: 3px;"></span>
                     </div>
                     <div id="viewSpecialPrice" style="font-size: 32px; font-weight: 700; color: var(--danger);"></div>
                 </div>
-                
+
                 <button id="btnCopyLine" class="btn-copy-line" onclick="copyToLine()">💬 คัดลอกข้อความเตรียมส่ง LINE</button>
-                <button id="btnAddToCartView" class="btn-copy-line hidden" onclick="addCurrentViewToCart()" style="background: var(--warning); color: white;">🛒 เพิ่มลงตะกร้า</button>
-                
+                <button id="btnAddToCartView" class="btn-copy-line hidden" onclick="addCurrentViewToCart()" style="background: var(--primary); color: #0e0e12;">🛒 เพิ่มลงตะกร้า</button>
+
                 <button id="btnViewPDF" class="btn-pdf hidden">📖 เปิดคู่มือเจาะลึกสินค้า (PDF)</button>
                 <button id="btnPromoGen" class="btn-promo-gen" onclick="generatePromoImage()">🎨 สร้างภาพโปรโมท (สำหรับแคปจอ)</button>
             </div>
 
             <div id="viewPromoGenContent" class="hidden">
-                <h3 style="text-align:center; margin-bottom:15px; color:var(--primary);">📸 แคปหน้าจอนี้ส่งลูกค้าได้เลย</h3>
+                <h3 style="text-align:center; margin-bottom:14px; color: var(--primary); font-size:15px;">📸 แคปหน้าจอนี้ส่งลูกค้าได้เลย</h3>
                 <div class="promo-gen-container" id="promoCanvas">
                     <div class="promo-gen-brand" id="genBrand"></div>
                     <img class="promo-gen-img" id="genImage" src="">
@@ -251,14 +882,17 @@
                     <div class="promo-gen-title" id="genTitle"></div>
                     <div class="promo-gen-price" id="genPrice"></div>
                 </div>
-                <button class="btn-cancel" style="width:100%; margin-top:15px;" onclick="closePromoImage()">⬅️ กลับไปหน้าเดิม</button>
+                <button class="btn-cancel" style="width:100%; margin-top:14px;" onclick="closePromoImage()">⬅️ กลับไปหน้าเดิม</button>
             </div>
         </div>
     </div>
 
+    <!-- ╔═══════════════════════════════╗ -->
+    <!-- ║         CART MODAL           ║ -->
+    <!-- ╚═══════════════════════════════╝ -->
     <div class="modal-overlay" id="cartModal">
         <div class="modal-content">
-            <button class="modal-close" onclick="closeCartModal()">✖</button>
+            <button class="modal-close" onclick="closeCartModal()">✕</button>
             <h2 class="modal-title">🛒 ตะกร้าสินค้า</h2>
             <div id="cartItemsContainer"></div>
             <div class="cart-total">
@@ -266,19 +900,28 @@
                 <span id="cartTotalPrice" style="color:var(--danger);">0.-</span>
             </div>
             <button id="btnCopyCart" class="btn-copy-line" onclick="copyCartToLine()">📝 คัดลอก "ใบเสนอราคา" ส่ง LINE</button>
-            <button id="btnCheckoutCart" class="btn-copy-line hidden" onclick="openCheckoutModal()" style="background: var(--success);">✅ ดำเนินการสั่งซื้อ</button>
+            <button id="btnCheckoutCart" class="btn-copy-line hidden" onclick="openCheckoutModal()" style="background: var(--success); color: #0e0e12;">✅ ดำเนินการสั่งซื้อ</button>
         </div>
     </div>
 
+    <!-- ╔═══════════════════════════════╗ -->
+    <!-- ║       CHECKOUT MODAL         ║ -->
+    <!-- ╚═══════════════════════════════╝ -->
     <div class="modal-overlay" id="checkoutModal">
-        <div class="modal-content" style="max-width: 450px;">
-            <button class="modal-close" onclick="closeCheckoutModal()">✖</button>
+        <div class="modal-content" style="max-width: 460px;">
+            <button class="modal-close" onclick="closeCheckoutModal()">✕</button>
             <h2 class="modal-title">📦 ยืนยันการสั่งซื้อ</h2>
-            <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #bbf7d0;">
-                <div style="font-size: 14px; color: #166534;">พนักงานดูแลลูกค้า (รหัสอ้างอิง): <strong id="displaySalesRep" style="font-size: 16px;"></strong></div>
+            <div class="checkout-info-box">
+                <div style="font-size: 13px;">พนักงานดูแลลูกค้า (รหัสอ้างอิง): <strong id="displaySalesRep" style="font-size: 15px;"></strong></div>
             </div>
-            <div class="form-group"><label>ชื่อ-นามสกุล (สำหรับจัดส่ง)</label><input type="text" id="customerName" class="form-control" placeholder="ระบุชื่อของคุณ"></div>
-            <div class="form-group"><label>เบอร์โทรศัพท์ติดต่อ</label><input type="text" id="customerPhone" class="form-control" placeholder="เช่น 0812345678" maxlength="10"></div>
+            <div class="form-group">
+                <label>ชื่อ-นามสกุล (สำหรับจัดส่ง)</label>
+                <input type="text" id="customerName" class="form-control" placeholder="ระบุชื่อของคุณ">
+            </div>
+            <div class="form-group">
+                <label>เบอร์โทรศัพท์ติดต่อ</label>
+                <input type="text" id="customerPhone" class="form-control" placeholder="เช่น 0812345678" maxlength="10">
+            </div>
             <div class="modal-actions">
                 <button class="btn-cancel" onclick="closeCheckoutModal()">ย้อนกลับ</button>
                 <button class="btn-save" id="btnSubmitOrder" onclick="submitOrder()">🚀 ยืนยันส่งคำสั่งซื้อ</button>
@@ -286,31 +929,46 @@
         </div>
     </div>
 
+    <!-- ╔═══════════════════════════════╗ -->
+    <!-- ║     ORDER DASHBOARD MODAL    ║ -->
+    <!-- ╚═══════════════════════════════╝ -->
     <div class="modal-overlay" id="orderDashboardModal">
         <div class="modal-content view-modal-content">
-            <button class="modal-close" onclick="closeOrderDashboard()">✖</button>
+            <button class="modal-close" onclick="closeOrderDashboard()">✕</button>
             <h2 class="modal-title">📋 สรุปออเดอร์จากลูกค้า</h2>
             <div id="orderListContainer">
-                <div style="text-align:center; padding:20px; color: var(--text-gray);">คลิกปุ่มเพื่อโหลดข้อมูลออเดอร์... ⏳</div>
+                <div class="loading-state" style="padding: 30px 0;">
+                    <div class="spinner"></div>
+                    คลิกปุ่มเพื่อโหลดข้อมูลออเดอร์...
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- ╔═══════════════════════════════╗ -->
+    <!-- ║         FORM MODAL           ║ -->
+    <!-- ╚═══════════════════════════════╝ -->
     <div class="modal-overlay" id="formModal">
         <div class="modal-content">
             <h2 class="modal-title" id="formModalTitle">เพิ่มข้อมูล</h2>
             <input type="hidden" id="formRowIndex">
-            <div class="form-group"><label>แบรนด์</label><input type="text" id="formBrand" class="form-control"></div>
-            <div class="form-group"><label>ชื่อสินค้า</label><input type="text" id="formTitle" class="form-control"></div>
-            <div class="form-group"><label>สรุปจุดขาย (- นำหน้า)</label><textarea id="formSellingPoints" class="form-control" rows="3"></textarea></div>
-            <div class="form-group"><label>แคปชันสั้นหน้าการ์ด</label><textarea id="formBenefits" class="form-control" rows="1"></textarea></div>
-            <div class="form-group"><label>รายละเอียดของแถม</label><textarea id="formDesc" class="form-control" rows="2"></textarea></div>
+            <div class="form-group"><label>แบรนด์</label><input type="text" id="formBrand" class="form-control" placeholder="ชื่อแบรนด์"></div>
+            <div class="form-group"><label>ชื่อสินค้า</label><input type="text" id="formTitle" class="form-control" placeholder="ชื่อสินค้า"></div>
+            <div class="form-group"><label>สรุปจุดขาย (- นำหน้า)</label><textarea id="formSellingPoints" class="form-control" rows="3" placeholder="- จุดขายที่ 1&#10;- จุดขายที่ 2"></textarea></div>
+            <div class="form-group"><label>แคปชันสั้นหน้าการ์ด</label><textarea id="formBenefits" class="form-control" rows="1" placeholder="แคปชันสั้นๆ"></textarea></div>
+            <div class="form-group"><label>รายละเอียดของแถม</label><textarea id="formDesc" class="form-control" rows="2" placeholder="รายละเอียดเพิ่มเติม"></textarea></div>
             <div style="display:flex; gap:10px;">
-                <div class="form-group" style="flex:1;"><label>ราคาปกติ (ใส่ , ได้)</label><input type="text" id="formNormal" class="form-control"></div>
-                <div class="form-group" style="flex:1;"><label>ราคาพิเศษ (ใส่ , ได้)</label><input type="text" id="formSpecial" class="form-control"></div>
+                <div class="form-group" style="flex:1;"><label>ราคาปกติ (ใส่ , ได้)</label><input type="text" id="formNormal" class="form-control" placeholder="0"></div>
+                <div class="form-group" style="flex:1;"><label>ราคาพิเศษ (ใส่ , ได้)</label><input type="text" id="formSpecial" class="form-control" placeholder="0"></div>
             </div>
-            <div class="form-group"><label>ลิงก์รูปภาพ <span style="color:var(--danger)">(หลายรูป คั่นด้วย ,)</span></label><input type="text" id="formImage" class="form-control"></div>
-            <div class="form-group"><label>ลิงก์คู่มือ (PDF_Link)</label><input type="text" id="formPDF" class="form-control"></div>
+            <div class="form-group">
+                <label>ลิงก์รูปภาพ <span style="color:var(--danger); font-weight:400; text-transform:none;">(หลายรูป คั่นด้วย ,)</span></label>
+                <input type="text" id="formImage" class="form-control" placeholder="https://...">
+            </div>
+            <div class="form-group">
+                <label>ลิงก์คู่มือ (PDF_Link)</label>
+                <input type="text" id="formPDF" class="form-control" placeholder="https://...">
+            </div>
             <div class="modal-actions">
                 <button class="btn-cancel" onclick="closeFormModal()">ยกเลิก</button>
                 <button class="btn-save" id="btnSave" onclick="saveData()">💾 บันทึก</button>
@@ -318,14 +976,20 @@
         </div>
     </div>
 
+    <!-- ╔═══════════════════════════════╗ -->
+    <!-- ║         TOUR OVERLAY         ║ -->
+    <!-- ╚═══════════════════════════════╝ -->
     <div class="tour-overlay" id="tourOverlay">
         <div class="tour-box">
             <div class="tour-title" id="tourTitle">ยินดีต้อนรับ! 👋</div>
             <div class="tour-desc" id="tourDesc"></div>
-            <button class="btn-primary" style="width:100%;" id="btnTourNext" onclick="nextTour()">ถัดไป ➡️</button>
+            <button class="btn-save" style="width:100%; padding: 12px;" id="btnTourNext" onclick="nextTour()">ถัดไป ➡️</button>
         </div>
     </div>
 
+    <!-- ╔═══════════════════════════════╗ -->
+    <!-- ║     JAVASCRIPT (ไม่แตะ)       ║ -->
+    <!-- ╚═══════════════════════════════╝ -->
     <script>
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzfhzBH0dzt1lxObKp6q0Fu6kb3c55UbZaWAI7AuzM712ndg-ExrvMSLv8xiOYxbkq9/exec'; 
         
@@ -354,7 +1018,7 @@
             const toast = document.getElementById('toastMessage');
             toast.innerHTML = type === 'success' ? `✅ ${message}` : `⚠️ ${message}`;
             toast.className = `toast-container show toast-${type}`;
-            toast.style.borderLeft = type === 'success' ? '4px solid var(--success)' : '4px solid var(--danger)';
+            toast.style.borderLeft = type === 'success' ? '3px solid var(--success)' : '3px solid var(--danger)';
             setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
 
@@ -374,7 +1038,7 @@
                 applyFiltersAndRender(); 
                 applyCustomerMode(); 
             } catch (error) {
-                document.getElementById('productGrid').innerHTML = '<div style="text-align:center; grid-column:1/-1; padding: 40px; color: var(--danger);">❌ เกิดข้อผิดพลาด กรุณารีเฟรชหน้าเว็บ</div>';
+                document.getElementById('productGrid').innerHTML = '<div style="text-align:center; grid-column:1/-1; padding: 60px; color: var(--danger);">❌ เกิดข้อผิดพลาด กรุณารีเฟรชหน้าเว็บ</div>';
             }
         }
 
@@ -411,7 +1075,7 @@
             const grid = document.getElementById('productGrid');
             grid.innerHTML = ''; 
             if(products.length === 0) {
-                grid.innerHTML = '<div style="text-align:center; grid-column:1/-1; color: var(--text-gray); padding: 40px;">🔍 ไม่พบรายการสินค้า</div>';
+                grid.innerHTML = '<div style="text-align:center; grid-column:1/-1; color: var(--text-gray); padding: 60px;">🔍 ไม่พบรายการสินค้า</div>';
                 return;
             }
 
@@ -474,7 +1138,7 @@
             container.innerHTML = '';
             
             if(cart.length === 0) {
-                container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-gray);">ยังไม่มีสินค้าในตะกร้า</div>';
+                container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-gray);">ยังไม่มีสินค้าในตะกร้า</div>';
             } else {
                 cart.forEach((item, index) => {
                     const priceVal = Number(String(item.SpecialPrice||'0').replace(/,/g, '')) || 0;
@@ -485,7 +1149,7 @@
                                 <div class="cart-item-title">${item.Title}</div>
                                 <div class="cart-item-price">${item.SpecialPrice}.-</div>
                             </div>
-                            <button class="btn-cart-remove" onclick="removeFromCart(${index})">✖</button>
+                            <button class="btn-cart-remove" onclick="removeFromCart(${index})">✕</button>
                         </div>
                     `;
                 });
@@ -550,61 +1214,45 @@
             const modal = document.getElementById('orderDashboardModal');
             const container = document.getElementById('orderListContainer');
             modal.classList.add('active');
-            container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-gray);">กำลังโหลดข้อมูลออเดอร์... ⏳</div>';
+            container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-gray);">กำลังโหลดข้อมูลออเดอร์... ⏳</div>';
             
             try {
                 const response = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'get_orders', data: {} }) });
                 const orders = await response.json();
                 
                 if (orders.length === 0) {
-                    container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-gray);">ยังไม่มีออเดอร์เข้ามาครับ</div>';
+                    container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-gray);">ยังไม่มีออเดอร์เข้ามาครับ</div>';
                     return;
                 }
 
                 container.innerHTML = '';
                 orders.forEach(order => {
                     let dateStr = order['Date'] || order['วัน/เวลา'] || '-';
-                    const cusName = order['CustomerName'] || order['ชื่อลูกค้า'] || '-';
-                    
-                    let phone = String(order['Phone'] || order['เบอร์โทร'] || '-').trim();
-                    if (phone.length === 9 && !phone.startsWith('0') && phone !== '-') {
-                        phone = '0' + phone;
-                    }
-
-                    const rep = order['SalesRep'] || order['รหัสเซลส์ (Ref)'] || 'ไม่มีผู้แนะนำ';
-                    const details = order['OrderDetails'] || order['รายการสินค้า'] || '-';
-                    const total = order['TotalPrice'] || order['ยอดรวม'] || '0';
-                    const status = order['Status'] || order['สถานะ'] || '-';
-
                     container.innerHTML += `
                         <div class="order-card">
                             <div class="order-header">
-                                <span>🕒 ${dateStr.replace(/'/g, '')}</span>
-                                <span style="color:var(--warning); font-weight:bold;">${status}</span>
+                                <span>${dateStr}</span>
+                                <span>📞 ${order['Phone'] || order['เบอร์โทร'] || '-'}</span>
                             </div>
-                            <div class="order-customer">👤 คุณ ${cusName} (โทร: ${phone})</div>
-                            <div class="order-rep">รหัสเซลส์: ${rep}</div>
-                            <div class="order-items">${details}</div>
-                            <div class="order-total">ยอดรวม: ${Number(total).toLocaleString('en-US')} บาท</div>
+                            <div class="order-customer">${order['CustomerName'] || order['ชื่อลูกค้า'] || '-'}</div>
+                            <div class="order-rep">👤 ${order['SalesRep'] || order['พนักงาน'] || '-'}</div>
+                            <div class="order-items">${order['OrderDetails'] || order['รายการสินค้า'] || '-'}</div>
+                            <div class="order-total">💰 ${Number(order['TotalPrice'] || order['ยอดรวม'] || 0).toLocaleString('en-US')} บาท</div>
                         </div>
                     `;
                 });
-            } catch (error) {
-                container.innerHTML = '<div style="color:red; text-align:center; padding:20px;">❌ เกิดข้อผิดพลาดในการโหลดออเดอร์</div>';
-            }
+            } catch (e) { container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--danger);">❌ เกิดข้อผิดพลาด</div>'; }
         }
         function closeOrderDashboard() { document.getElementById('orderDashboardModal').classList.remove('active'); }
 
         let currentViewProduct = null;
-        function openFullscreen(src) { if(!src) return; document.getElementById('fullscreenImg').src = src; document.getElementById('fullscreenOverlay').style.display = 'flex'; }
-        function addCurrentViewToCart() { if(currentViewProduct) { addToCart(currentViewProduct._rowIndex); closeViewModal(); } }
-
         function openViewModal(rowIndex) {
-            const product = allProducts.find(p => p._rowIndex === rowIndex);
-            currentViewProduct = product;
-            
-            document.getElementById('viewNormalContent').classList.remove('hidden');
+            currentViewProduct = allProducts.find(p => p._rowIndex === rowIndex);
+            if(!currentViewProduct) return;
+            const product = currentViewProduct;
+
             document.getElementById('viewPromoGenContent').classList.add('hidden');
+            document.getElementById('viewNormalContent').classList.remove('hidden');
 
             const urls = (product.ImageURL || '').split(',').map(u => u.trim()).filter(u => u !== '');
             const mainImg = document.getElementById('viewImage');
@@ -663,6 +1311,19 @@
             } else btnPDF.classList.add('hidden');
 
             document.getElementById('viewModal').classList.add('active');
+        }
+
+        function openFullscreen(src) {
+            const overlay = document.getElementById('fullscreenOverlay');
+            document.getElementById('fullscreenImg').src = src;
+            overlay.style.display = 'flex';
+        }
+
+        function addCurrentViewToCart() {
+            if(currentViewProduct) {
+                addToCart(currentViewProduct._rowIndex);
+                closeViewModal();
+            }
         }
 
         function copyToLine() {
@@ -766,7 +1427,7 @@
         }
 
         // ==========================================
-        // 🌟 ระบบหน้าต่าง Login (พิมพ์แล้วโชว์เป็น ***)
+        // 🌟 ระบบหน้าต่าง Login
         // ==========================================
         function openLoginModal() {
             document.getElementById('adminPasswordInput').value = '';
@@ -791,10 +1452,9 @@
                 showToast('รหัสผ่านไม่ถูกต้อง', 'error');
                 document.getElementById('adminToggleContainer').classList.remove('active');
                 closeLoginModal();
-                return; // ออกจากฟังก์ชัน ถ้ารหัสผิด
+                return;
             }
             
-            // ถ้ารหัสถูก ให้เปิดสวิตช์และแสดงปุ่มแอดมิน
             closeLoginModal();
             document.getElementById('adminToggleContainer').classList.add('active');
             document.getElementById('btnAddPromo').classList.remove('hidden');
@@ -802,19 +1462,14 @@
             applyFiltersAndRender();
         }
 
-        // 🌟 กด Enter เพื่อล็อกอินได้เลย
         document.getElementById('adminPasswordInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkLogin();
-            }
+            if (e.key === 'Enter') { checkLogin(); }
         });
 
-        // 🌟 ปรับปรุงปุ่ม Toggle ให้เรียกใช้หน้าต่าง Login แทน prompt()
         document.getElementById('adminToggleContainer').addEventListener('click', () => {
             if (currentAdminLevel === 0) {
-                openLoginModal(); // เรียกหน้าต่าง Login แบบ Custom
+                openLoginModal();
             } else {
-                // ออกจากระบบ
                 currentAdminLevel = 0;
                 document.getElementById('adminToggleContainer').classList.remove('active');
                 document.getElementById('btnAddPromo').classList.add('hidden');
@@ -824,7 +1479,6 @@
             }
         });
 
-        // UX: คลิกข้างนอกเพื่อปิด Modal
         window.addEventListener('click', (e) => {
             if (e.target === document.getElementById('viewModal')) closeViewModal();
             if (e.target === document.getElementById('cartModal')) closeCartModal();
