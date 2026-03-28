@@ -412,6 +412,72 @@
     .btn-danger { color: var(--danger) !important; border-color: rgba(255,92,106,0.2) !important; background: var(--danger-dim) !important; flex: 0.35 !important; }
     .btn-danger:hover { background: rgba(255,92,106,0.2) !important; }
 
+    /* ══ SHARE BUTTON ══ */
+    .btn-share {
+        width: 100%; padding: 10px 14px;
+        border: 1px solid rgba(56,189,248,0.28); background: rgba(56,189,248,0.08);
+        border-radius: var(--radius-md); font-size: 13px; font-weight: 700; color: var(--info);
+        cursor: pointer; transition: var(--transition); display: flex; align-items: center;
+        justify-content: center; gap: 6px; font-family: 'Prompt', sans-serif; margin-top: 8px;
+    }
+    .btn-share:hover { background: rgba(56,189,248,0.18); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(56,189,248,0.18); }
+
+    /* ══ SHARE MODAL ══ */
+    .share-modal-content { max-width: 420px; }
+    .share-product-preview {
+        display: flex; align-items: center; gap: 12px;
+        background: var(--surface-2); border: 1px solid var(--border);
+        border-radius: var(--radius-lg); padding: 12px 14px; margin-bottom: 18px;
+    }
+    .share-product-img {
+        width: 56px; height: 56px; border-radius: var(--radius-md);
+        object-fit: cover; flex-shrink: 0; background: var(--surface-3);
+    }
+    .share-product-img-placeholder { width: 56px; height: 56px; border-radius: var(--radius-md); background: var(--surface-3); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+    .share-product-meta { flex: 1; min-width: 0; }
+    .share-product-brand { font-size: 10px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+    .share-product-title { font-size: 13px; font-weight: 700; color: var(--text-dark); line-height: 1.35; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .share-product-price { font-size: 15px; font-weight: 800; color: var(--danger); margin-top: 3px; }
+    .share-input-wrap { position: relative; margin-bottom: 14px; }
+    .share-link-input {
+        width: 100%; padding: 11px 44px 11px 14px; background: var(--surface-2);
+        border: 1px solid var(--border); border-radius: var(--radius-md);
+        color: var(--text-mid); font-size: 12px; font-family: 'Prompt', sans-serif;
+        outline: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        cursor: pointer; transition: var(--transition);
+    }
+    .share-link-input:focus { border-color: var(--primary); }
+    .share-copy-icon {
+        position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+        color: var(--text-gray); cursor: pointer; font-size: 16px; transition: var(--transition);
+        background: none; border: none; padding: 3px;
+    }
+    .share-copy-icon:hover { color: var(--primary); }
+    .share-ref-row { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; }
+    .share-ref-label { font-size: 11px; font-weight: 700; color: var(--text-gray); white-space: nowrap; text-transform: uppercase; letter-spacing: .6px; }
+    .share-ref-input {
+        flex: 1; padding: 8px 12px; background: var(--surface-2); border: 1px solid var(--border);
+        border-radius: var(--radius-md); color: var(--text-dark); font-size: 13px;
+        outline: none; font-family: 'Prompt', sans-serif; transition: var(--transition);
+    }
+    .share-ref-input:focus { border-color: var(--primary); }
+    .btn-share-copy-main {
+        width: 100%; padding: 13px; background: var(--info); color: #fff;
+        border: none; border-radius: var(--radius-xl); font-size: 14px; font-weight: 800;
+        cursor: pointer; transition: var(--transition); font-family: 'Prompt', sans-serif;
+        box-shadow: 0 4px 18px rgba(56,189,248,0.3); display: flex; align-items: center; justify-content: center; gap: 7px;
+    }
+    .btn-share-copy-main:hover { filter: brightness(1.12); transform: translateY(-1px); }
+    .share-hint { font-size: 11px; color: var(--text-gray); text-align: center; margin-top: 10px; line-height: 1.5; }
+    .share-copied-badge {
+        display: inline-flex; align-items: center; gap: 4px;
+        background: var(--success-dim); color: var(--success);
+        border: 1px solid rgba(52,211,153,.22); border-radius: 20px;
+        font-size: 11px; font-weight: 700; padding: 3px 10px;
+        opacity: 0; transition: opacity .3s; margin-left: 8px;
+    }
+    .share-copied-badge.show { opacity: 1; }
+
     /* ══ FLOATING ELEMENTS ══ */
     .floating-cart-btn {
         position: fixed; bottom: 28px; left: 26px; background: var(--primary); color: var(--primary-text);
@@ -898,6 +964,42 @@
     </div>
 </div>
 
+<!-- ══ SHARE MODAL ══ -->
+<div class="modal-overlay" id="shareModal">
+    <div class="modal-content share-modal-content">
+        <button class="modal-close" onclick="closeShareModal()">✕</button>
+        <h2 class="modal-title">📤 แชร์สินค้าให้ลูกค้า</h2>
+
+        <!-- Product preview strip -->
+        <div class="share-product-preview" id="shareProductPreview"></div>
+
+        <!-- Ref name row -->
+        <div style="margin-bottom:10px;">
+            <div class="share-ref-row">
+                <span class="share-ref-label">รหัสพนักงาน</span>
+                <input type="text" id="shareRefInput" class="share-ref-input" placeholder="ชื่อ / รหัสพนักงาน (ไม่บังคับ)" oninput="updateShareLink()">
+            </div>
+        </div>
+
+        <!-- Link display -->
+        <div class="share-input-wrap">
+            <input type="text" id="shareLinkDisplay" class="share-link-input" readonly onclick="this.select()">
+            <button class="share-copy-icon" onclick="copyShareLinkIcon()" title="คัดลอก">📋</button>
+        </div>
+
+        <!-- Copy button -->
+        <button class="btn-share-copy-main" onclick="copyShareLink()">
+            📋 คัดลอกลิงก์
+            <span class="share-copied-badge" id="shareCopiedBadge">✅ คัดลอกแล้ว!</span>
+        </button>
+
+        <div class="share-hint">
+            ลิงก์นี้จะเปิดหน้าสินค้าเฉพาะตัวนั้น — ลูกค้าไม่เห็นสินค้าอื่น<br>
+            ส่งผ่าน LINE, Facebook หรือช่องทางใดก็ได้
+        </div>
+    </div>
+</div>
+
 <script>
 // ════════════════════════════════════════════════════════════════
 //  THEME SYSTEM
@@ -1184,6 +1286,7 @@ function renderProducts(products) {
                 <div class="user-controls" style="margin-top:10px;">
                     <button class="btn-cart-add" onclick="addToCart(${product._rowIndex})">${cartBtnText}</button>
                 </div>
+                <button class="btn-share" onclick="openShareModal(${product._rowIndex})">📤 แชร์ลิงก์ให้ลูกค้า</button>
             </div>`;
         grid.appendChild(card);
     });
@@ -1527,6 +1630,7 @@ window.addEventListener('click',e=>{
     if(e.target===document.getElementById('orderDashboardModal'))closeOrderDashboard();
     if(e.target===document.getElementById('loginModal'))closeLoginModal();
     if(e.target===document.getElementById('noteModal'))closeNoteModal();
+    if(e.target===document.getElementById('shareModal'))closeShareModal();
 });
 
 document.addEventListener('keydown',e=>{
@@ -1535,7 +1639,7 @@ document.addEventListener('keydown',e=>{
         if(fs.style.display==='flex'){fs.style.display='none';return;}
         const tour=document.getElementById('tourOverlay');
         if(tour.style.display==='flex'){tour.style.display='none';return;}
-        const modals=['viewModal','cartModal','formModal','checkoutModal','orderDashboardModal','loginModal','noteModal'];
+        const modals=['viewModal','cartModal','formModal','checkoutModal','orderDashboardModal','loginModal','noteModal','shareModal'];
         for(const id of modals){const m=document.getElementById(id);if(m.classList.contains('active')){m.classList.remove('active');return;}}
         document.getElementById('themePanel').classList.remove('open');
     }
@@ -1554,6 +1658,81 @@ document.querySelectorAll('.filter-btn').forEach(btn=>{
         applyFiltersAndRender();
     });
 });
+
+// ════════════════════════════════════════════════════════════════
+//  SHARE MODAL
+// ════════════════════════════════════════════════════════════════
+let shareRowIndex = null;
+
+function openShareModal(rowIndex) {
+    shareRowIndex = rowIndex;
+    const p = allProducts.find(x => x._rowIndex === rowIndex);
+    if (!p) return;
+
+    // Populate product preview
+    const urls = (p.ImageURL || '').split(',').map(u => u.trim()).filter(Boolean);
+    const firstUrl = urls.length > 0 ? getDirectImageUrl(urls[0]) : null;
+    const imgHtml = firstUrl
+        ? `<img class="share-product-img" src="${firstUrl}" onerror="this.outerHTML='<div class=\\'share-product-img-placeholder\\'>📷</div>'">`
+        : `<div class="share-product-img-placeholder">📷</div>`;
+
+    const discount = calcDiscount(p.NormalPrice, p.SpecialPrice);
+    const priceLine = discount
+        ? `<div class="share-product-price">${p.SpecialPrice}.- <span style="font-size:11px;font-weight:600;color:var(--success);background:var(--success-dim);padding:1px 7px;border-radius:20px;">ลด ${discount.pct}%</span></div>`
+        : `<div class="share-product-price">${p.SpecialPrice}.-</div>`;
+
+    document.getElementById('shareProductPreview').innerHTML = `
+        ${imgHtml}
+        <div class="share-product-meta">
+            <div class="share-product-brand">${p.Brand || ''}</div>
+            <div class="share-product-title">${p.Title || ''}</div>
+            ${priceLine}
+        </div>`;
+
+    // Prefill ref from URL param or saved
+    const saved = localStorage.getItem('share_ref') || (salesRepId || '');
+    document.getElementById('shareRefInput').value = saved;
+
+    // Generate link
+    updateShareLink();
+
+    // Reset copy badge
+    document.getElementById('shareCopiedBadge').classList.remove('show');
+
+    document.getElementById('shareModal').classList.add('active');
+    setTimeout(() => document.getElementById('shareRefInput').focus(), 120);
+}
+
+function updateShareLink() {
+    if (shareRowIndex === null) return;
+    const ref = document.getElementById('shareRefInput').value.trim();
+    if (ref) localStorage.setItem('share_ref', ref);
+    const base = window.location.href.split('?')[0].replace('index.html', '').replace(/\/$/, '');
+    const landingBase = base + (base.endsWith('/') ? '' : '/') + 'product-landing.html';
+    const url = ref
+        ? `${landingBase}?id=${shareRowIndex}&ref=${encodeURIComponent(ref)}`
+        : `${landingBase}?id=${shareRowIndex}`;
+    document.getElementById('shareLinkDisplay').value = url;
+}
+
+function copyShareLink() {
+    const val = document.getElementById('shareLinkDisplay').value;
+    navigator.clipboard.writeText(val)
+        .then(() => {
+            const badge = document.getElementById('shareCopiedBadge');
+            badge.classList.add('show');
+            showToast('✅ คัดลอกลิงก์แล้ว! พร้อมส่งให้ลูกค้า');
+            setTimeout(() => badge.classList.remove('show'), 3000);
+        })
+        .catch(() => {
+            document.getElementById('shareLinkDisplay').select();
+            document.execCommand('copy');
+            showToast('✅ คัดลอกแล้ว!');
+        });
+}
+
+function copyShareLinkIcon() { copyShareLink(); }
+function closeShareModal() { document.getElementById('shareModal').classList.remove('active'); }
 
 // ════════════════════════════════════════════════════════════════
 //  INIT
