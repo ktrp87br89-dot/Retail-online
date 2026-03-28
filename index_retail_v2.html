@@ -1497,7 +1497,7 @@ function buildScript(product) {
     document.getElementById('viewScriptBox').classList.remove('open');
 }
 function toggleScript() { document.getElementById('viewScriptBox').classList.toggle('open'); }
-function copyScript() { navigator.clipboard.writeText(document.getElementById('viewScriptText').textContent).then(()=>showToast('คัดลอกสคริปต์พูดขายแล้ว!')).catch(()=>showToast('ไม่สามารถคัดลอกได้','error')); }
+function copyScript() { navigator.clipboard.writeText(document.getElementById('viewScriptText').textContent).then(()=>showToast('คัดลอกคัดลอกข้อความแล้ว!')).catch(()=>showToast('ไม่สามารถคัดลอกได้','error')); }
 function openFullscreen(src) { if(!src||src===window.location.href)return; document.getElementById('fullscreenImg').src=src; document.getElementById('fullscreenOverlay').style.display='flex'; }
 function addCurrentViewToCart() { if(currentViewProduct){addToCart(currentViewProduct._rowIndex);closeViewModal();} }
 function copyToLine() {
