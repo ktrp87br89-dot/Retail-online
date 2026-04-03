@@ -165,13 +165,8 @@
     }
 
     /* ══ ANIMATED BACKGROUND ══ */
-    .bg-mesh {
-        position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
-    }
-    .bg-orb {
-        position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.25;
-        animation: orbFloat 18s ease-in-out infinite;
-    }
+    .bg-mesh { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .bg-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.25; animation: orbFloat 18s ease-in-out infinite; }
     .bg-orb-1 { width: 500px; height: 500px; background: var(--primary); top: -15%; left: -10%; animation-delay: 0s; }
     .bg-orb-2 { width: 380px; height: 380px; background: var(--primary); bottom: 10%; right: -8%; opacity: 0.18; animation-delay: -7s; animation-duration: 24s; }
     .bg-orb-3 { width: 260px; height: 260px; background: var(--success); top: 45%; left: 55%; opacity: 0.08; animation-delay: -14s; animation-duration: 20s; }
@@ -219,7 +214,6 @@
 
     /* ══ HEADER ROW ══ */
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
-
     .logo-wrap { display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink: 0; }
     .logo-icon {
         width: 40px; height: 40px; background: var(--primary); border-radius: 12px;
@@ -234,7 +228,6 @@
     .logo-subtitle { font-size: 10.5px; color: var(--text-gray); margin-top: 2px; font-weight: 500; }
 
     .header-actions { display: flex; align-items: center; gap: 7px; flex-shrink: 0; flex-wrap: wrap; }
-
     .btn-pill {
         padding: 7px 14px; border-radius: 50px; font-size: 12px; font-weight: 700;
         cursor: pointer; transition: var(--transition); white-space: nowrap; border: none;
@@ -573,51 +566,69 @@
     }
     .modal-close:hover { background: var(--danger-dim); border-color: var(--danger); color: var(--danger); }
     .modal-title { font-size: 18px; font-weight: 800; margin-bottom: 20px; color: var(--text-dark); padding-right: 40px; }
-    .view-modal-content { max-width: 680px; }
 
-    /* ══ VIEW MODAL ══ */
-    .view-image { width: 100%; border-radius: var(--radius-lg); margin-bottom: 14px; cursor: zoom-in; max-height: 340px; object-fit: cover; }
+    /* ══════════════════════════════════════════════════════════════
+       🚀 TELESALES DASHBOARD (VIEW MODAL UPGRADE)
+    ══════════════════════════════════════════════════════════════ */
+    .view-modal-content { max-width: 900px !important; padding: 24px !important; }
+    .ts-dashboard { display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px; }
+    
+    /* TS Left (Visual & Price) */
+    .ts-col-left { display: flex; flex-direction: column; }
+    .view-image { width: 100%; border-radius: var(--radius-lg); margin-bottom: 14px; cursor: zoom-in; max-height: 300px; object-fit: cover; }
     .gallery-container { display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; }
-    .gallery-thumb { width: 64px; height: 64px; object-fit: cover; border-radius: var(--radius-sm); border: 2px solid transparent; cursor: pointer; flex-shrink: 0; transition: var(--transition); }
-    .gallery-thumb.active, .gallery-thumb:hover { border-color: var(--primary); }
-    .view-title { font-size: 20px; font-weight: 800; margin: 10px 0 14px; color: var(--text-dark); line-height: 1.35; }
+    .gallery-thumb { width: 56px; height: 56px; object-fit: cover; border-radius: var(--radius-sm); border: 2px solid transparent; cursor: pointer; flex-shrink: 0; }
+    .gallery-thumb.active { border-color: var(--primary); }
+    .view-title { font-size: 18px; font-weight: 800; margin: 10px 0; color: var(--text-dark); line-height: 1.35; }
+    .view-price-box { display: flex; justify-content: space-between; align-items: flex-end; background: var(--danger-dim); border: 1px solid rgba(255,92,106,0.18); border-radius: var(--radius-md); padding: 14px 16px; margin: 14px 0; }
+    .view-price-label { font-size: 11px; font-weight: 700; color: var(--danger); text-transform: uppercase; margin-bottom: 4px; }
+    .view-normal-price-text { font-size: 12px; text-decoration: line-through; color: var(--text-gray); display: block; margin-bottom: 4px; }
+    .view-saving-badge { font-size: 11px; background: var(--success-dim); color: var(--success); border: 1px solid rgba(52,211,153,0.2); padding: 3px 8px; border-radius: 20px; font-weight: 700; }
+    
+    /* TS Right (Tabs System) */
+    .ts-col-right { display: flex; flex-direction: column; max-height: calc(90vh - 48px); overflow-y: auto; padding-right: 8px; }
+    .ts-col-right::-webkit-scrollbar { width: 4px; }
+    .ts-tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px; position: sticky; top: 0; background: var(--modal-bg); z-index: 10; }
+    .ts-tab { flex: 1; background: transparent; border: 1px solid var(--border); color: var(--text-gray); font-size: 12px; font-weight: 700; cursor: pointer; padding: 10px 8px; font-family: 'Prompt', sans-serif; transition: var(--transition); border-radius: var(--radius-sm); white-space: nowrap; }
+    .ts-tab:hover { background: var(--surface-2); color: var(--text-mid); }
+    .ts-tab.active { background: var(--primary-dim); color: var(--primary); border-color: var(--primary); }
+    .ts-tab.ai-tab { color: #c084fc; border-color: rgba(192,132,252,0.3); }
+    .ts-tab.ai-tab.active { background: linear-gradient(135deg, rgba(167,139,250,0.15), rgba(244,114,182,0.15)); color: #e879f9; border-color: #c084fc; box-shadow: 0 0 15px rgba(192,132,252,0.2); }
+    .ts-tab-content { display: none; flex-direction: column; animation: fadeIn 0.3s; }
+    .ts-tab-content.active { display: flex; }
 
+    /* Info Boxes */
     .info-box { padding: 12px 14px; border-radius: var(--radius-md); margin-bottom: 10px; }
     .info-box.benefits { background: var(--primary-dim); border: 1px solid var(--border-accent); }
     .info-box.selling { background: rgba(52,211,153,0.07); border: 1px solid rgba(52,211,153,0.2); }
     .info-box.desc { background: var(--surface-2); border: 1px solid var(--border); }
-    .info-box-label { font-size: 11px; font-weight: 700; color: var(--text-gray); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+    .info-box-label { font-size: 11px; font-weight: 700; color: var(--text-gray); text-transform: uppercase; margin-bottom: 6px; }
     .info-box-content { font-size: 13px; color: var(--text-dark); line-height: 1.6; }
     .sp-list { margin-left: 16px; color: var(--text-dark); font-size: 13px; line-height: 1.9; }
 
+    /* Script Box (Enhanced for Tab) */
     .script-box { border: 1px solid rgba(129,140,248,0.2); background: rgba(79,70,229,0.07); border-radius: var(--radius-md); overflow: hidden; margin-bottom: 14px; }
-    .script-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; cursor: pointer; }
-    .script-header-left { display: flex; align-items: center; gap: 8px; }
-    .script-title { font-size: 13px; font-weight: 700; color: #a5b4fc; }
-    .script-badge { font-size: 10px; background: rgba(129,140,248,0.18); color: #a5b4fc; padding: 2px 8px; border-radius: 20px; font-weight: 700; }
-    .script-toggle-icon { color: #a5b4fc; font-size: 11px; transition: var(--transition); }
-    .script-box.open .script-toggle-icon { transform: rotate(180deg); }
-    .script-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
-    .script-box.open .script-body { max-height: 400px; }
-    .script-text-area { padding: 0 14px 14px; font-size: 12.5px; color: #a5b4fc; white-space: pre-wrap; line-height: 1.7; font-family: 'Prompt', sans-serif; }
-    .btn-copy-script { margin: 0 14px 14px; padding: 8px 16px; background: rgba(129,140,248,0.12); border: 1px solid rgba(129,140,248,0.22); border-radius: var(--radius-md); color: #a5b4fc; font-size: 12px; font-weight: 700; cursor: pointer; transition: var(--transition); font-family: 'Prompt', sans-serif; }
+    .script-text-area { padding: 14px; font-size: 12.5px; color: #a5b4fc; white-space: pre-wrap; line-height: 1.7; font-family: 'Prompt', sans-serif; }
+    .btn-copy-script { width: 100%; padding: 11px 16px; background: rgba(129,140,248,0.12); border: 1px solid rgba(129,140,248,0.22); border-radius: var(--radius-md); color: #a5b4fc; font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition); font-family: 'Prompt', sans-serif; margin-bottom: 10px; }
     .btn-copy-script:hover { background: rgba(129,140,248,0.2); }
+    .btn-copy-line { display: block; width: 100%; padding: 12px; background: rgba(6,199,85,0.1); color: #06c755; border: 1px solid rgba(6,199,85,0.2); border-radius: var(--radius-md); font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition); text-align: center; font-family: 'Prompt', sans-serif; margin-bottom: 10px; }
+    
+    /* 🚀 AI Sales Assistant Box */
+    .ai-box { background: linear-gradient(145deg, rgba(167,139,250,0.08), rgba(56,189,248,0.05)); border: 1px solid rgba(167,139,250,0.25); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 16px; }
+    .ai-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid rgba(167,139,250,0.2); }
+    .ai-header-title { font-size: 14px; font-weight: 800; color: #d8b4fe; }
+    .ai-section { margin-bottom: 14px; }
+    .ai-label { font-size: 11px; font-weight: 800; color: #c084fc; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; display:flex; align-items:center; gap:5px;}
+    .ai-text { font-size: 13px; color: var(--text-dark); line-height: 1.6; background: rgba(0,0,0,0.2); padding: 10px 12px; border-radius: var(--radius-sm); border-left: 2px solid #a78bfa; }
+    
+    .btn-promo-gen { display: block; width: 100%; padding: 11px; background: linear-gradient(135deg, rgba(167,139,250,0.12), rgba(244,114,182,0.12)); color: #e4a6ff; border: 1px solid rgba(167,139,250,0.2); border-radius: var(--radius-md); font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition); text-align: center; margin-bottom: 8px; font-family: 'Prompt', sans-serif; }
+    .btn-pdf { display: block; width: 100%; padding: 11px; background: var(--info-dim); color: var(--info); border: 1px solid rgba(56,189,248,0.2); border-radius: var(--radius-md); font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition); text-align: center; margin-bottom: 8px; font-family: 'Prompt', sans-serif; }
 
-    .view-price-box { display: flex; justify-content: space-between; align-items: flex-end; background: var(--danger-dim); border: 1px solid rgba(255,92,106,0.18); border-radius: var(--radius-md); padding: 14px 16px; margin: 14px 0; }
-    .view-price-label { font-size: 11px; font-weight: 700; color: var(--danger); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
-    .view-normal-price-text { font-size: 12px; text-decoration: line-through; color: var(--text-gray); display: block; margin-bottom: 4px; }
-    .view-saving-badge { font-size: 11px; background: var(--success-dim); color: var(--success); border: 1px solid rgba(52,211,153,0.2); padding: 3px 8px; border-radius: 20px; font-weight: 700; }
-
-    .btn-copy-line {
-        display: block; width: 100%; padding: 12px; background: rgba(6,199,85,0.1); color: #06c755;
-        border: 1px solid rgba(6,199,85,0.2); border-radius: var(--radius-md); font-size: 13px;
-        font-weight: 700; cursor: pointer; transition: var(--transition); text-align: center; font-family: 'Prompt', sans-serif;
+    @media (max-width: 768px) {
+        .ts-dashboard { grid-template-columns: 1fr; gap: 16px; }
+        .ts-col-right { max-height: none; overflow-y: visible; }
+        .view-image { max-height: 240px; }
     }
-    .btn-copy-line:hover { background: rgba(6,199,85,0.18); }
-    .btn-pdf { display: block; width: 100%; padding: 11px; background: var(--info-dim); color: var(--info); border: 1px solid rgba(56,189,248,0.2); border-radius: var(--radius-md); font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition); text-align: center; margin-top: 8px; font-family: 'Prompt', sans-serif; }
-    .btn-pdf:hover { background: rgba(56,189,248,0.18); }
-    .btn-promo-gen { display: block; width: 100%; padding: 11px; background: linear-gradient(135deg, rgba(167,139,250,0.12), rgba(244,114,182,0.12)); color: #e4a6ff; border: 1px solid rgba(167,139,250,0.2); border-radius: var(--radius-md); font-size: 13px; font-weight: 700; cursor: pointer; transition: var(--transition); text-align: center; margin-top: 8px; font-family: 'Prompt', sans-serif; }
-    .btn-promo-gen:hover { background: linear-gradient(135deg, rgba(167,139,250,0.22), rgba(244,114,182,0.22)); }
 
     /* Promo Gen */
     .promo-gen-container { background: linear-gradient(135deg, #1a0a2e, #0a1a2e); border-radius: var(--radius-xl); overflow: hidden; padding: 24px; text-align: center; border: 1px solid rgba(167,139,250,0.2); }
@@ -682,9 +693,36 @@
     .loading-state { text-align: center; padding: 60px 20px; color: var(--text-gray); font-size: 14px; font-weight: 600; grid-column: 1 / -1; }
     .spinner { width: 38px; height: 38px; border: 3px solid var(--surface-3); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
 
-    /* ══ FULLSCREEN ══ */
-    .fullscreen-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 9999; cursor: zoom-out; }
-    .fullscreen-overlay img { max-width: 95vw; max-height: 95vh; border-radius: var(--radius-lg); object-fit: contain; }
+    /* ══════════════════════════════════════════════════════════════
+       🔍 FULLSCREEN & ZOOM SYSTEM (UPGRADED)
+    ══════════════════════════════════════════════════════════════ */
+    .fullscreen-overlay {
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
+        z-index: 9999;
+        display: none; align-items: center; justify-content: center;
+        opacity: 0; transition: opacity 0.3s ease;
+    }
+    .fullscreen-overlay.active { display: flex; opacity: 1; }
+    .fullscreen-close-btn {
+        position: absolute; top: 24px; right: 24px;
+        background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255,255,255,0.3);
+        color: #fff; width: 44px; height: 44px; border-radius: 50%;
+        font-size: 18px; font-weight: bold; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        z-index: 10000; transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .fullscreen-close-btn:hover { background: var(--danger); border-color: var(--danger); transform: scale(1.1); }
+    .fullscreen-content {
+        width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+        overflow: auto; padding: 40px;
+    }
+    #fullscreenImg {
+        max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 12px;
+        cursor: zoom-in; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    }
+    #fullscreenImg.zoomed { transform: scale(2); cursor: zoom-out; }
 
     /* ══ TOUR ══ */
     .tour-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 3000; backdrop-filter: blur(8px); }
@@ -709,14 +747,12 @@
     </style>
 </head>
 <body>
-<!-- Animated background -->
 <div class="bg-mesh">
     <div class="bg-orb bg-orb-1"></div>
     <div class="bg-orb bg-orb-2"></div>
     <div class="bg-orb bg-orb-3"></div>
 </div>
 
-<!-- ══ STICKY HEADER ══ -->
 <div class="sticky-wrapper">
     <div class="container">
         <div class="header">
@@ -763,7 +799,6 @@
     </div>
 </div>
 
-<!-- ══ PRODUCT GRID ══ -->
 <div class="container">
     <div class="result-bar" id="resultBar" style="display:none;">
         <div class="result-count" id="resultCount">สินค้าทั้งหมด <span>0</span> รายการ</div>
@@ -773,13 +808,12 @@
     </div>
 </div>
 
-<!-- ══ FLOATING ELEMENTS ══ -->
 <button class="floating-cart-btn" onclick="openCartModal()">🛒<span class="cart-badge" id="cartBadge">0</span></button>
 <div class="mode-toggle" id="adminToggleContainer">
     <span class="toggle-label" id="adminLabel">แอดมิน</span>
     <div class="toggle-switch"></div>
 </div>
-<!-- Theme Switcher -->
+
 <div class="theme-fab" onclick="toggleThemePanel()" title="เปลี่ยนธีม">🎨</div>
 <div class="theme-panel" id="themePanel">
     <div class="theme-panel-title">🎨 เลือกธีม</div>
@@ -808,9 +842,13 @@
 </div>
 
 <div id="toastMessage" class="toast-container"></div>
-<div id="fullscreenOverlay" class="fullscreen-overlay" onclick="this.style.display='none'"><img id="fullscreenImg" src="" alt="Full view"></div>
+<div id="fullscreenOverlay" class="fullscreen-overlay" onclick="closeFullscreenBox(event)">
+    <button type="button" class="fullscreen-close-btn" onclick="closeFullscreenBox(event, true)">✕</button>
+    <div class="fullscreen-content">
+        <img id="fullscreenImg" src="" alt="Full view" onclick="toggleZoom(event)">
+    </div>
+</div>
 
-<!-- ══ LOGIN MODAL ══ -->
 <div class="modal-overlay" id="loginModal">
     <div class="modal-content" style="max-width:360px;text-align:center;">
         <button class="modal-close" onclick="closeLoginModal()">✕</button>
@@ -823,38 +861,59 @@
     </div>
 </div>
 
-<!-- ══ VIEW MODAL ══ -->
 <div class="modal-overlay" id="viewModal">
     <div class="modal-content view-modal-content">
         <button class="modal-close" onclick="closeViewModal()">✕</button>
-        <div id="viewNormalContent">
-            <img id="viewImage" class="view-image" src="" alt="Product" loading="lazy" onclick="openFullscreen(this.src)">
-            <div id="viewGallery" class="gallery-container"></div>
-            <span class="brand-badge" id="viewBrand"></span>
-            <h2 class="view-title" id="viewTitle"></h2>
-            <div id="viewBenefitsBox" class="info-box benefits"><div class="info-box-label">✨ แคปชันสั้นๆ</div><div id="viewBenefits" class="info-box-content"></div></div>
-            <div id="viewSellingPointsBox" class="info-box selling"><div class="info-box-label">💡 จุดขายหลัก</div><ul id="viewSellingPoints" class="sp-list"></ul></div>
-            <div id="viewDescBox" class="info-box desc"><div class="info-box-label">🎁 รายละเอียด / ของแถม</div><div id="viewDesc" class="info-box-content"></div></div>
-            <div class="script-box" id="viewScriptBox">
-                <div class="script-header" onclick="toggleScript()">
-                    <div class="script-header-left"><span>📞</span><span class="script-title">สคริปต์พูดขาย</span><span class="script-badge">พร้อมใช้</span></div>
-                    <span class="script-toggle-icon">▼</span>
+        
+        <div id="viewNormalContent" class="ts-dashboard">
+            <div class="ts-col-left">
+                <img id="viewImage" class="view-image" src="" alt="Product" loading="lazy" onclick="openFullscreen(this.src)">
+                <div id="viewGallery" class="gallery-container"></div>
+                <span class="brand-badge" id="viewBrand"></span>
+                <h2 class="view-title" id="viewTitle"></h2>
+                
+                <div class="view-price-box">
+                    <div>
+                        <div class="view-price-label">🔥 ราคาโปรโมชั่น</div>
+                        <span id="viewNormalPrice" class="view-normal-price-text"></span>
+                        <span id="viewSavingBadge" class="view-saving-badge" style="display:none;"></span>
+                    </div>
+                    <div id="viewSpecialPrice" style="font-size:32px;font-weight:800;color:var(--danger);"></div>
                 </div>
-                <div class="script-body"><div class="script-text-area" id="viewScriptText"></div><button class="btn-copy-script" onclick="copyScript()">📋 คัดลอกสคริปต์</button></div>
+                
+                <button id="btnAddToCartView" class="btn-cart-add" style="margin-top:8px;" onclick="addCurrentViewToCart()">🛒 เพิ่มลงตะกร้า (จัดเซต)</button>
             </div>
-            <div class="view-price-box">
-                <div>
-                    <div class="view-price-label">🔥 ราคาโปรโมชั่น</div>
-                    <span id="viewNormalPrice" class="view-normal-price-text"></span>
-                    <span id="viewSavingBadge" class="view-saving-badge" style="display:none;"></span>
+
+            <div class="ts-col-right">
+                <div class="ts-tabs">
+                    <button class="ts-tab active" onclick="switchTsTab('info')">ℹ️ ข้อมูลสินค้า</button>
+                    <button class="ts-tab" onclick="switchTsTab('script')">📞 สคริปต์พูดขาย</button>
+                    <button class="ts-tab ai-tab" onclick="switchTsTab('ai')">✨ AI ช่วยขาย</button>
                 </div>
-                <div id="viewSpecialPrice" style="font-size:32px;font-weight:800;color:var(--danger);"></div>
+
+                <div id="tsTabInfo" class="ts-tab-content active">
+                    <div id="viewBenefitsBox" class="info-box benefits"><div class="info-box-label">✨ แคปชันสั้นๆ</div><div id="viewBenefits" class="info-box-content"></div></div>
+                    <div id="viewSellingPointsBox" class="info-box selling"><div class="info-box-label">💡 จุดขายหลัก</div><ul id="viewSellingPoints" class="sp-list"></ul></div>
+                    <div id="viewDescBox" class="info-box desc"><div class="info-box-label">🎁 รายละเอียด / ของแถม</div><div id="viewDesc" class="info-box-content"></div></div>
+                </div>
+
+                <div id="tsTabScript" class="ts-tab-content">
+                    <div class="script-box" id="viewScriptBox">
+                        <div class="script-text-area" id="viewScriptText"></div>
+                    </div>
+                    <button class="btn-copy-script" onclick="copyScript()">📋 คัดลอกสคริปต์สำหรับพูด</button>
+                    <button id="btnCopyLine" class="btn-copy-line" onclick="copyToLine()">💬 คัดลอกข้อความเตรียมส่ง LINE ลูกค้า</button>
+                </div>
+
+                <div id="tsTabAI" class="ts-tab-content">
+                    <div id="aiAnalysisContent" class="ai-box">
+                        </div>
+                    <button id="btnPromoGen" class="btn-promo-gen" onclick="generatePromoImage()">📸 สร้างภาพโปรโมท (ส่งลูกค้าแบบด่วน)</button>
+                    <button id="btnViewPDF" class="btn-pdf hidden">📖 เปิดคู่มือ PDF แบบเต็ม</button>
+                </div>
             </div>
-            <button id="btnCopyLine" class="btn-copy-line" onclick="copyToLine()">💬 คัดลอกข้อความเตรียมส่ง LINE</button>
-            <button id="btnAddToCartView" class="btn-copy-line hidden" onclick="addCurrentViewToCart()" style="background:var(--primary);color:var(--primary-text);margin-top:8px;border-color:var(--primary);">🛒 เพิ่มลงตะกร้า</button>
-            <button id="btnViewPDF" class="btn-pdf hidden">📖 เปิดคู่มือ PDF</button>
-            <button id="btnPromoGen" class="btn-promo-gen" onclick="generatePromoImage()">🎨 สร้างภาพโปรโมท</button>
         </div>
+
         <div id="viewPromoGenContent" class="hidden">
             <h3 style="text-align:center;margin-bottom:12px;color:var(--primary);font-size:14px;">📸 แคปหน้าจอนี้ส่งลูกค้าได้เลย</h3>
             <div class="promo-gen-container" id="promoCanvas">
@@ -869,7 +928,6 @@
     </div>
 </div>
 
-<!-- ══ CART MODAL ══ -->
 <div class="modal-overlay" id="cartModal">
     <div class="modal-content">
         <button class="modal-close" onclick="closeCartModal()">✕</button>
@@ -885,7 +943,6 @@
     </div>
 </div>
 
-<!-- ══ CHECKOUT MODAL ══ -->
 <div class="modal-overlay" id="checkoutModal">
     <div class="modal-content" style="max-width:460px;">
         <button class="modal-close" onclick="closeCheckoutModal()">✕</button>
@@ -900,7 +957,6 @@
     </div>
 </div>
 
-<!-- ══ ORDER DASHBOARD ══ -->
 <div class="modal-overlay" id="orderDashboardModal">
     <div class="modal-content view-modal-content">
         <button class="modal-close" onclick="closeOrderDashboard()">✕</button>
@@ -909,7 +965,6 @@
     </div>
 </div>
 
-<!-- ══ FORM MODAL ══ -->
 <div class="modal-overlay" id="formModal">
     <div class="modal-content">
         <button class="modal-close" onclick="closeFormModal()">✕</button>
@@ -935,7 +990,6 @@
     </div>
 </div>
 
-<!-- ★ NOTE MODAL -->
 <div class="modal-overlay" id="noteModal">
     <div class="modal-content" style="max-width:420px;">
         <button class="modal-close" onclick="closeNoteModal()">✕</button>
@@ -954,7 +1008,6 @@
     </div>
 </div>
 
-<!-- ══ TOUR ══ -->
 <div class="tour-overlay" id="tourOverlay">
     <div class="tour-box">
         <div class="tour-step" id="tourStepLabel">ขั้นตอน 1 / 5</div>
@@ -964,35 +1017,25 @@
     </div>
 </div>
 
-<!-- ══ SHARE MODAL ══ -->
 <div class="modal-overlay" id="shareModal">
     <div class="modal-content share-modal-content">
         <button class="modal-close" onclick="closeShareModal()">✕</button>
         <h2 class="modal-title">📤 แชร์สินค้าให้ลูกค้า</h2>
-
-        <!-- Product preview strip -->
         <div class="share-product-preview" id="shareProductPreview"></div>
-
-        <!-- Ref name row -->
         <div style="margin-bottom:10px;">
             <div class="share-ref-row">
                 <span class="share-ref-label">รหัสพนักงาน</span>
                 <input type="text" id="shareRefInput" class="share-ref-input" placeholder="ชื่อ / รหัสพนักงาน (ไม่บังคับ)" oninput="updateShareLink()">
             </div>
         </div>
-
-        <!-- Link display -->
         <div class="share-input-wrap">
             <input type="text" id="shareLinkDisplay" class="share-link-input" readonly onclick="this.select()">
             <button class="share-copy-icon" onclick="copyShareLinkIcon()" title="คัดลอก">📋</button>
         </div>
-
-        <!-- Copy button -->
         <button class="btn-share-copy-main" onclick="copyShareLink()">
             📋 คัดลอกลิงก์
             <span class="share-copied-badge" id="shareCopiedBadge">✅ คัดลอกแล้ว!</span>
         </button>
-
         <div class="share-hint">
             ลิงก์นี้จะเปิดหน้าสินค้าเฉพาะตัวนั้น — ลูกค้าไม่เห็นสินค้าอื่น<br>
             ส่งผ่าน LINE, Facebook หรือช่องทางใดก็ได้
@@ -1399,7 +1442,7 @@ function copyCartToLine() {
 }
 function openCheckoutModal() {
     if(cart.length===0) return showToast('กรุณาเลือกสินค้าก่อนทำการสั่งซื้อ','error');
-    document.getElementById('displaySalesRep').innerText=salesRepId;
+    document.getElementById('displaySalesRep').innerText=salesRepId || '-';
     document.getElementById('cartModal').classList.remove('active');
     document.getElementById('checkoutModal').classList.add('active');
 }
@@ -1444,14 +1487,97 @@ async function openOrderDashboard() {
 function closeOrderDashboard() { document.getElementById('orderDashboardModal').classList.remove('active'); }
 
 // ════════════════════════════════════════════════════════════════
-//  VIEW MODAL
+//  TELESALES DASHBOARD & AI SALES ASSISTANT LOGIC
+// ════════════════════════════════════════════════════════════════
+function switchTsTab(tabName) {
+    document.querySelectorAll('.ts-tab').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.ts-tab-content').forEach(el => el.classList.remove('active'));
+    
+    if(tabName === 'info') {
+        document.querySelectorAll('.ts-tab')[0].classList.add('active');
+        document.getElementById('tsTabInfo').classList.add('active');
+    } else if(tabName === 'script') {
+        document.querySelectorAll('.ts-tab')[1].classList.add('active');
+        document.getElementById('tsTabScript').classList.add('active');
+    } else if(tabName === 'ai') {
+        document.querySelectorAll('.ts-tab')[2].classList.add('active');
+        document.getElementById('tsTabAI').classList.add('active');
+        generateAIAnalysis();
+    }
+}
+
+function generateAIAnalysis() {
+    if(!currentViewProduct) return;
+    const p = currentViewProduct;
+    const aiBox = document.getElementById('aiAnalysisContent');
+    
+    const title = (p.Title || '').toLowerCase();
+    const desc = (p.Description || '').toLowerCase() + (p.Selling_Points || '').toLowerCase();
+    const brand = p.Brand || 'สินค้านี้';
+    
+    let target = "ลูกค้าทั่วไปที่กำลังมองหาความคุ้มค่า";
+    let painPoints = ["ต้องการแก้ปัญหาให้ตรงจุด", "มองหาสินค้าที่มีโปรโมชั่นคุ้มค่าที่สุด"];
+    
+    if(title.includes('เข่า') || title.includes('กระดูก') || desc.includes('ปวด')) {
+        target = "ผู้สูงอายุ, ผู้ที่มีปัญหาข้อเข่าหรือกระดูก, หรือวัยทำงานที่ซื้อให้พ่อแม่";
+        painPoints = ["ลุกนั่งลำบาก ปวดเมื่อยตามข้อ", "กังวลเรื่องสุขภาพระยะยาว", "เคยลองตัวอื่นแล้วไม่เห็นผลชัดเจน"];
+    } else if(title.includes('รังนก') || title.includes('บำรุง') || title.includes('สุขภาพ')) {
+        target = "วัยทำงานที่ต้องการฟื้นฟูร่างกาย หรือหาของขวัญพรีเมียมให้ผู้ใหญ่";
+        painPoints = ["พักผ่อนน้อย ร่างกายอ่อนเพลีย", "มองหาสินค้าที่น่าเชื่อถือและดูดีสำหรับเป็นของฝาก"];
+    } else if(title.includes('เซรั่ม') || title.includes('ผิว') || title.includes('สิว') || title.includes('ครีม')) {
+        target = "ผู้ที่รักสวยรักงาม กังวลเรื่องริ้วรอย หรือปัญหาผิวพรรณ";
+        painPoints = ["ขาดความมั่นใจเพราะฝ้า กระ จุดด่างดำ", "ผิวหย่อนคล้อย ต้องการตัวช่วยที่เห็นผลไวและปลอดภัย"];
+    }
+
+    const disc = calcDiscount(p.NormalPrice, p.SpecialPrice);
+    let closingStr = "แจ้งลูกค้าว่าของแถมในเซตมีจำนวนจำกัด เพื่อสร้างความรู้สึกว่าต้องรีบตัดสินใจ";
+    if(disc && disc.pct >= 30) {
+        closingStr = `ย้ำว่าเซตนี้ลดพิเศษถึง ${disc.pct}%! ประหยัดเงินไปได้ถึง ${disc.saving.toLocaleString('en-US')} บาท (อ้างอิงว่าเป็นโปรหลุดจอง หรือโควต้าพิเศษเฉพาะสายนี้)`;
+    }
+
+    const html = `
+        <div class="ai-header">
+            <span style="font-size:20px;">🤖</span>
+            <span class="ai-header-title">AI วิเคราะห์ข้อมูลเพื่อการขาย</span>
+        </div>
+        <div class="ai-section">
+            <div class="ai-label">🎯 กลุ่มเป้าหมายหลัก</div>
+            <div class="ai-text">${target}</div>
+        </div>
+        <div class="ai-section">
+            <div class="ai-label">💔 Pain Point ที่ควรขยี้ (สอบถามลูกค้า)</div>
+            <ul class="ai-text" style="padding-left:24px; margin:0;">
+                ${painPoints.map(pp => `<li style="margin-bottom:4px;">${pp}</li>`).join('')}
+            </ul>
+        </div>
+        <div class="ai-section">
+            <div class="ai-label">💬 ประโยคตะล่อมเปิดใจ (Hook)</div>
+            <div class="ai-text" style="font-style:italic;">
+                "ขออนุญาตสอบถามนะคะ ช่วงนี้คุณพี่มีปัญหาเรื่อง...อยู่บ้างไหมคะ? ตัว ${brand} ที่โทรมานำเสนอวันนี้ ตอบโจทย์ตรงนี้มากๆ ค่ะ เพราะว่า... (โยงเข้าจุดเด่น)"
+            </div>
+        </div>
+        <div class="ai-section">
+            <div class="ai-label">🔥 การปิดการขาย (Closing / Urgency)</div>
+            <div class="ai-text">${closingStr}</div>
+        </div>
+    `;
+    aiBox.innerHTML = html;
+}
+
+// ════════════════════════════════════════════════════════════════
+//  VIEW MODAL (UPDATED)
 // ════════════════════════════════════════════════════════════════
 function openViewModal(rowIndex) {
     currentViewProduct = allProducts.find(p => p._rowIndex === rowIndex);
     if (!currentViewProduct) return;
     const product = currentViewProduct;
+    
     document.getElementById('viewPromoGenContent').classList.add('hidden');
     document.getElementById('viewNormalContent').classList.remove('hidden');
+    
+    // Reset tabs
+    if(typeof switchTsTab === 'function') switchTsTab('info');
+
     const urls=(product.ImageURL||'').split(',').map(u=>u.trim()).filter(Boolean);
     const mainImg=document.getElementById('viewImage');
     const gallery=document.getElementById('viewGallery');
@@ -1463,27 +1589,35 @@ function openViewModal(rowIndex) {
             gallery.style.display='flex';
         } else gallery.style.display='none';
     } else{mainImg.style.display='none';gallery.style.display='none';}
+    
     document.getElementById('viewBrand').innerText=product.Brand||'-';
     document.getElementById('viewTitle').innerText=product.Title||'-';
     document.getElementById('viewNormalPrice').innerText=product.NormalPrice?`ปกติ ${product.NormalPrice}.-`:'';
     document.getElementById('viewSpecialPrice').innerText=`${product.SpecialPrice||'0'}.-`;
+    
     const disc=calcDiscount(product.NormalPrice,product.SpecialPrice);
     const savBadge=document.getElementById('viewSavingBadge');
     if(disc){savBadge.textContent=`ประหยัด ${disc.saving.toLocaleString('en-US')} บาท (-${disc.pct}%)`;savBadge.style.display='inline-block';}else savBadge.style.display='none';
+    
     const benefitsBox=document.getElementById('viewBenefitsBox');
     if(product.Benefits){document.getElementById('viewBenefits').innerHTML=String(product.Benefits).replace(/\n/g,'<br>');benefitsBox.style.display='block';}else benefitsBox.style.display='none';
+    
     const spBox=document.getElementById('viewSellingPointsBox');const spList=document.getElementById('viewSellingPoints');
     if(product.Selling_Points&&String(product.Selling_Points).trim()){const points=String(product.Selling_Points).split('-').filter(p=>p.trim());spList.innerHTML=points.map(p=>`<li>${p.trim()}</li>`).join('');spBox.style.display='block';}else spBox.style.display='none';
+    
     const descBox=document.getElementById('viewDescBox');
     if(product.Description&&String(product.Description).trim()){document.getElementById('viewDesc').innerHTML=String(product.Description).replace(/\n/g,'<br>');descBox.style.display='block';}else descBox.style.display='none';
+    
     buildScript(product);
+    
     const btnPDF=document.getElementById('btnViewPDF');
     if(product.PDF_Link&&String(product.PDF_Link).trim()){btnPDF.classList.remove('hidden');btnPDF.onclick=()=>window.open(product.PDF_Link,'_blank');}else btnPDF.classList.add('hidden');
+    
     document.getElementById('viewModal').classList.add('active');
 }
 
 // ════════════════════════════════════════════════════════════════
-//  SALES SCRIPT
+//  SALES SCRIPT & COPY
 // ════════════════════════════════════════════════════════════════
 function buildScript(product) {
     let script=`สวัสดีครับ/ค่ะ 😊\nวันนี้มีสินค้าดีจากแบรนด์ "${product.Brand||''}" มาแนะนำครับ\n\n`;
@@ -1494,12 +1628,9 @@ function buildScript(product) {
     if(product.SpecialPrice){const disc=calcDiscount(product.NormalPrice,product.SpecialPrice);script+=`💰 ราคาพิเศษวันนี้ เพียง ${product.SpecialPrice} บาทเท่านั้นครับ\n`;if(product.NormalPrice){script+=`   (ราคาปกติ ${product.NormalPrice} บาท)`;if(disc)script+=` ประหยัดถึง ${disc.saving.toLocaleString('en-US')} บาท!`;script+='\n';}}
     script+=`\nสนใจพิมพ์ "รับ" หรือแจ้งจำนวนได้เลยครับ 🙏`;
     document.getElementById('viewScriptText').textContent=script;
-    document.getElementById('viewScriptBox').classList.remove('open');
 }
-function toggleScript() { document.getElementById('viewScriptBox').classList.toggle('open'); }
 function copyScript() { navigator.clipboard.writeText(document.getElementById('viewScriptText').textContent).then(()=>showToast('คัดลอกสคริปต์พูดขายแล้ว!')).catch(()=>showToast('ไม่สามารถคัดลอกได้','error')); }
-function openFullscreen(src) { if(!src||src===window.location.href)return; document.getElementById('fullscreenImg').src=src; document.getElementById('fullscreenOverlay').style.display='flex'; }
-function addCurrentViewToCart() { if(currentViewProduct){addToCart(currentViewProduct._rowIndex);closeViewModal();} }
+function addCurrentViewToCart() { if(currentViewProduct){addToCart(currentViewProduct._rowIndex);showToast('ใส่ตะกร้าแล้ว');} }
 function copyToLine() {
     if(!currentViewProduct)return;
     const p=currentViewProduct;
@@ -1507,8 +1638,37 @@ function copyToLine() {
     if(p.Selling_Points){text+=`\n💡 จุดเด่นสินค้า:\n`;String(p.Selling_Points).split('-').filter(pt=>pt.trim()).forEach(pt=>{text+=`✅ ${pt.trim()}\n`;});}
     if(p.Description)text+=`\n🎁 รายละเอียดเซต:\n${p.Description}\n`;
     text+=`\n💰 ราคาเพียง: ${p.SpecialPrice} บาท (ปกติ ${p.NormalPrice||'-'})\n\nสนใจพิมพ์ "รับ" ได้เลยครับ`;
-    navigator.clipboard.writeText(text).then(()=>{showToast('คัดลอกข้อความสำเร็จ!');closeViewModal();}).catch(()=>showToast('ไม่สามารถคัดลอกได้','error'));
+    navigator.clipboard.writeText(text).then(()=>{showToast('คัดลอกข้อความสำเร็จ!');}).catch(()=>showToast('ไม่สามารถคัดลอกได้','error'));
 }
+
+// ════════════════════════════════════════════════════════════════
+//  ZOOM & FULLSCREEN (NEW)
+// ════════════════════════════════════════════════════════════════
+function openFullscreen(src) { 
+    if(!src) return; 
+    const overlay = document.getElementById('fullscreenOverlay');
+    const img = document.getElementById('fullscreenImg');
+    
+    img.src = src; 
+    img.classList.remove('zoomed');
+    overlay.classList.add('active'); 
+}
+
+function closeFullscreenBox(event, forceClose = false) {
+    if (forceClose || event.target.id === 'fullscreenOverlay' || event.target.classList.contains('fullscreen-content')) {
+        document.getElementById('fullscreenOverlay').classList.remove('active');
+    }
+}
+
+function toggleZoom(event) {
+    event.stopPropagation();
+    const img = document.getElementById('fullscreenImg');
+    img.classList.toggle('zoomed');
+}
+
+// ════════════════════════════════════════════════════════════════
+//  PROMO GEN
+// ════════════════════════════════════════════════════════════════
 function generatePromoImage() {
     if(!currentViewProduct)return;
     document.getElementById('viewNormalContent').classList.add('hidden');
@@ -1636,7 +1796,7 @@ window.addEventListener('click',e=>{
 document.addEventListener('keydown',e=>{
     if(e.key==='Escape'){
         const fs=document.getElementById('fullscreenOverlay');
-        if(fs.style.display==='flex'){fs.style.display='none';return;}
+        if(fs.classList.contains('active')){fs.classList.remove('active');return;}
         const tour=document.getElementById('tourOverlay');
         if(tour.style.display==='flex'){tour.style.display='none';return;}
         const modals=['viewModal','cartModal','formModal','checkoutModal','orderDashboardModal','loginModal','noteModal','shareModal'];
@@ -1669,7 +1829,6 @@ function openShareModal(rowIndex) {
     const p = allProducts.find(x => x._rowIndex === rowIndex);
     if (!p) return;
 
-    // Populate product preview
     const urls = (p.ImageURL || '').split(',').map(u => u.trim()).filter(Boolean);
     const firstUrl = urls.length > 0 ? getDirectImageUrl(urls[0]) : null;
     const imgHtml = firstUrl
@@ -1689,16 +1848,10 @@ function openShareModal(rowIndex) {
             ${priceLine}
         </div>`;
 
-    // Prefill ref from URL param or saved
     const saved = localStorage.getItem('share_ref') || (salesRepId || '');
     document.getElementById('shareRefInput').value = saved;
-
-    // Generate link
     updateShareLink();
-
-    // Reset copy badge
     document.getElementById('shareCopiedBadge').classList.remove('show');
-
     document.getElementById('shareModal').classList.add('active');
     setTimeout(() => document.getElementById('shareRefInput').focus(), 120);
 }
