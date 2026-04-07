@@ -886,9 +886,9 @@
 
             <div class="ts-col-right">
                 <div class="ts-tabs">
-                    <button class="ts-tab active" onclick="switchTsTab('info')">ℹ️ ข้อมูลสินค้า</button>
-                    <button class="ts-tab" onclick="switchTsTab('script')">📞 สคริปต์พูดขาย</button>
-                    <button class="ts-tab ai-tab" onclick="switchTsTab('ai')">✨ AI ช่วยขาย</button>
+                    <button id="tabBtn-info" class="ts-tab active" onclick="switchTsTab('info')">ℹ️ ข้อมูลสินค้า</button>
+                    <button id="tabBtn-script" class="ts-tab" onclick="switchTsTab('script')">📞 สคริปต์พูดขาย</button>
+                    <button id="tabBtn-ai" class="ts-tab ai-tab" onclick="switchTsTab('ai')">✨ AI ช่วยขาย</button>
                 </div>
 
                 <div id="tsTabInfo" class="ts-tab-content active">
@@ -1069,11 +1069,10 @@ function toggleThemePanel() {
     document.getElementById('themePanel').classList.toggle('open');
 }
 
-// Close theme panel when clicking outside
 document.addEventListener('click', e => {
     const panel = document.getElementById('themePanel');
     const fab = document.querySelector('.theme-fab');
-    if (panel.classList.contains('open') && !panel.contains(e.target) && !fab.contains(e.target)) {
+    if (panel && panel.classList.contains('open') && !panel.contains(e.target) && !fab.contains(e.target)) {
         panel.classList.remove('open');
     }
 });
@@ -1099,7 +1098,7 @@ const salesRepId = urlParams.get('ref');
 const isCustomerMode = !!salesRepId;
 
 // ════════════════════════════════════════════════════════════════
-//  HELPERS
+//  HELPERS & BUG FIXES
 // ════════════════════════════════════════════════════════════════
 function safeAttr(str) { return String(str || '').replace(/'/g, "&#39;").replace(/"/g, '&quot;'); }
 
@@ -1115,6 +1114,17 @@ function getCartTotalQty() { return cart.reduce((s, e) => s + e.qty, 0); }
 function getCartTotalPrice() { return cart.reduce((s, e) => s + parsePriceNum(e.product.SpecialPrice) * e.qty, 0); }
 function saveFavorites() { localStorage.setItem('promo_favorites', JSON.stringify([...favorites])); }
 function saveNotes() { localStorage.setItem('promo_notes', JSON.stringify(notes)); }
+
+// แก้ไข Bug: ฟังก์ชันสำหรับจัดการรูปล้มเหลว เพื่อความปลอดภัยของ HTML
+function handleImageError(imgElement) {
+    const wrapper = imgElement.parentElement;
+    const overlay = wrapper.querySelector('.card-img-overlay');
+    if (overlay) overlay.style.display = 'none';
+    imgElement.style.display = 'none';
+    if (!wrapper.querySelector('.img-placeholder')) {
+        wrapper.insertAdjacentHTML('beforeend', '<span class="img-placeholder">ไม่มีรูป</span>');
+    }
+}
 
 // ════════════════════════════════════════════════════════════════
 //  TOAST
@@ -1168,6 +1178,7 @@ async function fetchProducts() {
     try {
         const res = await fetch(APPS_SCRIPT_URL);
         allProducts = await res.json();
+        if (!Array.isArray(allProducts)) allProducts = []; // ป้องกันกรณีดึงข้อมูลแล้วพัง
         updateBrandCounts();
         applyFiltersAndRender();
         applyCustomerMode();
@@ -1283,8 +1294,10 @@ function renderProducts(products) {
         const hasNote = !!notes[product._rowIndex]?.text;
         const urls = (product.ImageURL || '').split(',').map(u => u.trim()).filter(Boolean);
         const firstUrl = urls.length > 0 ? getDirectImageUrl(urls[0]) : null;
+        
+        // ใช้ handleImageError() ที่ปรับแก้แทน
         const imgContent = firstUrl
-            ? `<img src="${firstUrl}" loading="lazy" onerror="this.parentElement.querySelector('.card-img-overlay').style.display='none';this.style.display='none';this.parentElement.insertAdjacentHTML('beforeend','<span class=\\'img-placeholder\\'>ไม่มีรูป</span>')">`
+            ? `<img src="${firstUrl}" loading="lazy" onerror="handleImageError(this)">`
             : `<span class="img-placeholder">ไม่มีรูป</span>`;
 
         const discount = calcDiscount(product.NormalPrice, product.SpecialPrice);
@@ -1487,20 +1500,20 @@ async function openOrderDashboard() {
 function closeOrderDashboard() { document.getElementById('orderDashboardModal').classList.remove('active'); }
 
 // ════════════════════════════════════════════════════════════════
-//  TELESALES DASHBOARD & AI SALES ASSISTANT LOGIC
+//  TELESALES DASHBOARD & AI SALES ASSISTANT LOGIC (แก้ไขความเสถียร)
 // ════════════════════════════════════════════════════════════════
 function switchTsTab(tabName) {
     document.querySelectorAll('.ts-tab').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.ts-tab-content').forEach(el => el.classList.remove('active'));
     
     if(tabName === 'info') {
-        document.querySelectorAll('.ts-tab')[0].classList.add('active');
+        document.getElementById('tabBtn-info').classList.add('active');
         document.getElementById('tsTabInfo').classList.add('active');
     } else if(tabName === 'script') {
-        document.querySelectorAll('.ts-tab')[1].classList.add('active');
+        document.getElementById('tabBtn-script').classList.add('active');
         document.getElementById('tsTabScript').classList.add('active');
     } else if(tabName === 'ai') {
-        document.querySelectorAll('.ts-tab')[2].classList.add('active');
+        document.getElementById('tabBtn-ai').classList.add('active');
         document.getElementById('tsTabAI').classList.add('active');
         generateAIAnalysis();
     }
@@ -1565,7 +1578,7 @@ function generateAIAnalysis() {
 }
 
 // ════════════════════════════════════════════════════════════════
-//  VIEW MODAL (UPDATED)
+//  VIEW MODAL
 // ════════════════════════════════════════════════════════════════
 function openViewModal(rowIndex) {
     currentViewProduct = allProducts.find(p => p._rowIndex === rowIndex);
@@ -1575,7 +1588,6 @@ function openViewModal(rowIndex) {
     document.getElementById('viewPromoGenContent').classList.add('hidden');
     document.getElementById('viewNormalContent').classList.remove('hidden');
     
-    // Reset tabs
     if(typeof switchTsTab === 'function') switchTsTab('info');
 
     const urls=(product.ImageURL||'').split(',').map(u=>u.trim()).filter(Boolean);
@@ -1642,7 +1654,7 @@ function copyToLine() {
 }
 
 // ════════════════════════════════════════════════════════════════
-//  ZOOM & FULLSCREEN (NEW)
+//  ZOOM & FULLSCREEN
 // ════════════════════════════════════════════════════════════════
 function openFullscreen(src) { 
     if(!src) return; 
@@ -1757,12 +1769,13 @@ async function deleteData(rowIndex,title){
 }
 
 // ════════════════════════════════════════════════════════════════
-//  LOGIN
+//  LOGIN & SECURITY NOTE
 // ════════════════════════════════════════════════════════════════
 function openLoginModal(){document.getElementById('adminPasswordInput').value='';document.getElementById('loginModal').classList.add('active');setTimeout(()=>document.getElementById('adminPasswordInput').focus(),100);}
 function closeLoginModal(){document.getElementById('loginModal').classList.remove('active');}
 function checkLogin(){
     const pass=document.getElementById('adminPasswordInput').value;
+    // หมายเหตุ: การดักพาสเวิร์ดที่ Frontend แบบนี้คนดู Source code สามารถเห็นได้
     if(pass==='admin9sing'){currentAdminLevel=2;showToast('🔓 Super Admin Mode');}
     else if(pass==='admin0208'){currentAdminLevel=1;showToast('🔓 Admin Mode');}
     else{showToast('รหัสผ่านไม่ถูกต้อง','error');document.getElementById('adminToggleContainer').classList.remove('active');closeLoginModal();return;}
