@@ -537,8 +537,8 @@ body.call-mode #callBar{display:block;}
 .ts-tab-content.active{display:block;}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
 
-.ts-right-scroll{max-height:480px;overflow-y:auto;padding-right:4px;}
-@media(max-width:768px){.ts-right-scroll{max-height:none;}}
+.ts-right-scroll{max-height:480px;min-height:120px;overflow-y:auto;padding-right:4px;}
+@media(max-width:768px){.ts-right-scroll{max-height:none;min-height:0;}}
 
 /* Info Boxes */
 .info-box{border-radius:var(--r-lg);padding:13px 14px;margin-bottom:10px;border:1px solid;}
@@ -611,6 +611,28 @@ body.call-mode #callBar{display:block;}
 .ai-loading{display:flex;flex-direction:column;align-items:center;padding:24px;gap:12px;}
 .ai-spinner{width:32px;height:32px;border:2px solid rgba(167,139,250,.2);border-top-color:#a78bfa;border-radius:50%;animation:spin .8s linear infinite;}
 .ai-loading-text{font-size:12px;color:#a78bfa;font-weight:600;}
+/* AI error box */
+.ai-error-box{
+  background:rgba(255,77,94,.06);border:1px solid rgba(255,77,94,.2);
+  border-radius:var(--r-xl);padding:20px;text-align:center;margin-bottom:12px;
+}
+.ai-err-icon{font-size:32px;margin-bottom:8px;}
+.ai-err-title{font-size:14px;font-weight:800;color:var(--danger);margin-bottom:6px;}
+.ai-err-detail{font-size:12px;color:var(--tx2);line-height:1.65;margin-bottom:14px;}
+.ai-err-retry{
+  display:block;width:100%;padding:10px;margin-bottom:7px;
+  background:var(--P-dim);color:var(--P);border:1px solid var(--br-P);
+  border-radius:var(--r-md);font-size:12.5px;font-weight:700;cursor:pointer;
+  transition:var(--transition);font-family:'Prompt',sans-serif;
+}
+.ai-err-retry:hover{background:var(--P);color:var(--P-text);}
+.ai-err-fallback{
+  display:block;width:100%;padding:10px;
+  background:var(--s2);color:var(--tx2);border:1px solid var(--br);
+  border-radius:var(--r-md);font-size:12px;font-weight:700;cursor:pointer;
+  transition:var(--transition);font-family:'Prompt',sans-serif;
+}
+.ai-err-fallback:hover{border-color:var(--P);color:var(--P);}
 
 /* AI streaming text cursor */
 .ai-cursor::after{content:'▋';animation:blink .7s step-end infinite;color:#a78bfa;font-size:12px;}
@@ -1047,6 +1069,8 @@ body.call-mode .theme-panel{bottom:265px;}
             <div id="viewBenefitBox" class="info-box benefits"><div class="info-label">✨ แคปชันสั้นๆ</div><div id="viewBenefits" class="info-content"></div></div>
             <div id="viewSpBox" class="info-box selling"><div class="info-label">💡 จุดขายหลัก</div><ul id="viewSellingPoints" class="sp-list"></ul></div>
             <div id="viewDescBox" class="info-box desc"><div class="info-label">🎁 รายละเอียด / ของแถม</div><div id="viewDesc" class="info-content"></div></div>
+            <!-- ✅ Fix: PDF button moved here so it's visible on Info tab -->
+            <button id="btnViewPDF" class="btn-pdf hidden">📖 เปิดคู่มือ PDF แบบเต็ม</button>
           </div>
           
           <!-- SCRIPT TAB -->
@@ -1071,7 +1095,6 @@ body.call-mode .theme-panel{bottom:265px;}
               <!-- populated by JS -->
             </div>
             <button id="btnPromoGen" class="btn-ai-gen" onclick="generatePromoImage()">📸 สร้างภาพโปรโมท (แคปส่งลูกค้าด่วน)</button>
-            <button id="btnViewPDF" class="btn-pdf hidden">📖 เปิดคู่มือ PDF แบบเต็ม</button>
           </div>
         </div>
       </div>
@@ -1217,10 +1240,13 @@ body.call-mode .theme-panel{bottom:265px;}
     <h2 class="modal-title">⚙️ ตั้งค่าระบบ</h2>
     
     <div class="settings-section">
-      <div class="settings-section-title">🤖 AI Sales Assistant</div>
+      <div class="settings-section-title">🤖 AI Sales Assistant — Google Gemini</div>
       <div class="form-group">
-        <label>Gemini API Key <span style="color:var(--tx3);text-transform:none;font-weight:400;">(สำหรับ AI ช่วยขายจริง)</span></label>
-        <input type="password" id="apiKeyInput" class="form-control" placeholder="AIzaSy..." autocomplete="off">
+        <label>Google Gemini API Key <span style="color:var(--tx3);text-transform:none;font-weight:400;">(สำหรับ AI ช่วยขายจริง)</span></label>
+        <input type="password" id="apiKeyInput" class="form-control" placeholder="AIza..." autocomplete="off">
+        <div style="font-size:10.5px;color:var(--tx3);margin-top:5px;">
+          รับ API Key ฟรีได้ที่ <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--P);text-decoration:none;">aistudio.google.com/apikey</a>
+        </div>
         <div class="api-key-status" id="apiKeyStatus">
           <span>○</span><span>ยังไม่ได้ตั้งค่า — AI จะใช้โหมดพื้นฐาน</span>
         </div>
@@ -1396,14 +1422,16 @@ function saveApiKey(){
   const key=document.getElementById('apiKeyInput').value.trim();
   localStorage.setItem('gemini_api_key',key);
   updateApiKeyStatus();
-  showToast(key?'✅ บันทึก API Key แล้ว':'API Key ถูกลบออกแล้ว');
+  showToast(key?'✅ บันทึก Gemini API Key แล้ว':'API Key ถูกลบออกแล้ว');
 }
 function updateApiKeyStatus(){
   const key=localStorage.getItem('gemini_api_key')||'';
   const el=document.getElementById('apiKeyStatus');
   if(el){
     el.className='api-key-status'+(key?' ok':' missing');
-    el.innerHTML=key?'<span>●</span><span>ตั้งค่าแล้ว — AI จะใช้ข้อมูลจริง</span>':'<span>○</span><span>ยังไม่ได้ตั้งค่า — AI จะใช้โหมดพื้นฐาน</span>';
+    el.innerHTML=key
+      ?'<span>●</span><span>ตั้งค่าแล้ว — Gemini AI พร้อมใช้งาน ✨</span>'
+      :'<span>○</span><span>ยังไม่ได้ตั้งค่า — AI จะใช้โหมดพื้นฐาน</span>';
   }
 }
 
@@ -1779,25 +1807,34 @@ function openViewModal(rowIndex){
     normalEl.textContent='';savingEl.style.display='none';
   }
   
-  // Info tab
+  // Info tab — ✅ Fix: check trim() not just truthy (empty string '' is falsy but trim check is safer)
   const benefitBox=document.getElementById('viewBenefitBox');
-  if(p.Benefits){benefitBox.style.display='';document.getElementById('viewBenefits').textContent=p.Benefits;}
+  const benefitText=(p.Benefits||'').trim();
+  if(benefitText){benefitBox.style.display='';document.getElementById('viewBenefits').textContent=benefitText;}
   else benefitBox.style.display='none';
   
   const spBox=document.getElementById('viewSpBox');
   const spList=document.getElementById('viewSellingPoints');
   spList.innerHTML='';
-  if(p.Selling_Points){
+  const spText=(p.Selling_Points||'').trim();
+  if(spText){
     spBox.style.display='';
-    p.Selling_Points.split('\n').forEach(line=>{
+    spText.split('\n').forEach(line=>{
       const clean=line.replace(/^[-•*]\s*/,'').trim();
       if(clean){const li=document.createElement('li');li.textContent=clean;spList.appendChild(li);}
     });
   } else spBox.style.display='none';
   
   const descBox=document.getElementById('viewDescBox');
-  if(p.Description){descBox.style.display='';document.getElementById('viewDesc').textContent=p.Description;}
+  const descText=(p.Description||'').trim();
+  if(descText){descBox.style.display='';document.getElementById('viewDesc').textContent=descText;}
   else descBox.style.display='none';
+  
+  // ✅ Fix: if ALL info boxes empty, show a placeholder so tab isn't blank
+  if(!benefitText&&!spText&&!descText){
+    benefitBox.style.display='';
+    document.getElementById('viewBenefits').innerHTML=`<span style="color:var(--tx3);font-size:12px;">ยังไม่มีข้อมูลรายละเอียดสินค้า<br>แอดมินสามารถเพิ่มข้อมูลผ่านปุ่ม ✏️ ได้เลย</span>`;
+  }
   
   // Script tab
   const script=buildScript(p);
@@ -1864,11 +1901,10 @@ function switchTab(name){
   document.querySelectorAll('.ts-tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.ts-tab-content').forEach(t=>t.classList.remove('active'));
   document.getElementById('tabBtn-'+name).classList.add('active');
-  
-  // แก้ปัญหาหา ID ไม่เจอเพราะตัวพิมพ์เล็ก/ใหญ่ (tsTabAi vs tsTabAI)
-  const tabContentId = name === 'ai' ? 'tsTabAI' : 'tsTab' + name.charAt(0).toUpperCase() + name.slice(1);
-  document.getElementById(tabContentId).classList.add('active');
-  
+  // ✅ Fix: map tab names to exact IDs (prevent 'ai' → 'tsTabAi' wrong casing)
+  const tabIdMap={info:'tsTabInfo',script:'tsTabScript',ai:'tsTabAI'};
+  const tabEl=document.getElementById(tabIdMap[name]);
+  if(tabEl)tabEl.classList.add('active');
   if(name==='ai')generateAIAnalysis();
 }
 
@@ -1911,67 +1947,133 @@ function closePromoImage(){
 }
 
 // ════════════════════════════════════════════════════════════
-//  AI ANALYSIS (with Google Gemini API)
+//  AI ANALYSIS (Google Gemini API — with model cascade & quota fallback)
 // ════════════════════════════════════════════════════════════
+// Model priority: try faster/lighter first, fallback to basic mode on quota
+const GEMINI_MODELS=[
+  {id:'gemini-1.5-flash',label:'Gemini 1.5 Flash'},
+  {id:'gemini-1.5-flash-8b',label:'Gemini 1.5 Flash 8B'},
+  {id:'gemini-2.0-flash-lite',label:'Gemini 2.0 Flash Lite'},
+];
+
+async function callGeminiModel(apiKey,modelId,prompt){
+  const endpoint=`https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${apiKey}`;
+  const res=await fetch(endpoint,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      contents:[{parts:[{text:prompt}]}],
+      generationConfig:{temperature:0.7,maxOutputTokens:600}
+    })
+  });
+  return await res.json();
+}
+
+function isQuotaError(data){
+  const msg=(data.error?.message||'').toLowerCase();
+  return data.error&&(msg.includes('quota')||msg.includes('rate')||msg.includes('limit')||msg.includes('429')||data.error.code===429);
+}
+
+function friendlyGeminiError(data,modelId){
+  const code=data.error?.code||'';
+  const msg=data.error?.message||'';
+  if(isQuotaError(data))return{icon:'⏳',title:'Quota หมดชั่วคราว',detail:`Model ${modelId} ถูกใช้เกิน free limit แล้ว — ลองใหม่ในอีกสักครู่`,canRetry:true};
+  if(code===400||msg.includes('API_KEY'))return{icon:'🔑',title:'API Key ไม่ถูกต้อง',detail:'กรุณาตรวจสอบ Gemini API Key ใน ⚙️ ตั้งค่า',canRetry:false};
+  return{icon:'❌',title:'Gemini ตอบสนองผิดปกติ',detail:msg.slice(0,120)||(msg||'Unknown error'),canRetry:true};
+}
+
 async function generateAIAnalysis(){
   if(!currentViewProduct)return;
   const p=currentViewProduct;
   const aiContent=document.getElementById('aiContent');
   const apiKey=localStorage.getItem('gemini_api_key')||'';
   
-  if(apiKey){
-    // Real AI mode with Gemini
-    aiContent.innerHTML=`<div class="ai-loading"><div class="ai-spinner"></div><div class="ai-loading-text">AI กำลังวิเคราะห์สินค้า...</div></div>`;
-    try{
-      const prompt=`คุณเป็น AI ผู้ช่วยพนักงานขายทางโทรศัพท์ชาวไทย วิเคราะห์สินค้านี้และให้ข้อมูลสำคัญสำหรับใช้ขายทางโทรศัพท์:
-
+  if(!apiKey){renderAIFallback(p);return;}
+  
+  const prompt=`คุณเป็น AI ผู้ช่วยพนักงานขายทางโทรศัพท์ชาวไทย วิเคราะห์สินค้านี้และให้ข้อมูลสำคัญสำหรับใช้ขายทางโทรศัพท์:
 สินค้า: ${p.Title}
 แบรนด์: ${p.Brand}
 สรรพคุณ: ${p.Benefits||'-'}
 จุดขาย: ${p.Selling_Points||'-'}
 รายละเอียด: ${p.Description||'-'}
-ราคาปกติ: ${p.NormalPrice||'-'} บาท
-ราคาพิเศษ: ${p.SpecialPrice||'-'} บาท
+ราคาปกติ: ${p.NormalPrice||'-'} บาท / ราคาพิเศษ: ${p.SpecialPrice||'-'} บาท
+ตอบเป็น JSON เท่านั้น ไม่มี markdown ไม่มีคำนอก JSON:
+{"target":"กลุ่มเป้าหมาย","painPoints":["ปัญหา 1","ปัญหา 2","ปัญหา 3"],"opening":"ประโยคเปิดใจ","objection":"ตอบแพงไป","closing":"ปิดการขาย"}`;
 
-ตอบเป็น JSON เท่านั้น (ไม่มี markdown backticks) รูปแบบ:
-{
-  "target": "กลุ่มเป้าหมายที่เหมาะสม",
-  "painPoints": ["ปัญหา 1", "ปัญหา 2", "ปัญหา 3"],
-  "opening": "ประโยคเปิดใจลูกค้า 1 ประโยค",
-  "objection": "วิธีตอบข้อโต้แย้ง 'แพงไป'",
-  "closing": "เทคนิคปิดการขาย"
-}`;
-      
-      const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            response_mime_type: "application/json" // บังคับให้ Gemini ตอบกลับเป็น JSON อย่างเดียว
-          }
-        })
-      });
-      const data=await res.json();
-      
-      if(data.error) throw new Error(data.error.message);
-      
-      const txt=data.candidates[0].content.parts[0].text||'';
+  // Try each model in cascade order
+  for(let i=0;i<GEMINI_MODELS.length;i++){
+    const{id,label}=GEMINI_MODELS[i];
+    const isLast=i===GEMINI_MODELS.length-1;
+    aiContent.innerHTML=`<div class="ai-loading"><div class="ai-spinner"></div><div class="ai-loading-text">✨ กำลังโหลด (${label})...</div></div>`;
+    try{
+      const data=await callGeminiModel(apiKey,id,prompt);
+      if(isQuotaError(data)){
+        if(!isLast)continue; // try next model
+        // All models exhausted → show clean quota error + fallback result
+        showAIQuotaError(p,data,id);
+        return;
+      }
+      if(data.error){
+        const{icon,title,detail,canRetry}=friendlyGeminiError(data,id);
+        aiContent.innerHTML=`
+          <div class="ai-error-box">
+            <div class="ai-err-icon">${icon}</div>
+            <div class="ai-err-title">${title}</div>
+            <div class="ai-err-detail">${detail}</div>
+            ${canRetry?`<button class="ai-err-retry" onclick="generateAIAnalysis()">🔄 ลองอีกครั้ง</button>`:''}
+            <button class="ai-err-fallback" onclick="renderAIFallback(currentViewProduct)">📋 ใช้โหมดพื้นฐานแทน</button>
+          </div>`;
+        return;
+      }
+      const txt=data.candidates?.[0]?.content?.parts?.[0]?.text||'';
       try{
-        const clean=txt.replace(/```json|```/g,'').trim();
-        const ai=JSON.parse(clean);
-        renderAIResult(ai,p);
-      } catch{renderAIFallback(p);}
-    } catch(e){
-      console.error('Gemini API Error:', e);
-      renderAIFallback(p);
+        const ai=JSON.parse(txt.replace(/```json|```/g,'').trim());
+        renderAIResult(ai,p,label);
+        return;
+      }catch{
+        if(!isLast)continue;
+        renderAIFallback(p);
+      }
+    }catch(err){
+      if(!isLast)continue;
+      aiContent.innerHTML=`
+        <div class="ai-error-box">
+          <div class="ai-err-icon">🌐</div>
+          <div class="ai-err-title">เชื่อมต่อไม่ได้</div>
+          <div class="ai-err-detail">ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่</div>
+          <button class="ai-err-retry" onclick="generateAIAnalysis()">🔄 ลองอีกครั้ง</button>
+          <button class="ai-err-fallback" onclick="renderAIFallback(currentViewProduct)">📋 ใช้โหมดพื้นฐานแทน</button>
+        </div>`;
     }
-  } else {
-    renderAIFallback(p);
   }
 }
 
-function renderAIResult(ai,p){
+function showAIQuotaError(p,data,lastModelId){
+  const retryMs=((data.error?.message||'').match(/retry in ([\d.]+)s/i)||[])[1];
+  const retryTxt=retryMs?`ลองใหม่ใน ~${Math.ceil(retryMs)} วินาที`:'ลองใหม่ภายหลัง';
+  document.getElementById('aiContent').innerHTML=`
+    <div class="ai-error-box">
+      <div class="ai-err-icon">⏳</div>
+      <div class="ai-err-title">Quota หมดทุก model แล้ว</div>
+      <div class="ai-err-detail">Free tier ถูกใช้จนเกินวันนี้<br>${retryTxt} หรืออัปเกรด plan ที่ Google AI Studio</div>
+      <button class="ai-err-retry" onclick="generateAIAnalysis()">🔄 ลองอีกครั้ง</button>
+      <button class="ai-err-fallback" onclick="renderAIFallback(currentViewProduct)">📋 ใช้โหมดพื้นฐานแทน</button>
+    </div>`;
+  // Auto-show fallback result below the error so sales rep isn't blocked
+  setTimeout(()=>{
+    const box=document.getElementById('aiContent');
+    if(box)box.insertAdjacentHTML('beforeend','<div style="margin-top:10px;"></div>');
+    renderAIFallbackAppend(p);
+  },300);
+}
+
+function renderAIFallbackAppend(p){
+  // append fallback content below error box without replacing it
+  const tmp=document.createElement('div');
+  renderAIFallback(p,tmp);
+}
+
+function renderAIResult(ai,p,modelLabel='Gemini'){
   const disc=calcDiscount(p.NormalPrice,p.SpecialPrice);
   let closing=ai.closing||'แจ้งลูกค้าว่าโปรโมชั่นนี้มีจำนวนจำกัด';
   if(disc&&disc.pct>=30)closing=`ย้ำว่าเซตนี้ลดพิเศษถึง ${disc.pct}% ประหยัดไปได้ ${disc.saving.toLocaleString('en-US')} บาท! (โควต้าพิเศษเฉพาะสายนี้)`;
@@ -1979,9 +2081,9 @@ function renderAIResult(ai,p){
   document.getElementById('aiContent').innerHTML=`
     <div class="ai-box">
       <div class="ai-head">
-        <span style="font-size:18px;">🤖</span>
+        <span style="font-size:18px;">✨</span>
         <span class="ai-head-title">AI Sales Assistant</span>
-        <span style="font-size:9px;color:#a78bfa;background:rgba(167,139,250,.12);padding:2px 7px;border-radius:20px;font-weight:700;margin-left:auto;">Live AI</span>
+        <span style="font-size:9px;color:#4ade80;background:rgba(74,222,128,.12);padding:2px 8px;border-radius:20px;font-weight:700;margin-left:auto;border:1px solid rgba(74,222,128,.25);">🔵 ${modelLabel}</span>
       </div>
       <div class="ai-section">
         <div class="ai-label">🎯 กลุ่มเป้าหมาย</div>
@@ -2006,7 +2108,7 @@ function renderAIResult(ai,p){
     </div>`;
 }
 
-function renderAIFallback(p){
+function renderAIFallback(p,targetEl){
   const disc=calcDiscount(p.NormalPrice,p.SpecialPrice);
   const title=(p.Title||'').toLowerCase();
   const desc=((p.Description||'')+(p.Selling_Points||'')).toLowerCase();
@@ -2033,7 +2135,7 @@ function renderAIFallback(p){
   let closing='แจ้งลูกค้าว่าของแถมในเซตมีจำนวนจำกัด — สร้างความรู้สึกเร่งด่วน';
   if(disc&&disc.pct>=30)closing=`ย้ำว่าเซตนี้ลดพิเศษถึง ${disc.pct}% ประหยัดไปได้ถึง ${disc.saving.toLocaleString('en-US')} บาท (โควต้าพิเศษเฉพาะสายนี้)`;
   
-  document.getElementById('aiContent').innerHTML=`
+  const html=`
     <div class="ai-box">
       <div class="ai-head">
         <span style="font-size:18px;">🤖</span>
@@ -2061,7 +2163,10 @@ function renderAIFallback(p){
         <div class="ai-text">${closing}</div>
       </div>
     </div>
-    <div style="text-align:center;font-size:10.5px;color:var(--tx3);margin-bottom:12px;">💡 เพิ่ม API Key ใน ⚙️ ตั้งค่า เพื่อเปิดใช้ AI จริง</div>`;
+    <div style="text-align:center;font-size:10.5px;color:var(--tx3);margin-bottom:12px;">💡 เพิ่ม Gemini API Key ใน ⚙️ ตั้งค่า เพื่อเปิดใช้ AI จริง (ฟรีที่ aistudio.google.com)</div>`;
+  
+  if(targetEl){targetEl.innerHTML=html;}
+  else{document.getElementById('aiContent').innerHTML=html;}
 }
 
 // ════════════════════════════════════════════════════════════
